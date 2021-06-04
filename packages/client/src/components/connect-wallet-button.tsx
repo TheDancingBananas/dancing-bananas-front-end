@@ -2,6 +2,8 @@ import config from 'config/app';
 import { useWallet } from 'hooks/use-wallet';
 import { formatAddress } from 'util/formats';
 
+import pngWallet from 'styles/images/wallet.png';
+
 function ConnectWalletButton({
     onClick,
 }: {
@@ -22,7 +24,8 @@ function ConnectWalletButton({
         : 'Connect Wallet';
     return (
         <button className='connect-wallet-button' onClick={onClick}>
-            {buttonText}
+            <img src={pngWallet} />
+            <span>{buttonText}</span>
         </button>
     );
 }

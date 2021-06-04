@@ -62,6 +62,7 @@
         "react-loading-icons": "^1.0.4",
         "react-query": "^3.13.5",
         "react-responsive": "^8.2.0",
+        "react-responsive-carousel": "^3.2.18",
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.1",
         "react-spring": "^8.0.27",

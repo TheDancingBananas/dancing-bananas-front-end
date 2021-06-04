@@ -42,6 +42,10 @@ import Sentry, { SentryError } from 'util/sentry';
 import { trackSentimentInteraction, trackAddLiquidityTx } from 'util/mixpanel';
 import classNames from 'classnames';
 
+import pngApyHappy from 'styles/images/apy-happy.png';
+import pngApyNormal from 'styles/images/apy-normal.png';
+import pngApySad from 'styles/images/apy-sad.png';
+
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
@@ -1304,31 +1308,38 @@ export const AddLiquidityV3 = ({
     return (
         <>
             <div className='add-v3-container'>
-                <p>Select 1 or 2 token(s)</p>
+                <div className='pool-info'>
+                    <div className='pool-pairs'>
+                        <div className='pool-pairs-item'>
+                            {resolveLogo(tokenInputState[token0Symbol].id)}
+                            <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
+                        </div>
+                        <div className='pool-pairs-item'>
+                            {resolveLogo(tokenInputState[token1Symbol].id)}
+                            <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
+                        </div>
+                    </div>
+                    <div className='pool-details'>
+                        <div className='pool-details-row'>
+                            <div className='pool-details-desc'>
+                                FEES AWARDED
+                            </div>
+                            <div className='pool-details-value green'>$180</div>
+                        </div>
+                        <div className='pool-details-row'>
+                            <div className='pool-details-desc'>
+                                NANAS AWARDED
+                            </div>
+                            <div className='pool-details-value'>+5</div>
+                        </div>
+                    </div>
+                </div>
+                <div className='pair-text'>CHOOSE YOUR TOKENS TO DEPOSIT</div>
                 <Box
                     display='flex'
                     flexDirection='column'
                     className='token-control-container'
                 >
-                    {/* <Box width='48%'>
-                        {selectedSymbol0 && (
-                            <TokenWithBalance
-                                id={tokenInputState[selectedSymbol0].id}
-                                name={selectedSymbol0}
-                                balance={balances?.[selectedSymbol0]?.balance}
-                                decimals={balances?.[selectedSymbol0]?.decimals}
-                            />
-                        )}
-                        <br />
-                        {selectedSymbol1 && (
-                            <TokenWithBalance
-                                id={tokenInputState[selectedSymbol1].id}
-                                name={selectedSymbol1}
-                                balance={balances?.[selectedSymbol1]?.balance}
-                                decimals={balances?.[selectedSymbol1]?.decimals}
-                            />
-                        )}
-                    </Box> */}
                     {isWETHPair && (
                         <Box
                             display='flex'
@@ -1355,20 +1366,6 @@ export const AddLiquidityV3 = ({
                                     });
                                 }}
                             >
-                                <button
-                                    className={classNames('btn-default', {
-                                        active: isTokenETHActive,
-                                    })}
-                                    disabled={isTokenETHDisabled}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={
-                                            isTokenETHDisabled
-                                                ? faBan
-                                                : faCheckCircle
-                                        }
-                                    />
-                                </button>
                                 <div
                                     style={{
                                         flexGrow: 1,
@@ -1446,21 +1443,6 @@ export const AddLiquidityV3 = ({
                                 });
                             }}
                         >
-                            <button
-                                className={classNames('btn-default', {
-                                    active: isToken0Active,
-                                })}
-                                disabled={
-                                    isToken0Disabled ||
-                                    (token0Symbol === 'WETH' && disableWETH)
-                                }
-                            >
-                                <FontAwesomeIcon
-                                    icon={
-                                        isToken0Disabled ? faBan : faCheckCircle
-                                    }
-                                />
-                            </button>
                             <div
                                 style={{
                                     flexGrow: 1,
@@ -1537,21 +1519,6 @@ export const AddLiquidityV3 = ({
                                 });
                             }}
                         >
-                            <button
-                                className={classNames('btn-default', {
-                                    active: isToken1Active,
-                                })}
-                                disabled={
-                                    isToken1Disabled ||
-                                    (token1Symbol === 'WETH' && disableWETH)
-                                }
-                            >
-                                <FontAwesomeIcon
-                                    icon={
-                                        isToken1Disabled ? faBan : faCheckCircle
-                                    }
-                                />
-                            </button>
                             <div
                                 style={{
                                     flexGrow: 1,
@@ -1600,7 +1567,7 @@ export const AddLiquidityV3 = ({
                     </Box>
                 </Box>
                 <br />
-                <p>Select Market Sentiment</p>
+                <div className='pair-text'>CHOOSE A SENTIMENT</div>
                 <Box
                     display='flex'
                     justifyContent='center'
@@ -1608,106 +1575,53 @@ export const AddLiquidityV3 = ({
                 >
                     <div
                         className={classNames({
-                            'sentiment-button': true,
+                            'sentiment-item': true,
                             active: isFlipped
                                 ? sentiment === 'bullish'
                                 : sentiment === 'bearish',
                         })}
+                        role='button'
                         onClick={() => {
                             setSentiment(isFlipped ? 'bullish' : 'bearish');
                             trackSentimentInteraction(pool, 'bearish');
                         }}
                     >
-                        📉 Bearish {baseCoin}
+                        <img src={pngApyHappy} />
                     </div>
                     <div
                         className={classNames({
-                            'sentiment-button': true,
+                            'sentiment-item': true,
                             active: sentiment === 'neutral',
                         })}
+                        role='button'
                         onClick={() => {
                             setSentiment('neutral');
                             trackSentimentInteraction(pool, 'neutral');
                         }}
                     >
-                        Neutral
+                        <img src={pngApyNormal} />
                     </div>
                     <div
                         className={classNames({
-                            'sentiment-button': true,
+                            'sentiment-item': true,
                             active: isFlipped
                                 ? sentiment === 'bearish'
                                 : sentiment === 'bullish',
                         })}
+                        role='button'
                         onClick={() => {
                             setSentiment(isFlipped ? 'bearish' : 'bullish');
                             trackSentimentInteraction(pool, 'bullish');
                         }}
                     >
-                        📈 Bullish {baseCoin}
+                        <img src={pngApySad} />
                     </div>
                 </Box>
-                {warning?.status && (
-                    <div className='well-warn out-of-range'>
-                        {warning?.message}
-                    </div>
-                )}
-                <br />
-                <div className='preview'>
-                    <Box display='flex' justifyContent='space-between'>
-                        <div>Current Price</div>
-                        <div>
-                            <span className='face-deep'>
-                                {isFlipped ? 1 / currentPrice : currentPrice}{' '}
-                                {isFlipped
-                                    ? pool.token1.symbol
-                                    : pool.token0.symbol}
-                                <span
-                                    onClick={() => setIsFlipped(!isFlipped)}
-                                    style={{
-                                        cursor: 'pointer',
-                                        color: 'var(--objAccentAlt)',
-                                        padding: '0.5rem',
-                                    }}
-                                >
-                                    <FontAwesomeIcon icon={faExchangeAlt} />
-                                </span>
-                                {isFlipped
-                                    ? pool.token0.symbol
-                                    : pool.token1.symbol}
-                            </span>
-                        </div>
-                    </Box>
-                    <Box display='flex' justifyContent='space-between'>
-                        <div>Liquidity Range</div>
-                        <div>
-                            <span className='face-positive'>
-                                {pendingBounds ? (
-                                    <ThreeDots width='24px' height='10px' />
-                                ) : isFlipped ? (
-                                    `${1 / bounds.prices[1]} to ${
-                                        1 / bounds.prices[0]
-                                    }`
-                                ) : (
-                                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                                    `${bounds.prices[0]} to ${bounds.prices[1]}`
-                                )}
-                            </span>
-                        </div>
-                    </Box>
-                    {/* TODO Re-introduce once we know per-tick liquidity
-                        {selectedSymbolCount == 1 && (
-                        <Box display='flex' justifyContent='space-between'>
-                            <div>Expected Price Impact</div>
-                            <div>
-                                <span className='price-impact'>
-                                    {priceImpact}%
-                                </span>
-                            </div>
-                        </Box>
-                    )} */}
+                <div className='pair-action'>
+                    <button className='pair-action-button silver'>SKIP</button>
+                    <button className='pair-action-button green'>ADD</button>
                 </div>
-                <br />
+                {/* <br />
                 <div>
                     <LiquidityActionButton
                         disabledInput={disabledInput}
@@ -1718,7 +1632,7 @@ export const AddLiquidityV3 = ({
                         pendingBounds={pendingBounds}
                         currentGasPrice={currentGasPrice}
                     />
-                </div>
+                </div> */}
             </div>
         </>
     );

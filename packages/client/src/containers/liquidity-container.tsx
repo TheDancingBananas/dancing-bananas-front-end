@@ -9,7 +9,7 @@ import { PoolSearch } from 'components/pool-search';
 import { Box } from '@material-ui/core';
 import { AddLiquidityV3 } from 'components/add-liquidity/add-liquidity-v3';
 import { useBalance } from 'hooks/use-balance';
-import { usePoolOverview } from 'hooks/data-fetchers';
+import { usePoolOverview, useTopPools } from 'hooks/data-fetchers';
 import { useWallet } from 'hooks/use-wallet';
 import { debug } from 'util/debug';
 import { EthGasPrices } from '@sommelier/shared-types';
@@ -18,6 +18,9 @@ import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
 import { ThreeDots } from 'react-loading-icons';
 import classNames from 'classnames';
+
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from 'react-responsive-carousel';
 
 export enum GasPriceSelection {
     Standard = 'standard',
@@ -149,6 +152,8 @@ export const LiquidityContainer = ({
 }: {
     gasPrices: EthGasPrices | null;
 }): JSX.Element => {
+    const { data: pools, isLoading: isTopPoolsLoading } = useTopPools();
+
     const [poolId, setPoolId] = useState<string | null>(null);
     const { wallet } = useWallet();
     const { data: pool } = usePoolOverview(wallet.network, poolId);
@@ -162,6 +167,18 @@ export const LiquidityContainer = ({
     debug.poolId = poolId;
     debug.balances = balances;
 
+    const { data: randomPool } = usePoolOverview(
+        wallet.network,
+        `0x4e3f5778bafe258e4e75786f38fa3f8be34ad7f2`,
+    );
+    const { data: nanaPool } = usePoolOverview(
+        wallet.network,
+        `0xea7ef4f39eb2320a0e23c8ce1131d2c3f67097fd`,
+    );
+
+    const randomPoolBalances = useBalance({ pool: randomPool });
+    const nanaPoolBalances = useBalance({ pool: nanaPool });
+
     return (
         <LiquidityContext.Provider
             value={{
@@ -173,17 +190,28 @@ export const LiquidityContainer = ({
                 setSlippageTolerance,
             }}
         >
-            <Box className='liquidity-container'>
-                <SearchHeader setPoolId={setPoolId} />
-                {poolId && pool && (
-                    <AddLiquidityV3
-                        pool={pool}
-                        balances={balances}
-                        gasPrices={gasPrices}
-                    />
-                )}
-                {poolId && <TransactionSettings gasPrices={gasPrices} />}
-            </Box>
+            {randomPool && nanaPool && (
+                <div className='liquidity-carousel-item'>
+                    <Box className='liquidity-container'>
+                        <AddLiquidityV3
+                            pool={randomPool}
+                            balances={randomPoolBalances}
+                            gasPrices={gasPrices}
+                        />
+                    </Box>
+                </div>
+                // <Carousel centerMode>
+                //     <div className='liquidity-carousel-item'>
+                //         <Box className='liquidity-container'>
+                //             <AddLiquidityV3
+                //                 pool={nanaPool}
+                //                 balances={nanaPoolBalances}
+                //                 gasPrices={gasPrices}
+                //             />
+                //         </Box>
+                //     </div>
+                // </Carousel>
+            )}
         </LiquidityContext.Provider>
     );
 };

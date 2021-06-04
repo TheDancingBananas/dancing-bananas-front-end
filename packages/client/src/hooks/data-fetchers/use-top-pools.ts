@@ -20,7 +20,8 @@ export const useTopPools = (): UseTopPools => {
         wallet: { network },
     } = useWallet();
 
-    const networkName = network ? config.networks[network].name : 'mainnet';
+    // const networkName = network ? config.networks[network].name : 'mainnet';
+    const networkName = 'rinkeby';
 
     const getTopPools = async () => {
         const response = await fetch(

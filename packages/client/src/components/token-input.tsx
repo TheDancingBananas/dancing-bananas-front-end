@@ -33,29 +33,32 @@ export const TokenInput = ({
     disabled,
 }: TokenInputProps): JSX.Element => (
     <div className={classNames({ 'token-input': true, disabled })}>
+        <div className='token-input-balances'>
+            <input
+                placeholder='0.00'
+                value={amount}
+                disabled={disabled}
+                onChange={(e) => {
+                    const val = e.target.value;
+
+                    if (!val || !new BigNumber(val).isNaN()) {
+                        updateAmount(val);
+                        twoSide && handleTokenRatio(token, val);
+                    }
+                }}
+            />
+            <span>{toBalanceStr(token, balances)}</span>
+        </div>
         <button
-            className=''
+            className='token-input-max'
             disabled={!balances?.[token] || disabled}
             onClick={() => {
                 updateAmount(toBalanceStr(token, balances));
                 handleTokenRatio(token, toBalanceStr(token, balances));
             }}
         >
-            Max
+            <div>MAX</div>
+            <span>BALANCE</span>
         </button>
-        &nbsp;
-        <input
-            placeholder='Enter Amount'
-            value={amount}
-            disabled={disabled}
-            onChange={(e) => {
-                const val = e.target.value;
-
-                if (!val || !new BigNumber(val).isNaN()) {
-                    updateAmount(val);
-                    twoSide && handleTokenRatio(token, val);
-                }
-            }}
-        />
     </div>
 );

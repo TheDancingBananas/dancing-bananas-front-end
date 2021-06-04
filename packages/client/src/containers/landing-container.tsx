@@ -36,28 +36,7 @@ function LandingContainer({
     return (
         <div>
             <div className='main-header-container'>
-                <div className='nav-button-container'>
-                    <h5 className='logo-title'>
-                        PAIRINGS
-                        <span
-                            style={{
-                                fontFamily: 'cursive',
-                                fontSize: '1rem',
-                                color: 'var(--faceSecondary)',
-                                fontStyle: 'italic',
-                                padding: '0 0.5rem',
-                            }}
-                        >
-                            by
-                        </span>
-                        <span style={{ color: 'var(--faceAccent)' }}>
-                            SOMMELIER
-                        </span>
-                    </h5>
-                    <TelegramCTA />
-                </div>
                 <div className='wallet-combo'>
-                    {wallet?.account && <PendingTx />}
                     {<ConnectWalletButton onClick={showWalletModal} />}
                 </div>
             </div>
@@ -67,12 +46,6 @@ function LandingContainer({
                 alignItems='center'
                 justifyContent='space-around'
             >
-                <div style={{ fontSize: '1.5rem', textAlign: 'center' }}>
-                    The easiest way to add liquidity to{' '}
-                    <span style={{ color: 'var(--faceAccent)' }}>Uniswap</span>{' '}
-                    <span style={{ color: 'var(--faceAccentAlt)' }}>v3</span>
-                </div>
-                <br />
                 <LiquidityContainer gasPrices={gasPrices} />
             </Box>
             <Box
