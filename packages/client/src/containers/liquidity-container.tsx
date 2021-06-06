@@ -8,6 +8,7 @@ import {
 import { PoolSearch } from 'components/pool-search';
 import { Box } from '@material-ui/core';
 import { AddLiquidityV3 } from 'components/add-liquidity/add-liquidity-v3';
+import { useParams } from 'react-router-dom';
 import { useBalance } from 'hooks/use-balance';
 import {
     usePoolOverview,
@@ -21,7 +22,7 @@ import { LiquidityBasketData } from 'types/states';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
-import { ThreeDots } from 'react-loading-icons';
+import { Circles, ThreeDots } from 'react-loading-icons';
 import classNames from 'classnames';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -158,6 +159,18 @@ export const LiquidityContext = createContext<Partial<LiquidityContext>>(
 
 const level = 1;
 
+const ErrorBox = ({ msg }: { msg: string }) => (
+    <Box style={{ textAlign: 'center' }} className='alert-well'>
+        {msg}
+    </Box>
+);
+
+const LoadingPoolBox = ({ msg }: { msg: string }) => (
+    <Box style={{ textAlign: 'center' }}>
+        <Circles width='24px' height='24px' />
+        {msg}
+    </Box>
+);
 export const LiquidityContainer = ({
     gasPrices,
     poolId,

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useContext, useEffect, useReducer } from 'react';
+import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { Price, Token, TokenAmount } from '@uniswap/sdk-core';
@@ -120,34 +120,52 @@ export const AddLiquidityV3 = ({
     }>({ status: false, message: <p>Warning placeholder</p> });
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     // State here is used to compute what tokens are being used to add liquidity with.
-    const initialState: Record<string, any> = {
-        [token0Symbol]: {
-            id: pool?.token0?.id,
-            name: pool?.token0?.name,
-            symbol: pool?.token0?.symbol,
-            amount: '',
-            selected: false,
-        },
-        [token1Symbol]: {
-            id: pool?.token1?.id,
-            name: pool?.token1?.name,
-            symbol: pool?.token1?.symbol,
-            amount: '',
-            selected: false,
-        },
-        ETH: {
-            id: ETH_ID,
-            symbol: 'ETH',
-            name: 'Ethereum',
-            amount: '',
-            selected: true,
-        },
-        selectedTokens: ['ETH'],
-    };
+    const initialState: Record<string, any> = useMemo(
+        () => ({
+            [token0Symbol]: {
+                id: pool?.token0?.id,
+                name: pool?.token0?.name,
+                symbol: pool?.token0?.symbol,
+                amount: '',
+                selected: false,
+            },
+            [token1Symbol]: {
+                id: pool?.token1?.id,
+                name: pool?.token1?.name,
+                symbol: pool?.token1?.symbol,
+                amount: '',
+                selected: false,
+            },
+            ETH: {
+                id: ETH_ID,
+                symbol: 'ETH',
+                name: 'Ethereum',
+                amount: '',
+                selected: true,
+            },
+            selectedTokens: ['ETH'],
+        }),
+        [
+            pool?.token0?.id,
+            pool?.token0?.name,
+            pool?.token0?.symbol,
+            pool?.token1?.id,
+            pool?.token1?.name,
+            pool?.token1?.symbol,
+            token0Symbol,
+            token1Symbol,
+        ],
+    );
 
+    const init = (initialState: Record<string, any>) => {
+        return initialState;
+    };
     const reducer = (
         state: { [x: string]: any },
-        action: { type: any; payload: { sym: any; amount?: any } },
+        action: {
+            type: any;
+            payload: { sym: any; amount?: any } | Record<string, any>;
+        },
     ) => {
         let sym: string;
         let amt: string;
@@ -190,12 +208,14 @@ export const AddLiquidityV3 = ({
                     ...state,
                     [sym]: { ...state[sym], amount: amt },
                 };
+            case 'reset':
+                return init(action.payload);
             default:
                 throw new Error();
         }
     };
 
-    const [tokenInputState, dispatch] = useReducer(reducer, initialState);
+    const [tokenInputState, dispatch] = useReducer(reducer, initialState, init);
 
     // const [token, setToken] = useState('ETH');
     // TODO calculate price impact
@@ -222,6 +242,9 @@ export const AddLiquidityV3 = ({
     >([new BigNumber(0), new BigNumber(0)]);
     const { wallet } = useWallet();
 
+    useEffect(() => {
+        dispatch({ type: 'reset', payload: initialState });
+    }, [initialState, pool]);
     let provider: ethers.providers.Web3Provider | null = null;
     if (wallet.provider) {
         provider = new ethers.providers.Web3Provider(wallet?.provider);
