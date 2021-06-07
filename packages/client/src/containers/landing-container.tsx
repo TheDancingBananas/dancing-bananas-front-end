@@ -24,6 +24,8 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
 
+    const [tab, setTab] = useState<string>('home');
+
     const showWalletModal = () => setShowConnectWallet(true);
     useEffect(() => {
         try {
@@ -46,33 +48,53 @@ function LandingContainer({
                 alignItems='center'
                 justifyContent='space-around'
             >
-                <LiquidityContainer gasPrices={gasPrices} />
+                {tab === 'home' && <LiquidityContainer gasPrices={gasPrices} />}
+
+                {/* {tab === 'reward' && <LiquidityContainer gasPrices={gasPrices} />}
+                {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
+                {tab === 'card' && <LiquidityContainer gasPrices={gasPrices} />} */}
             </Box>
             <Box
                 display='flex'
                 alignItems='center'
                 className='footer-tab-container'
             >
-                {/* <a href='https://t.me/getsomm' target='_blank' rel='noreferrer'>
-                    <FontAwesomeIcon icon={faTelegram} />
-                </a>
-                <a
-                    href='https://twitter.com/sommfinance'
-                    target='_blank'
-                    rel='noreferrer'
+                <div
+                    className='footer-tab'
+                    role='button'
+                    onClick={(e) => {
+                        setTab('home');
+                    }}
                 >
-                    <FontAwesomeIcon icon={faTwitter} />
-                </a> */}
-                <a
-                    className='support-tab'
-                    href='https://discord.gg/VXyUgtnbtv'
-                    target='_blank'
-                    rel='noreferrer'
+                    <img src='../styles/images/home.png' />
+                </div>
+                <div
+                    className='footer-tab'
+                    role='button'
+                    onClick={(e) => {
+                        setTab('reward');
+                    }}
                 >
-                    <FontAwesomeIcon icon={faDiscord} />
-                    &nbsp;
-                    <p>Support</p>
-                </a>
+                    <img src='../styles/images/reward.png' />
+                </div>
+                <div
+                    className='footer-tab'
+                    role='button'
+                    onClick={(e) => {
+                        setTab('search');
+                    }}
+                >
+                    <img src='../styles/images/search.png' />
+                </div>
+                <div
+                    className='footer-tab'
+                    role='button'
+                    onClick={(e) => {
+                        setTab('cart');
+                    }}
+                >
+                    <img src='../styles/images/cart.png' />
+                </div>
             </Box>
         </div>
     );
