@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
+import { Modal } from 'react-bootstrap';
 import { TelegramCTA } from 'components/telegram-cta';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import PendingTx from 'components/pending-tx';
 import { LiquidityContainer } from 'containers/liquidity-container';
+import config from 'config/app';
 import { Box } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -275,6 +277,23 @@ function LandingContainer({
                     </div>
                 </div>
             </Box>
+            <Modal
+                show={networkUpdateModal}
+                onHide={() => setNetworkUpdateModal(false)}
+                dialogClassName='dark'
+            >
+                <Modal.Header
+                    className='connect-wallet-modal-header'
+                    closeButton
+                >
+                    <Modal.Title className='connect-wallet-modal-title'>
+                        {'Change Network'}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='connect-wallet-modal'>
+                    {'Switch to Ethereum Mainnet network in metamask.'}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 }

@@ -24,6 +24,7 @@ import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
 import { Circles, ThreeDots } from 'react-loading-icons';
 import classNames from 'classnames';
+import { ethers } from 'ethers';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
