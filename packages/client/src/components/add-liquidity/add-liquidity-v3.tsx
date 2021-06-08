@@ -66,6 +66,7 @@ import AlertModal from './alert-modal';
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
+    shortUrl: string | null;
     gasPrices: EthGasPrices | null;
     level: number;
     isNANA: boolean | false;
@@ -87,6 +88,7 @@ const ETH_ID = config.ethAddress;
 export const AddLiquidityV3 = ({
     pool,
     balances,
+    shortUrl,
     gasPrices,
     level,
     isNANA,
@@ -120,6 +122,7 @@ export const AddLiquidityV3 = ({
     }>({ status: false, message: <p>Warning placeholder</p> });
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     // State here is used to compute what tokens are being used to add liquidity with.
+    const [copiedShortUrl, setCopiedShortUrl] = useState<boolean>(false);
     const initialState: Record<string, any> = useMemo(
         () => ({
             [token0Symbol]: {
