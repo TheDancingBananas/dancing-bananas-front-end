@@ -59,6 +59,11 @@
         align-items: center;
         margin-bottom: 15px;
         cursor: pointer;
+        opacity: 0.5;
+
+        &.enable {
+            opacity: 1;
+        }
 
         &-img {
             flex: 1;
