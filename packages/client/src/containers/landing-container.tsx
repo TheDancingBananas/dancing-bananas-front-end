@@ -15,6 +15,12 @@ import {
     faTwitter,
     faTelegram,
 } from '@fortawesome/free-brands-svg-icons';
+
+import classNames from 'classnames';
+import { IconHome, IconReward, IconSearch, IconCart } from 'components/icon';
+
+import RewardContainer from './tabs/reward-container';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -24,7 +30,7 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
 
-    const [tab, setTab] = useState<string>('home');
+    const [tab, setTab] = useState<string>('reward');
 
     const showWalletModal = () => setShowConnectWallet(true);
     useEffect(() => {
@@ -49,9 +55,9 @@ function LandingContainer({
                 justifyContent='space-around'
             >
                 {tab === 'home' && <LiquidityContainer gasPrices={gasPrices} />}
+                {tab === 'reward' && <RewardContainer />}
 
-                {/* {tab === 'reward' && <LiquidityContainer gasPrices={gasPrices} />}
-                {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
+                {/* {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
                 {tab === 'card' && <LiquidityContainer gasPrices={gasPrices} />} */}
             </Box>
             <Box
@@ -59,41 +65,55 @@ function LandingContainer({
                 alignItems='center'
                 className='footer-tab-container'
             >
-                <div
-                    className='footer-tab'
-                    role='button'
-                    onClick={(e) => {
-                        setTab('home');
-                    }}
-                >
-                    <img src='../styles/images/home.png' />
-                </div>
-                <div
-                    className='footer-tab'
-                    role='button'
-                    onClick={(e) => {
-                        setTab('reward');
-                    }}
-                >
-                    <img src='../styles/images/reward.png' />
-                </div>
-                <div
-                    className='footer-tab'
-                    role='button'
-                    onClick={(e) => {
-                        setTab('search');
-                    }}
-                >
-                    <img src='../styles/images/search.png' />
-                </div>
-                <div
-                    className='footer-tab'
-                    role='button'
-                    onClick={(e) => {
-                        setTab('cart');
-                    }}
-                >
-                    <img src='../styles/images/cart.png' />
+                <div className='footer-wrapper'>
+                    <div
+                        className={classNames('footer-tab', {
+                            active: tab === 'home',
+                        })}
+                        role='button'
+                        onClick={(e) => {
+                            setTab('home');
+                        }}
+                    >
+                        <IconHome fill={tab === 'home' ? '#000' : '#808080'} />
+                    </div>
+                    <div
+                        className={classNames('footer-tab', {
+                            active: tab === 'reward',
+                        })}
+                        role='button'
+                        onClick={(e) => {
+                            setTab('reward');
+                        }}
+                    >
+                        <IconReward
+                            fill={tab === 'reward' ? '#000' : '#808080'}
+                        />
+                    </div>
+                    <div
+                        className={classNames('footer-tab', {
+                            active: tab === 'search',
+                        })}
+                        role='button'
+                        onClick={(e) => {
+                            setTab('search');
+                        }}
+                    >
+                        <IconSearch
+                            fill={tab === 'search' ? '#000' : '#808080'}
+                        />
+                    </div>
+                    <div
+                        className={classNames('footer-tab', {
+                            active: tab === 'cart',
+                        })}
+                        role='button'
+                        onClick={(e) => {
+                            setTab('cart');
+                        }}
+                    >
+                        <IconCart fill={tab === 'cart' ? '#000' : '#808080'} />
+                    </div>
                 </div>
             </Box>
         </div>
