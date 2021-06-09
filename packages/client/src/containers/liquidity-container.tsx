@@ -22,6 +22,8 @@ import classNames from 'classnames';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
+import WaitContainer from './tabs/wait-container';
+
 export enum GasPriceSelection {
     Standard = 'standard',
     Fast = 'fast',
@@ -179,6 +181,8 @@ export const LiquidityContainer = ({
     const randomPoolBalances = useBalance({ pool: randomPool });
     const nanaPoolBalances = useBalance({ pool: nanaPool });
 
+    const [view, setView] = useState('pairs');
+
     return (
         <LiquidityContext.Provider
             value={{
@@ -190,28 +194,37 @@ export const LiquidityContainer = ({
                 setSlippageTolerance,
             }}
         >
-            {randomPool && nanaPool && (
-                <div className='liquidity-carousel-item'>
-                    <Box className='liquidity-container'>
-                        <AddLiquidityV3
-                            pool={randomPool}
-                            balances={randomPoolBalances}
-                            gasPrices={gasPrices}
-                        />
-                    </Box>
+            {randomPool && nanaPool && view === 'pairs' && (
+                <div className='carousel-container'>
+                    <Carousel centerMode>
+                        <div className='liquidity-carousel-item'>
+                            <Box className='liquidity-container'>
+                                <AddLiquidityV3
+                                    pool={randomPool}
+                                    balances={randomPoolBalances}
+                                    gasPrices={gasPrices}
+                                    onSkipPairs={() => {
+                                        setView('wait');
+                                    }}
+                                />
+                            </Box>
+                        </div>
+                        <div className='liquidity-carousel-item'>
+                            <Box className='liquidity-container yellow'>
+                                <AddLiquidityV3
+                                    pool={nanaPool}
+                                    balances={nanaPoolBalances}
+                                    gasPrices={gasPrices}
+                                    onSkipPairs={() => {
+                                        setView('wait');
+                                    }}
+                                />
+                            </Box>
+                        </div>
+                    </Carousel>
                 </div>
-                // <Carousel centerMode>
-                //     <div className='liquidity-carousel-item'>
-                //         <Box className='liquidity-container'>
-                //             <AddLiquidityV3
-                //                 pool={nanaPool}
-                //                 balances={nanaPoolBalances}
-                //                 gasPrices={gasPrices}
-                //             />
-                //         </Box>
-                //     </div>
-                // </Carousel>
             )}
+            {view === 'wait' && <WaitContainer />}
         </LiquidityContext.Provider>
     );
 };

@@ -30,7 +30,7 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
 
-    const [tab, setTab] = useState<string>('reward');
+    const [tab, setTab] = useState<string>('home');
 
     const showWalletModal = () => setShowConnectWallet(true);
     useEffect(() => {

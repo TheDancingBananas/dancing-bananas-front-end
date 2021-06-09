@@ -50,6 +50,7 @@ type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
     gasPrices: EthGasPrices | null;
+    onSkipPairs: () => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -60,6 +61,7 @@ export const AddLiquidityV3 = ({
     pool,
     balances,
     gasPrices,
+    onSkipPairs,
 }: Props): JSX.Element | null => {
     const [priceImpact, setPriceImpact] = useState('0');
     const [pendingApproval, setPendingApproval] = useState(false);
@@ -1618,7 +1620,12 @@ export const AddLiquidityV3 = ({
                     </div>
                 </Box>
                 <div className='pair-action'>
-                    <button className='pair-action-button silver'>SKIP</button>
+                    <button
+                        className='pair-action-button silver'
+                        onClick={(e) => onSkipPairs()}
+                    >
+                        SKIP
+                    </button>
                     <button className='pair-action-button green'>ADD</button>
                 </div>
                 {/* <br />
