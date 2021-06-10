@@ -1203,8 +1203,6 @@ export const AddLiquidityV3 = ({
         ];
 
         debug.mintParams = mintParams;
-        console.log('MINT PARAMS', mintAmountOneSide, tokenData.id, mintParams);
-
         const baseGasPrice = ethers.utils
             .parseUnits(currentGasPrice.toString(), 9)
             .toString();
