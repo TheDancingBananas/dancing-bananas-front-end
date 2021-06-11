@@ -36,6 +36,8 @@ import { storage } from 'util/localStorage';
 
 import pngWait from 'styles/images/wait.png';
 
+import { storage } from 'util/localStorage';
+
 function LandingContainer({
     gasPrices,
 }: {
@@ -76,6 +78,32 @@ function LandingContainer({
         console.log('oldPoolId', oldPooldId);
 
         getRandomPool(oldPooldId);
+    }, [currentPoolId]);
+
+    const handleRefreshPool = () => {
+        console.log('handle refresh');
+        setCurrentPoolId('');
+    };
+
+    const [currentPoolId, setCurrentPoolId] = useState<string>('');
+
+    const getRandomPool = async () => {
+        const shouldRefresh = storage.shouldRefreshPool();
+
+        if (currentPoolId === '' || shouldRefresh) {
+            const response = await fetch(
+                `/api/v1/rinkeby/randomPool?count=${30}`,
+            );
+            if (!response.ok) throw new Error(`Failed to fetch top pools`);
+
+            const data = await (response.json() as Promise<string>);
+            console.log('new Id', data);
+            setCurrentPoolId(data);
+        }
+    };
+
+    useEffect(() => {
+        getRandomPool();
     }, [currentPoolId]);
 
     const handleRefreshPool = () => {
