@@ -9,7 +9,11 @@ import { PoolSearch } from 'components/pool-search';
 import { Box } from '@material-ui/core';
 import { AddLiquidityV3 } from 'components/add-liquidity/add-liquidity-v3';
 import { useBalance } from 'hooks/use-balance';
-import { usePoolOverview, useTopPools } from 'hooks/data-fetchers';
+import {
+    usePoolOverview,
+    useTopPools,
+    useRandomPool,
+} from 'hooks/data-fetchers';
 import { useWallet } from 'hooks/use-wallet';
 import { debug } from 'util/debug';
 import { EthGasPrices } from '@sommelier/shared-types';
@@ -23,6 +27,8 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
 import WaitContainer from './tabs/wait-container';
+
+import { storage } from 'util/localStorage';
 
 export enum GasPriceSelection {
     Standard = 'standard',
@@ -48,131 +54,131 @@ export const LiquidityContext = createContext<Partial<LiquidityContext>>(
     initialContext,
 );
 
-const SearchHeader = ({
-    setPoolId,
-}: {
-    setPoolId: Dispatch<SetStateAction<string | null>>;
-}) => {
-    return (
-        <>
-            <Box
-                display='flex'
-                justifyContent='space-between'
-                flexDirection='column'
-                className='search-header'
-            >
-                <div style={{ fontSize: '1', color: 'var(--faceDeep)' }}>
-                    {'Search Pairings'}
-                </div>
-                &nbsp;
-                <PoolSearch setPoolId={setPoolId} />
-                {/* <div className='transaction-settings'>
-                    <FontAwesomeIcon icon={faCog} />
-                </div> */}
-            </Box>
-        </>
-    );
-};
+// const SearchHeader = ({
+//     setPoolId,
+// }: {
+//     setPoolId: Dispatch<SetStateAction<string | null>>;
+// }) => {
+//     return (
+//         <>
+//             <Box
+//                 display='flex'
+//                 justifyContent='space-between'
+//                 flexDirection='column'
+//                 className='search-header'
+//             >
+//                 <div style={{ fontSize: '1', color: 'var(--faceDeep)' }}>
+//                     {'Search Pairings'}
+//                 </div>
+//                 &nbsp;
+//                 <PoolSearch setPoolId={setPoolId} />
+//                 {/* <div className='transaction-settings'>
+//                     <FontAwesomeIcon icon={faCog} />
+//                 </div> */}
+//             </Box>
+//         </>
+//     );
+// };
 
-const TransactionSettings = ({
-    gasPrices,
-}: {
-    gasPrices: EthGasPrices | null;
-}) => {
-    // TODO why does TS think this could be undefined ?
-    const { selectedGasPrice, setSelectedGasPrice } = useContext(
-        LiquidityContext,
-    );
+// const TransactionSettings = ({
+//     gasPrices,
+// }: {
+//     gasPrices: EthGasPrices | null;
+// }) => {
+//     // TODO why does TS think this could be undefined ?
+//     const { selectedGasPrice, setSelectedGasPrice } = useContext(
+//         LiquidityContext,
+//     );
 
-    // TODO show loader only for prices
-    const isStandardActive = selectedGasPrice === GasPriceSelection.Standard;
-    const isFastActive = selectedGasPrice === GasPriceSelection.Fast;
-    const isFastestActive = selectedGasPrice === GasPriceSelection.Fastest;
+//     // TODO show loader only for prices
+//     const isStandardActive = selectedGasPrice === GasPriceSelection.Standard;
+//     const isFastActive = selectedGasPrice === GasPriceSelection.Fast;
+//     const isFastestActive = selectedGasPrice === GasPriceSelection.Fastest;
 
-    return (
-        <div style={{ padding: '1rem', paddingTop: '0' }}>
-            <p style={{ marginBottom: '1rem' }}>Select Transaction Speed</p>
-            {setSelectedGasPrice && (
-                <Box
-                    display='flex'
-                    alignItems='center'
-                    justifyContent='space-between'
-                    className='transaction-speed'
-                >
-                    <div
-                        className={classNames({ active: isStandardActive })}
-                        onClick={() =>
-                            setSelectedGasPrice(GasPriceSelection.Standard)
-                        }
-                    >
-                        {isStandardActive && (
-                            <FontAwesomeIcon icon={faCheckCircle} />
-                        )}
-                        <span>
-                            Standard{' '}
-                            {gasPrices?.standard ?? <ThreeDots width='24px' />}{' '}
-                            Gwei
-                        </span>
-                    </div>
-                    <div
-                        className={classNames({ active: isFastActive })}
-                        onClick={() =>
-                            setSelectedGasPrice(GasPriceSelection.Fast)
-                        }
-                    >
-                        {isFastActive && (
-                            <FontAwesomeIcon icon={faCheckCircle} />
-                        )}
-                        <span>
-                            Fast {gasPrices?.fast ?? <ThreeDots width='24px' />}{' '}
-                            Gwei
-                        </span>
-                    </div>
-                    <div
-                        className={classNames({ active: isFastestActive })}
-                        onClick={() =>
-                            setSelectedGasPrice(GasPriceSelection.Fastest)
-                        }
-                    >
-                        {isFastestActive && (
-                            <FontAwesomeIcon icon={faCheckCircle} />
-                        )}
-                        <span>
-                            Fastest{' '}
-                            {gasPrices?.fastest ?? <ThreeDots width='24px' />}{' '}
-                            Gwei
-                        </span>
-                    </div>
-                </Box>
-            )}
-        </div>
-    );
-};
+//     return (
+//         <div style={{ padding: '1rem', paddingTop: '0' }}>
+//             <p style={{ marginBottom: '1rem' }}>Select Transaction Speed</p>
+//             {setSelectedGasPrice && (
+//                 <Box
+//                     display='flex'
+//                     alignItems='center'
+//                     justifyContent='space-between'
+//                     className='transaction-speed'
+//                 >
+//                     <div
+//                         className={classNames({ active: isStandardActive })}
+//                         onClick={() =>
+//                             setSelectedGasPrice(GasPriceSelection.Standard)
+//                         }
+//                     >
+//                         {isStandardActive && (
+//                             <FontAwesomeIcon icon={faCheckCircle} />
+//                         )}
+//                         <span>
+//                             Standard{' '}
+//                             {gasPrices?.standard ?? <ThreeDots width='24px' />}{' '}
+//                             Gwei
+//                         </span>
+//                     </div>
+//                     <div
+//                         className={classNames({ active: isFastActive })}
+//                         onClick={() =>
+//                             setSelectedGasPrice(GasPriceSelection.Fast)
+//                         }
+//                     >
+//                         {isFastActive && (
+//                             <FontAwesomeIcon icon={faCheckCircle} />
+//                         )}
+//                         <span>
+//                             Fast {gasPrices?.fast ?? <ThreeDots width='24px' />}{' '}
+//                             Gwei
+//                         </span>
+//                     </div>
+//                     <div
+//                         className={classNames({ active: isFastestActive })}
+//                         onClick={() =>
+//                             setSelectedGasPrice(GasPriceSelection.Fastest)
+//                         }
+//                     >
+//                         {isFastestActive && (
+//                             <FontAwesomeIcon icon={faCheckCircle} />
+//                         )}
+//                         <span>
+//                             Fastest{' '}
+//                             {gasPrices?.fastest ?? <ThreeDots width='24px' />}{' '}
+//                             Gwei
+//                         </span>
+//                     </div>
+//                 </Box>
+//             )}
+//         </div>
+//     );
+// };
 
 export const LiquidityContainer = ({
     gasPrices,
+    poolId,
+    onRefreshPool,
 }: {
     gasPrices: EthGasPrices | null;
+    poolId: string;
+    onRefreshPool: () => void;
 }): JSX.Element => {
-    const { data: pools, isLoading: isTopPoolsLoading } = useTopPools();
-
-    const [poolId, setPoolId] = useState<string | null>(null);
     const { wallet } = useWallet();
-    const { data: pool } = usePoolOverview(wallet.network, poolId);
-    const [slippageTolerance, setSlippageTolerance] = useState(3.0);
-    const [selectedGasPrice, setSelectedGasPrice] = useState<GasPriceSelection>(
-        GasPriceSelection.Fast,
-    );
-    const balances = useBalance({
-        pool,
-    });
-    debug.poolId = poolId;
-    debug.balances = balances;
 
-    const { data: randomPool } = usePoolOverview(
-        wallet.network,
-        `0x4e3f5778bafe258e4e75786f38fa3f8be34ad7f2`,
-    );
+    // const { data: pools, isLoading: isTopPoolsLoading } = useTopPools();
+    // const { data: pool } = usePoolOverview(wallet.network, poolId);
+    // const [slippageTolerance, setSlippageTolerance] = useState(3.0);
+    // const [selectedGasPrice, setSelectedGasPrice] = useState<GasPriceSelection>(
+    //     GasPriceSelection.Fast,
+    // );
+    // const balances = useBalance({
+    //     pool,
+    // });
+    // debug.poolId = poolId;
+    // debug.balances = balances;
+
+    const { data: randomPool } = usePoolOverview(wallet.network, poolId);
     const { data: nanaPool } = usePoolOverview(
         wallet.network,
         `0xea7ef4f39eb2320a0e23c8ce1131d2c3f67097fd`,
@@ -183,17 +189,29 @@ export const LiquidityContainer = ({
 
     const [view, setView] = useState('pairs');
 
+    const handleSkip = () => {
+        const skipStatus = storage.getSkip();
+
+        if (skipStatus === 'off') {
+            storage.setSkipStatus('on');
+            storage.setLastSkipTime(Math.floor(Date.now() / 1000));
+        }
+
+        setView('wait');
+    };
+
+    const handleSkipFinish = () => {
+        if (storage.getSkip() === 'on') {
+            console.log('skip finish');
+            storage.setSkipStatus('off');
+            storage.setCurrentPoolId('');
+            onRefreshPool();
+            setView('pairs');
+        }
+    };
+
     return (
-        <LiquidityContext.Provider
-            value={{
-                poolId,
-                setPoolId,
-                selectedGasPrice,
-                setSelectedGasPrice,
-                slippageTolerance,
-                setSlippageTolerance,
-            }}
-        >
+        <>
             {randomPool && nanaPool && view === 'pairs' && (
                 <div className='carousel-container'>
                     <Carousel centerMode>
@@ -203,9 +221,7 @@ export const LiquidityContainer = ({
                                     pool={randomPool}
                                     balances={randomPoolBalances}
                                     gasPrices={gasPrices}
-                                    onSkipPairs={() => {
-                                        setView('wait');
-                                    }}
+                                    onSkipPairs={() => handleSkip()}
                                 />
                             </Box>
                         </div>
@@ -215,16 +231,16 @@ export const LiquidityContainer = ({
                                     pool={nanaPool}
                                     balances={nanaPoolBalances}
                                     gasPrices={gasPrices}
-                                    onSkipPairs={() => {
-                                        setView('wait');
-                                    }}
+                                    onSkipPairs={() => handleSkip()}
                                 />
                             </Box>
                         </div>
                     </Carousel>
                 </div>
             )}
-            {view === 'wait' && <WaitContainer />}
-        </LiquidityContext.Provider>
+            {view === 'wait' && (
+                <WaitContainer onSkipFinish={() => handleSkipFinish()} />
+            )}
+        </>
     );
 };

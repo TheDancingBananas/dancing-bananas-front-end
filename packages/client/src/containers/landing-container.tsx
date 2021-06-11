@@ -21,6 +21,8 @@ import { IconHome, IconReward, IconSearch, IconCart } from 'components/icon';
 
 import RewardContainer from './tabs/reward-container';
 
+import { storage } from 'util/localStorage';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -32,7 +34,34 @@ function LandingContainer({
 
     const [tab, setTab] = useState<string>('home');
 
+    const [currentPoolId, setCurrentPoolId] = useState<string>('');
+
+    const getRandomPool = async () => {
+        const shouldRefresh = storage.shouldRefreshPool();
+
+        if (currentPoolId === '' || shouldRefresh) {
+            const response = await fetch(
+                `/api/v1/rinkeby/randomPool?count=${30}`,
+            );
+            if (!response.ok) throw new Error(`Failed to fetch top pools`);
+
+            const data = await (response.json() as Promise<string>);
+            console.log('new Id', data);
+            setCurrentPoolId(data);
+        }
+    };
+
+    useEffect(() => {
+        getRandomPool();
+    }, [currentPoolId]);
+
+    const handleRefreshPool = () => {
+        console.log('handle refresh');
+        setCurrentPoolId('');
+    };
+
     const showWalletModal = () => setShowConnectWallet(true);
+
     useEffect(() => {
         try {
             mixpanel.track('pageview:landing', {});
@@ -54,7 +83,13 @@ function LandingContainer({
                 alignItems='center'
                 justifyContent='space-around'
             >
-                {tab === 'home' && <LiquidityContainer gasPrices={gasPrices} />}
+                {tab === 'home' && currentPoolId !== '' && (
+                    <LiquidityContainer
+                        gasPrices={gasPrices}
+                        poolId={currentPoolId}
+                        onRefreshPool={() => handleRefreshPool()}
+                    />
+                )}
                 {tab === 'reward' && <RewardContainer />}
 
                 {/* {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}

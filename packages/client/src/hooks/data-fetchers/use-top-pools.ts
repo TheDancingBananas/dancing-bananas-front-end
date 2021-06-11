@@ -15,6 +15,13 @@ export interface UseTopPools {
     isError: boolean;
 }
 
+export interface UseRandomPool {
+    data?: string;
+    isLoading: boolean;
+    status: string;
+    isError: boolean;
+}
+
 export const useTopPools = (): UseTopPools => {
     const {
         wallet: { network },
@@ -25,7 +32,7 @@ export const useTopPools = (): UseTopPools => {
 
     const getTopPools = async () => {
         const response = await fetch(
-            `/api/v1/${networkName}/pools?count=${1000}`,
+            `/api/v1/${networkName}/randomPool?count=${1000}`,
         );
         if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
@@ -39,6 +46,35 @@ export const useTopPools = (): UseTopPools => {
     const { data, isLoading, status, isError } = useQuery(
         ['topPools', networkName],
         getTopPools,
+    );
+
+    return { data, isLoading, status, isError };
+};
+
+export const useRandomPool = (): UseRandomPool => {
+    const {
+        wallet: { network },
+    } = useWallet();
+
+    // const networkName = network ? config.networks[network].name : 'mainnet';
+    const networkName = 'rinkeby';
+
+    const getRandomPool = async () => {
+        const response = await fetch(
+            `/api/v1/${networkName}/randomPool?count=${30}`,
+        );
+        if (!response.ok) throw new Error(`Failed to fetch top pools`);
+
+        const data = await (response.json() as Promise<string>);
+
+        debug.pools = data;
+
+        return data;
+    };
+
+    const { data, isLoading, status, isError } = useQuery(
+        ['topPools', networkName],
+        getRandomPool,
     );
 
     return { data, isLoading, status, isError };

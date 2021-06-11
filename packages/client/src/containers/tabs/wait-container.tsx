@@ -9,8 +9,14 @@ import './wait-container.scss';
 import pngTimer from 'styles/images/timer.png';
 import pngPaperPlane from 'styles/images/paper-plane.png';
 
-const WaitContainer = (): JSX.Element | null => {
-    const [time, setTime] = useState<number>(240);
+import { storage, SKIP_DURATION } from 'util/localStorage';
+
+const WaitContainer = ({
+    onSkipFinish,
+}: {
+    onSkipFinish: () => void;
+}): JSX.Element | null => {
+    const [time, setTime] = useState<number>(storage.getRemainingWaitingTime());
 
     const getHours = (time: number): string => {
         const hours = Math.floor(time / 60);
@@ -25,6 +31,9 @@ const WaitContainer = (): JSX.Element | null => {
         interval = setInterval(() => {
             if (time > 1) {
                 setTime(time - 1);
+            } else {
+                clearInterval(interval);
+                onSkipFinish();
             }
         }, 1000);
         return () => clearInterval(interval);
@@ -42,7 +51,9 @@ const WaitContainer = (): JSX.Element | null => {
                 <div className='wait-wrapper'>
                     <div style={{ width: 300, height: 300 }}>
                         <CircularProgressbar
-                            value={(time / 240) * 100}
+                            value={
+                                ((SKIP_DURATION - time) / SKIP_DURATION) * 100
+                            }
                             text={`${getHours(time)}`}
                             strokeWidth={6}
                             styles={buildStyles({

@@ -66,6 +66,18 @@ export class UniswapV3FetcherMemoized implements UniswapFetcher {
         return fn(poolId, blockNumber);
     }
 
+    getRandomPool(
+        count: number,
+        orderBy: keyof Pool,
+    ): Promise<GetTopPoolsResult> {
+        const config = memoConfig.getTopPools;
+        const fn: UniswapFetcher['getTopPools'] = this.memoize(
+            this.fetcher.getTopPools.bind(this.fetcher),
+            config,
+        );
+        return fn(count, orderBy);
+    }
+
     getTopPools(
         count: number,
         orderBy: keyof Pool,

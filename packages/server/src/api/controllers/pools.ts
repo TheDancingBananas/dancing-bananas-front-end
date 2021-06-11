@@ -24,6 +24,7 @@ import shortLinks from 'services/short-links';
 import catchAsyncRoute from 'api/util/catch-async-route';
 import config from '@config';
 import validateEthAddress from 'api/util/validate-eth-address';
+import { getRandomArbitrary } from 'util/math';
 
 // poolToPair(pool: Pool): IUniswapPair {
 // const totalSupply = '0'; // TODO
@@ -96,6 +97,28 @@ async function getTopPools(
     // or find a better TS integration with Celebrate
     const { count, sort }: GetTopPoolsQuery = <any>req.query;
     return fetcher.getTopPools(count, sort);
+}
+
+async function getRandomPool(
+    req: Request<Path, unknown, unknown, GetTopPoolsQuery>,
+): Promise<string> {
+    const { network } = req.params;
+    const fetcher = UniswapV3Fetchers.get(network);
+
+    // TODO: add override for route.get()
+    // Request<any, any, any, ParsedQs> query must be a ParsedQs
+    // We should add a union type for all validated queries
+    // or find a better TS integration with Celebrate
+    const { count, sort }: GetTopPoolsQuery = <any>req.query;
+
+    const data = await fetcher.getTopPools(count, sort);
+
+    const randomIndex = getRandomArbitrary(0, data.length - 1);
+    const randomPool = data[randomIndex];
+    console.log('*************************');
+    console.log(randomPool.id);
+    console.log('*************************');
+    return randomPool.id;
 }
 
 // GET /pools/:id
@@ -185,6 +208,13 @@ route.get(
     '/:network/ethPrice',
     networkValidator,
     catchAsyncRoute(getEthPrice, poolConfig),
+);
+
+route.get(
+    '/:network/randomPool',
+    getTopPoolsValidator,
+    // sMaxAge != memoizer ttl here because we have the cache warmer, we want the cdn to revalidate more often
+    catchAsyncRoute(getRandomPool, poolConfig),
 );
 
 route.get(
