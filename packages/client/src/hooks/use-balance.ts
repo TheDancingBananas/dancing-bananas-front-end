@@ -203,3 +203,30 @@ export const useBalance = ({ pool }: Props): WalletBalances => {
 
     return balances;
 };
+
+export const useETHBalance = (): ethers.BigNumber => {
+    const { wallet } = useWallet();
+    let provider: ethers.providers.Web3Provider;
+    if (wallet.provider) {
+        provider = new ethers.providers.Web3Provider(wallet?.provider);
+    }
+
+    const [balances, setBalances] = useState<ethers.BigNumber>(
+        ethers.BigNumber.from(0),
+    );
+
+    useEffect(() => {
+        // get balances of both tokens
+        const getBalances = async () => {
+            if (!provider || !wallet.account) return;
+            const getEthBalance = provider.getBalance(wallet.account);
+            const [ethBalance] = await Promise.all([getEthBalance]);
+            setBalances(ethBalance);
+        };
+
+        void getBalances();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [wallet]);
+
+    return balances;
+};
