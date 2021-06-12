@@ -9,6 +9,7 @@ import {
 import { PoolSearch } from 'components/pool-search';
 import { Box } from '@material-ui/core';
 import { AddLiquidityV3 } from 'components/add-liquidity/add-liquidity-v3';
+import { Helmet } from 'react-helmet';
 import { useLocation, useParams } from 'react-router-dom';
 import { useBalance } from 'hooks/use-balance';
 import {
