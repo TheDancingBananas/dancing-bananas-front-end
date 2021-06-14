@@ -1,4 +1,4 @@
-export const SKIP_DURATION = 20; // 20 sec for test. Should be 240 mins in production
+export const SKIP_DURATION = 5; // 5 sec for test. Should be 240 mins in production
 
 const setCurrentPoolId = (poolId: string): void => {
     localStorage.setItem('random-pool-id', poolId);

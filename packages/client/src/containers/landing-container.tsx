@@ -82,6 +82,7 @@ function LandingContainer({
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='space-around'
+                className='main-content-container'
             >
                 {tab === 'home' && currentPoolId !== '' && (
                     <LiquidityContainer

@@ -52,6 +52,7 @@ type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
     gasPrices: EthGasPrices | null;
+    level: number;
     leftArrow: boolean | false;
     rightArrow: boolean | false;
     onSkipPairs: () => void;
@@ -67,6 +68,7 @@ export const AddLiquidityV3 = ({
     pool,
     balances,
     gasPrices,
+    level,
     leftArrow,
     rightArrow,
     onSkipPairs,
@@ -1322,8 +1324,15 @@ export const AddLiquidityV3 = ({
             <div className='add-v3-container'>
                 <div className='pool-info'>
                     <div className='pool-pairs'>
-                        <div className='pool-pairs-arrow'>
-                            {/* {leftArrow && <img src={pngArrowLeft} onClick={(e) => onLeft()}/>} */}
+                        <div
+                            className='pool-pairs-arrow'
+                            onClick={(e) => {
+                                if (leftArrow) {
+                                    onLeft();
+                                }
+                            }}
+                        >
+                            {leftArrow && <img src={pngArrowLeft} />}
                         </div>
                         <div className='pool-pairs-item'>
                             {resolveLogo(tokenInputState[token0Symbol].id)}
@@ -1333,8 +1342,15 @@ export const AddLiquidityV3 = ({
                             {resolveLogo(tokenInputState[token1Symbol].id)}
                             <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
                         </div>
-                        <div className='pool-pairs-arrow'>
-                            {/* {rightArrow && <img src={pngArrowRight} onClick={(e) => onRight()} />} */}
+                        <div
+                            className='pool-pairs-arrow'
+                            onClick={(e) => {
+                                if (rightArrow) {
+                                    onRight();
+                                }
+                            }}
+                        >
+                            {rightArrow && <img src={pngArrowRight} />}
                         </div>
                     </div>
                     <div className='pool-details'>
@@ -1600,11 +1616,13 @@ export const AddLiquidityV3 = ({
                         })}
                         role='button'
                         onClick={() => {
-                            setSentiment(isFlipped ? 'bullish' : 'bearish');
-                            trackSentimentInteraction(pool, 'bearish');
+                            if (level > 1) {
+                                setSentiment(isFlipped ? 'bullish' : 'bearish');
+                                trackSentimentInteraction(pool, 'bearish');
+                            }
                         }}
                     >
-                        <img src={pngApyHappy} />
+                        <img src={pngApySad} />
                     </div>
                     <div
                         className={classNames({
@@ -1628,11 +1646,13 @@ export const AddLiquidityV3 = ({
                         })}
                         role='button'
                         onClick={() => {
-                            setSentiment(isFlipped ? 'bearish' : 'bullish');
-                            trackSentimentInteraction(pool, 'bullish');
+                            if (level > 1) {
+                                setSentiment(isFlipped ? 'bearish' : 'bullish');
+                                trackSentimentInteraction(pool, 'bullish');
+                            }
                         }}
                     >
-                        <img src={pngApySad} />
+                        <img src={pngApyHappy} />
                     </div>
                 </Box>
                 <div className='pair-action'>

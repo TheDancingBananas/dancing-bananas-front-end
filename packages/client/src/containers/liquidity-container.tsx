@@ -155,6 +155,8 @@ export const LiquidityContext = createContext<Partial<LiquidityContext>>(
 //     );
 // };
 
+const level = 1;
+
 export const LiquidityContainer = ({
     gasPrices,
     poolId,
@@ -236,7 +238,6 @@ export const LiquidityContainer = ({
             {randomPool && nanaPool && view === 'pairs' && (
                 <div className='carousel-container'>
                     <Carousel
-                        centerMode
                         showArrows={false}
                         showIndicators={false}
                         showStatus={false}
@@ -248,6 +249,7 @@ export const LiquidityContainer = ({
                                     pool={randomPool}
                                     balances={randomPoolBalances}
                                     gasPrices={gasPrices}
+                                    level={level}
                                     leftArrow={false}
                                     rightArrow={true}
                                     onSkipPairs={() => handleSkip(1)}
@@ -262,6 +264,7 @@ export const LiquidityContainer = ({
                                     pool={nanaPool}
                                     balances={nanaPoolBalances}
                                     gasPrices={gasPrices}
+                                    level={level}
                                     leftArrow={true}
                                     rightArrow={false}
                                     onSkipPairs={() => handleSkip(2)}
