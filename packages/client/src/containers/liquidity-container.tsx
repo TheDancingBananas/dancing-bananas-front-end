@@ -259,6 +259,8 @@ export const LiquidityContainer = ({
     const handleClickRight = () => {
         setCurrentItem(1);
     };
+
+    const str = 
     return (
         <>
             {randomPool && view === 'pairs' && (
