@@ -19,8 +19,17 @@
     .pool-pairs {
         display: flex;
         align-items: center;
-        justify-content: center;
-        align-content: center;
+        justify-content: space-between;
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+
+        &-arrow {
+            width: 28px;
+            height: 70px;
+            cursor: pointer;
+            z-index: 500;
+        }
 
         &-item {
             display: flex;

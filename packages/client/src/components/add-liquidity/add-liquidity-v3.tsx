@@ -45,12 +45,18 @@ import classNames from 'classnames';
 import pngApyHappy from 'styles/images/apy-happy.png';
 import pngApyNormal from 'styles/images/apy-normal.png';
 import pngApySad from 'styles/images/apy-sad.png';
+import pngArrowLeft from 'styles/images/left.png';
+import pngArrowRight from 'styles/images/right.png';
 
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
     gasPrices: EthGasPrices | null;
+    leftArrow: boolean | false;
+    rightArrow: boolean | false;
     onSkipPairs: () => void;
+    onLeft: () => void;
+    onRight: () => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -61,7 +67,11 @@ export const AddLiquidityV3 = ({
     pool,
     balances,
     gasPrices,
+    leftArrow,
+    rightArrow,
     onSkipPairs,
+    onLeft,
+    onRight,
 }: Props): JSX.Element | null => {
     const [priceImpact, setPriceImpact] = useState('0');
     const [pendingApproval, setPendingApproval] = useState(false);
@@ -1312,6 +1322,9 @@ export const AddLiquidityV3 = ({
             <div className='add-v3-container'>
                 <div className='pool-info'>
                     <div className='pool-pairs'>
+                        <div className='pool-pairs-arrow'>
+                            {/* {leftArrow && <img src={pngArrowLeft} onClick={(e) => onLeft()}/>} */}
+                        </div>
                         <div className='pool-pairs-item'>
                             {resolveLogo(tokenInputState[token0Symbol].id)}
                             <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
@@ -1319,6 +1332,9 @@ export const AddLiquidityV3 = ({
                         <div className='pool-pairs-item'>
                             {resolveLogo(tokenInputState[token1Symbol].id)}
                             <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
+                        </div>
+                        <div className='pool-pairs-arrow'>
+                            {/* {rightArrow && <img src={pngArrowRight} onClick={(e) => onRight()} />} */}
                         </div>
                     </div>
                     <div className='pool-details'>

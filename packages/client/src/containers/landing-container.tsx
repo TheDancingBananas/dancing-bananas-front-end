@@ -88,6 +88,7 @@ function LandingContainer({
                         gasPrices={gasPrices}
                         poolId={currentPoolId}
                         onRefreshPool={() => handleRefreshPool()}
+                        handleWalletConnect={() => showWalletModal()}
                     />
                 )}
                 {tab === 'reward' && <RewardContainer />}

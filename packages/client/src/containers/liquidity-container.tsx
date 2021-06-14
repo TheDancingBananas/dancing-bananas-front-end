@@ -159,10 +159,12 @@ export const LiquidityContainer = ({
     gasPrices,
     poolId,
     onRefreshPool,
+    handleWalletConnect,
 }: {
     gasPrices: EthGasPrices | null;
     poolId: string;
     onRefreshPool: () => void;
+    handleWalletConnect: () => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
 
@@ -178,6 +180,8 @@ export const LiquidityContainer = ({
     // debug.poolId = poolId;
     // debug.balances = balances;
 
+    const [currentItem, setCurrentItem] = useState<number>(0);
+
     const { data: randomPool } = usePoolOverview(wallet.network, poolId);
     const { data: nanaPool } = usePoolOverview(
         wallet.network,
@@ -189,7 +193,16 @@ export const LiquidityContainer = ({
 
     const [view, setView] = useState('pairs');
 
-    const handleSkip = () => {
+    const handleSkip = (status: number) => {
+        if (!wallet.account) {
+            handleWalletConnect();
+            return;
+        }
+
+        if (status === 1) {
+            setCurrentItem(1);
+            return;
+        }
         const skipStatus = storage.getSkip();
 
         if (skipStatus === 'off') {
@@ -210,18 +223,36 @@ export const LiquidityContainer = ({
         }
     };
 
+    const handleClickLeft = () => {
+        setCurrentItem(0);
+    };
+
+    const handleClickRight = () => {
+        setCurrentItem(1);
+    };
+
     return (
         <>
             {randomPool && nanaPool && view === 'pairs' && (
                 <div className='carousel-container'>
-                    <Carousel centerMode>
+                    <Carousel
+                        centerMode
+                        showArrows={false}
+                        showIndicators={false}
+                        showStatus={false}
+                        selectedItem={currentItem}
+                    >
                         <div className='liquidity-carousel-item'>
                             <Box className='liquidity-container'>
                                 <AddLiquidityV3
                                     pool={randomPool}
                                     balances={randomPoolBalances}
                                     gasPrices={gasPrices}
-                                    onSkipPairs={() => handleSkip()}
+                                    leftArrow={false}
+                                    rightArrow={true}
+                                    onSkipPairs={() => handleSkip(1)}
+                                    onLeft={() => handleClickLeft()}
+                                    onRight={() => handleClickRight()}
                                 />
                             </Box>
                         </div>
@@ -231,7 +262,11 @@ export const LiquidityContainer = ({
                                     pool={nanaPool}
                                     balances={nanaPoolBalances}
                                     gasPrices={gasPrices}
-                                    onSkipPairs={() => handleSkip()}
+                                    leftArrow={true}
+                                    rightArrow={false}
+                                    onSkipPairs={() => handleSkip(2)}
+                                    onLeft={() => handleClickLeft()}
+                                    onRight={() => handleClickRight()}
                                 />
                             </Box>
                         </div>
