@@ -42,6 +42,7 @@ import Sentry, { SentryError } from 'util/sentry';
 import { trackSentimentInteraction, trackAddLiquidityTx } from 'util/mixpanel';
 import classNames from 'classnames';
 
+import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngApyHappy from 'styles/images/apy-happy.png';
 import pngApyNormal from 'styles/images/apy-normal.png';
 import pngApySad from 'styles/images/apy-sad.png';
@@ -1332,7 +1333,7 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            {leftArrow && <img src={pngArrowLeft} />}
+                            {/* {leftArrow && <img src={pngArrowLeft} />} */}
                         </div>
                         <div className='pool-pairs-item'>
                             {resolveLogo(tokenInputState[token0Symbol].id)}
@@ -1350,21 +1351,26 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            {rightArrow && <img src={pngArrowRight} />}
+                            {/* {rightArrow && <img src={pngArrowRight} />} */}
                         </div>
                     </div>
                     <div className='pool-details'>
                         <div className='pool-details-row'>
                             <div className='pool-details-desc'>
-                                FEES AWARDED
+                                TOTAL POOL FEES
                             </div>
-                            <div className='pool-details-value green'>$180</div>
+                            <div className='pool-details-value green'>
+                                86.49K
+                            </div>
                         </div>
                         <div className='pool-details-row'>
                             <div className='pool-details-desc'>
-                                NANAS AWARDED
+                                NANAS FOR YOU
                             </div>
-                            <div className='pool-details-value'>+5</div>
+                            <div className='pool-details-value'>
+                                +5
+                                <img src={pngDancingBanana} />
+                            </div>
                         </div>
                     </div>
                 </div>
