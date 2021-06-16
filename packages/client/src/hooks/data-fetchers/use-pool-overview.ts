@@ -23,8 +23,8 @@ export const usePoolOverview = (
     const getPoolOverview = async () => {
         if (!poolId) return;
         if (!network) network = '1';
-        // const networkName = config.networks[network].name;
-        const networkName = 'rinkeby';
+        const networkName = config.networks[network].name;
+        // const networkName = 'rinkeby';
 
         const response = await fetch(`/api/v1/${networkName}/pools/${poolId}`);
         if (!response.ok) throw new Error(`Failed to fetch pool ${poolId}`);
