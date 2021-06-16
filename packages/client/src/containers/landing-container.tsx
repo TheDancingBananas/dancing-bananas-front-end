@@ -20,6 +20,7 @@ import classNames from 'classnames';
 import { IconHome, IconReward, IconSearch, IconCart } from 'components/icon';
 
 import RewardContainer from './tabs/reward-container';
+import CartContainer from './tabs/cart-container';
 
 import { storage } from 'util/localStorage';
 
@@ -93,6 +94,7 @@ function LandingContainer({
                     />
                 )}
                 {tab === 'reward' && <RewardContainer />}
+                {tab === 'cart' && <CartContainer />}
 
                 {/* {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
                 {tab === 'card' && <LiquidityContainer gasPrices={gasPrices} />} */}
