@@ -90,9 +90,11 @@ function LandingContainer({
     const getRandomPool = async () => {
         const shouldRefresh = storage.shouldRefreshPool();
 
+        const networkName = 'mainnet';
+
         if (currentPoolId === '' || shouldRefresh) {
             const response = await fetch(
-                `/api/v1/mainnet/randomPool?count=${30}`,
+                `/api/v1/${networkName}/randomPool?count=${100}`,
             );
             if (!response.ok) throw new Error(`Failed to fetch top pools`);
 

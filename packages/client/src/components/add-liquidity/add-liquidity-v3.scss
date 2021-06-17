@@ -120,6 +120,13 @@
         margin-top: 15px;
     }
 
+    .pool-separator {
+        height: 1px;
+        background: #671CC9;
+        width: 80%;
+        margin-top: 15px;
+    }
+
     .pool-pairs {
         display: flex;
         justify-content: space-around;
@@ -195,6 +202,8 @@
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px rgba(0, 0, 0, 0.75);
             -webkit-text-stroke-width: 0.5px;
             -webkit-text-stroke-color: black;
+
+            height: 35px;
 
             &.green {
                 color: #00FE81;
