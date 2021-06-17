@@ -39,6 +39,7 @@ import { EthGasPrices, LiquidityBand } from '@sommelier/shared-types';
 import { PoolOverview } from 'hooks/data-fetchers';
 import { debug } from 'util/debug';
 import Sentry, { SentryError } from 'util/sentry';
+import { formatUSD } from 'util/formats';
 import { trackSentimentInteraction, trackAddLiquidityTx } from 'util/mixpanel';
 import classNames from 'classnames';
 
@@ -48,6 +49,7 @@ import pngApyNormal from 'styles/images/apy-normal.png';
 import pngApySad from 'styles/images/apy-sad.png';
 import pngArrowLeft from 'styles/images/left.png';
 import pngArrowRight from 'styles/images/right.png';
+import pngMoney from 'styles/images/money.png';
 
 type Props = {
     balances: WalletBalances;
@@ -1354,22 +1356,24 @@ export const AddLiquidityV3 = ({
                             {/* {rightArrow && <img src={pngArrowRight} />} */}
                         </div>
                     </div>
+                    <div className='pool-separator' />
                     <div className='pool-details'>
                         <div className='pool-details-row'>
-                            <div className='pool-details-desc'>
-                                TOTAL POOL FEES
+                            <div className='pool-details-value'>
+                                <img src={pngDancingBanana} />
+                                +5
                             </div>
-                            <div className='pool-details-value green'>
-                                86.49K
-                            </div>
-                        </div>
-                        <div className='pool-details-row'>
                             <div className='pool-details-desc'>
                                 NANAS FOR YOU
                             </div>
-                            <div className='pool-details-value'>
-                                +5
-                                <img src={pngDancingBanana} />
+                        </div>
+                        <div className='pool-details-row'>
+                            <div className='pool-details-value green'>
+                                <img src={pngMoney} />
+                                {pool.volumeUSD}
+                            </div>
+                            <div className='pool-details-desc'>
+                                24 HRS POOL FEES
                             </div>
                         </div>
                     </div>
