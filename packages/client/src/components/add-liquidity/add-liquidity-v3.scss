@@ -110,8 +110,6 @@
             -webkit-text-stroke-width: 0.2px;
             -webkit-text-stroke-color: black;
 
-            height: 35px;
-
             &.green {
                 color: #00FE81;
             }
@@ -119,6 +117,17 @@
             img {
                 width: 34px !important;
                 margin-right: 8px;
+            }
+        }
+
+        &-banana {
+            &-row {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                img {
+                    width: 21px !important;
+                }
             }
         }
     }

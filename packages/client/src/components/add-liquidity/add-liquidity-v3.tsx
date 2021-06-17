@@ -39,7 +39,7 @@ import { EthGasPrices, LiquidityBand } from '@sommelier/shared-types';
 import { PoolOverview } from 'hooks/data-fetchers';
 import { debug } from 'util/debug';
 import Sentry, { SentryError } from 'util/sentry';
-import { formatUSD } from 'util/formats';
+import { formatUSD, formatNumber } from 'util/formats';
 import { trackSentimentInteraction, trackAddLiquidityTx } from 'util/mixpanel';
 import classNames from 'classnames';
 
@@ -1359,9 +1359,16 @@ export const AddLiquidityV3 = ({
                     <div className='pool-separator' />
                     <div className='pool-details'>
                         <div className='pool-details-row'>
-                            <div className='pool-details-value'>
-                                <img src={pngDancingBanana} />
-                                +5
+                            <div className='pool-details-banana'>
+                                <div className='pool-details-banana-row'>
+                                    <img src={pngDancingBanana} />
+                                    <img src={pngDancingBanana} />
+                                </div>
+                                <div className='pool-details-banana-row'>
+                                    <img src={pngDancingBanana} />
+                                    <img src={pngDancingBanana} />
+                                    <img src={pngDancingBanana} />
+                                </div>
                             </div>
                             <div className='pool-details-desc'>
                                 NANAS FOR YOU
@@ -1370,7 +1377,7 @@ export const AddLiquidityV3 = ({
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
                                 <img src={pngMoney} />
-                                {formatUSD(
+                                {formatNumber(
                                     (Number(pool.volumeUSD) / 100) * 0.3,
                                 )}
                             </div>

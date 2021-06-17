@@ -27,4 +27,17 @@ export const poolSymbol = (pool: PoolLike, separator = ' '): string => {
 
     return `${pool.token0.symbol}${separator}${pool.token1.symbol}`;
 };
+
+export const formatNumber = (val: number): string => {
+    if (val < Math.pow(10, 5)) {
+        return usdFormatter.format(parseFloat(val.toString()));
+    }
+
+    if (val < Math.pow(10, 8)) {
+        return `${usdFormatter.format(val / 1000)}K`;
+    }
+
+    return `${usdFormatter.format(val / 1000000)}M`;
+};
+
 export type { PoolLike };
