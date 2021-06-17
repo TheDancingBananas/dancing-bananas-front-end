@@ -1321,7 +1321,7 @@ export const AddLiquidityV3 = ({
     const disableWETH = tokenInputState['ETH'].selected;
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
-
+    console.log(pool);
     return (
         <>
             <div className='add-v3-container'>
@@ -1370,7 +1370,9 @@ export const AddLiquidityV3 = ({
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
                                 <img src={pngMoney} />
-                                {pool.volumeUSD}
+                                {formatUSD(
+                                    (Number(pool.volumeUSD) / 100) * 0.3,
+                                )}
                             </div>
                             <div className='pool-details-desc'>
                                 24 HRS POOL FEES

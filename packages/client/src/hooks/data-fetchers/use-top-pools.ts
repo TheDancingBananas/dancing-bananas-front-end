@@ -32,7 +32,7 @@ export const useTopPools = (): UseTopPools => {
 
     const getTopPools = async () => {
         const response = await fetch(
-            `/api/v1/${networkName}/randomPool?count=${100}`,
+            `/api/v1/${networkName}/randomPool?count=${50}`,
         );
         if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
@@ -61,7 +61,7 @@ export const useRandomPool = (): UseRandomPool => {
 
     const getRandomPool = async () => {
         const response = await fetch(
-            `/api/v1/${networkName}/randomPool?count=${1000}`,
+            `/api/v1/${networkName}/randomPool?count=${50}`,
         );
         if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
