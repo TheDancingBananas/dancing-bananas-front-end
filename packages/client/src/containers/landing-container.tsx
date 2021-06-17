@@ -94,7 +94,7 @@ function LandingContainer({
 
         if (currentPoolId === '' || shouldRefresh) {
             const response = await fetch(
-                `/api/v1/${networkName}/randomPool?count=${100}`,
+                `/api/v1/${networkName}/randomPool?count=${50}`,
             );
             if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
