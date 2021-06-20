@@ -3,6 +3,7 @@
 @import './themes.scss';
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;400;600&family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&display=swap');
 
 @import url('https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Bungee+Inline|Bungee+Outline|Bungee+Shade');
 
@@ -230,7 +231,8 @@ p {
 }
 
 .app-body {
-    width: calc(100% - 200px);
+    width: 100%;
+    max-width: 840px;
     padding: 2rem;
     min-height: 100vh;
     // background: var(--bgDeep);
@@ -242,10 +244,10 @@ p {
     margin-top: 1rem;
 }
 .logo-title {
-    font-family: 'Barlow Condensed';
+    font-family: 'Oswald', sans-serif;
     font-weight: 800;
     color: var(--faceDeep);
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 .centered {
     text-align: center;
@@ -330,20 +332,17 @@ p {
     //     display: flex;
     // }
 }
-.telegram-cta {
+.social-cta {
     font-size: 1rem;
-    color: var(--facePrimary);
+    color: var(--faceAccentAlt);
+    padding: 0.5rem 0;
     a {
-        color: var(--facePrimary);
-        // font-weight: bold;
+        color: var(--faceAccentAlt);
         &:hover {
+            color: var(--faceDeep);
             text-decoration: underline;
         }
     }
-}
-
-.social-cta {
-    text-align: right;
 }
 
 // .pair-search-container {

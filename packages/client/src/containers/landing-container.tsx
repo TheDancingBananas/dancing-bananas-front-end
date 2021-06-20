@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
@@ -9,7 +8,8 @@ import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import PendingTx from 'components/pending-tx';
 import { LiquidityContainer } from 'containers/liquidity-container';
-import config from 'config/app';
+import { useMediaQuery } from 'react-responsive';
+import { AppHeader } from 'components/app-header/app-header';
 import { Box } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -38,10 +38,8 @@ import { storage } from 'util/localStorage';
 import pngWait from 'styles/images/wait.png';
 
 function LandingContainer({
-    setShowConnectWallet,
     gasPrices,
 }: {
-    setShowConnectWallet: (wallet: boolean) => void;
     gasPrices: EthGasPrices | null;
 }): JSX.Element {
     const { wallet } = useWallet();
@@ -277,25 +275,6 @@ function LandingContainer({
                     </div>
                 </div>
             </Box>
-            <Modal
-                show={networkUpdateModal}
-                onHide={() => setNetworkUpdateModal(false)}
-                dialogClassName='dark'
-            >
-                <Modal.Header
-                    className='connect-wallet-modal-header'
-                    closeButton
-                >
-                    <Modal.Title className='connect-wallet-modal-title'>
-                        {'Change Network'}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='connect-wallet-modal'>
-                    {
-                        'Pairings by Sommelier only supports Ethereum mainnet. Please change your network in your wallet provider. More networks coming soon!'
-                    }
-                </Modal.Body>
-            </Modal>
         </div>
     );
 }

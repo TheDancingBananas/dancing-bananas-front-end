@@ -27,6 +27,7 @@ import {
     faCheckCircle,
     faBan,
     faExchangeAlt,
+    faCopy,
 } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
 import { compactHash } from 'util/formats';

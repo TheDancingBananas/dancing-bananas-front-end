@@ -25,8 +25,7 @@ import { LiquidityBasketData } from 'types/states';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
-import { Circles, ThreeDots } from 'react-loading-icons';
-import classNames from 'classnames';
+import { Circles } from 'react-loading-icons';
 import { ethers } from 'ethers';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -325,5 +324,78 @@ export const LiquidityContainer = ({
                 <WaitContainer onSkipFinish={() => handleSkipFinish()} />
             )}
         </>
+    );
+};
+
+const WidgetSelector = (): JSX.Element => (
+    <Box display='flex'>
+        <Box display='flex'>
+            <div className='nav-item-border-wrapper'>
+                <div className='nav-item'>Liquidity</div>
+            </div>
+        </Box>
+    </Box>
+);
+
+const SearchWithHelmet = ({ pool }: { pool: PoolOverview }) => {
+    return (
+        <>
+            {pool && (
+                <Helmet>
+                    <meta
+                        name='description'
+                        content={`Simplest way to provide liquidity to ${pool?.token0?.symbol} / ${pool?.token1?.symbol} uniswap pool`}
+                    />
+                    <title>{`Sommelier Finance ${pool?.token0?.symbol} / ${pool?.token1?.symbol} Uniswap Pool`}</title>
+                </Helmet>
+            )}
+            <PoolSearch pool={pool} />
+        </>
+    );
+};
+
+const ErrorBox = ({ msg }: { msg: string }) => (
+    <Box style={{ textAlign: 'center' }} className='alert-well'>
+        {msg}
+    </Box>
+);
+
+const LoadingPoolBox = ({ msg }: { msg: string }) => (
+    <Box style={{ textAlign: 'center' }}>
+        <Circles width='24px' height='24px' />
+        {msg}
+    </Box>
+);
+
+const SettingsBar = ({ gasPrices }: { gasPrices: EthGasPrices | null }) => {
+    const [showModal, setShowModal] = useState(false);
+
+    return (
+        <Box
+            display='flex'
+            justifyContent='space-between'
+            className='search-header'
+            alignItems='center'
+        >
+            <div style={{ fontSize: '1rem', color: 'var(--faceDeep)' }}>
+                {'Add Liquidity'}
+            </div>
+            <div
+                className='transaction-settings'
+                onClick={() => setShowModal(true)}
+            >
+                <FontAwesomeIcon icon={faCog} />
+                {showModal ? (
+                    <SettingsPopover
+                        show={showModal}
+                        gasPrices={gasPrices}
+                        onClose={(e) => {
+                            e.stopPropagation();
+                            setShowModal(false);
+                        }}
+                    />
+                ) : null}
+            </div>
+        </Box>
     );
 };
