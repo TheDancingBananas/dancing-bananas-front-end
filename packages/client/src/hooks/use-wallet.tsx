@@ -259,6 +259,8 @@ export const WalletProvider = ({
                 providerName: 'metamask',
             };
             mixpanel.people?.set({ distinct_id: account, wallet: account });
+
+            mixpanel.identify(account);
             mixpanel.track('wallet:connected', mixpanelData);
         } catch (e) {
             console.error(`Metrics error on wallet.`);
@@ -289,6 +291,8 @@ export const WalletProvider = ({
                 distinct_id: wcProvider.accounts[0],
                 wallet: wcProvider.accounts[0],
             });
+
+            mixpanel.identify(wcProvider.accounts[0]);
             mixpanel.track('wallet:connected', mixpanelData);
         } catch (e) {
             console.error(`Metrics error on wallet.`);
