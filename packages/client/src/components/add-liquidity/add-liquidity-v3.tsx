@@ -28,6 +28,9 @@ import {
     faBan,
     faExchangeAlt,
     faCopy,
+    faAngleDoubleDown,
+    faAngleDoubleUp,
+    faArrowsAltV,
 } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
 import { compactHash } from 'util/formats';
@@ -1391,6 +1394,7 @@ export const AddLiquidityV3 = ({
     const disableWETH = tokenInputState['ETH'].selected;
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
+    const baseCoinId = isFlipped ? pool.token0.id : pool.token1.id;
 
     const isDisabled = (symbol: string) =>
         disabledInput && disabledInput.includes(symbol);

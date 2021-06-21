@@ -46,8 +46,8 @@ TokenWithLogo.displayName = 'TokenWithLogo';
 
 const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
 
-export function resolveLogo(addressLower?: string): JSX.Element {
-    console.log(addressLower);
+export function resolveLogo(addressLower?: string, size = '24px'): JSX.Element {
+
     if (
         addressLower?.toLowerCase() === config.ethAddress.toLowerCase() ||
         addressLower?.toLowerCase() === weth.toLowerCase()
@@ -56,7 +56,7 @@ export function resolveLogo(addressLower?: string): JSX.Element {
         const imgUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png`;
         return (
             <span>
-                <img src={pngETH} alt='🍇' />
+                <img src={pngETH} alt='🍇' height={size} />
             </span>
         );
     }
@@ -72,7 +72,7 @@ export function resolveLogo(addressLower?: string): JSX.Element {
     const imgUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
     return (
         <span>
-            <img src={imgUrl} alt='🍇' />
+            <img src={imgUrl} alt='🍇' height={size} />
         </span>
     );
 }
