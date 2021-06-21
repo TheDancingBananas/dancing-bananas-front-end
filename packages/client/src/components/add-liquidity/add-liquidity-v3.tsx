@@ -50,15 +50,22 @@ import pngApySad from 'styles/images/apy-sad.png';
 import pngArrowLeft from 'styles/images/left.png';
 import pngArrowRight from 'styles/images/right.png';
 import pngMoney from 'styles/images/money.png';
+import pngETH from 'styles/images/eth.png';
+import pngNANA from 'styles/images/tokens/nana.png';
+import pngLeft from 'styles/images/left-arrow.png';
+import pngRight from 'styles/images/right-arrow.png';
+import pngBanana2 from 'styles/images/banana-2.png';
 
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
     gasPrices: EthGasPrices | null;
     level: number;
+    isNANA: boolean | false;
     leftArrow: boolean | false;
     rightArrow: boolean | false;
     onSkipPairs: () => void;
+    onAddBasket: () => void;
     onLeft: () => void;
     onRight: () => void;
 };
@@ -72,9 +79,11 @@ export const AddLiquidityV3 = ({
     balances,
     gasPrices,
     level,
+    isNANA,
     leftArrow,
     rightArrow,
     onSkipPairs,
+    onAddBasket,
     onLeft,
     onRight,
 }: Props): JSX.Element | null => {
@@ -1321,59 +1330,75 @@ export const AddLiquidityV3 = ({
     const disableWETH = tokenInputState['ETH'].selected;
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
-    console.log(pool);
+
     return (
         <>
             <div className='add-v3-container'>
+                <div className='navigator'>
+                    <div
+                        className='navigator-arrow'
+                        onClick={(e) => {
+                            if (leftArrow) {
+                                onLeft();
+                            }
+                        }}
+                    >
+                        {leftArrow && <img src={pngLeft} />}
+                    </div>
+                    <div className='navigator-title'>
+                        {isNANA ? 'NANA POOL' : 'DANCING BANANA POOL'}
+                    </div>
+                    <div
+                        className='navigator-arrow'
+                        onClick={(e) => {
+                            if (rightArrow) {
+                                onRight();
+                            }
+                        }}
+                    >
+                        {rightArrow && <img src={pngRight} />}
+                    </div>
+                </div>
+                <div className={classNames('reward', { nana: isNANA })}>
+                    <img src={pngBanana2} />
+                    <div className='reward-count'>x5</div>
+                    <div className='reward-amount'>
+                        BONUS
+                        <br />
+                        BANANAS
+                    </div>
+                </div>
                 <div className='pool-info'>
                     <div className='pool-pairs'>
-                        <div
-                            className='pool-pairs-arrow'
-                            onClick={(e) => {
-                                if (leftArrow) {
-                                    onLeft();
-                                }
-                            }}
-                        >
-                            {/* {leftArrow && <img src={pngArrowLeft} />} */}
-                        </div>
-                        <div className='pool-pairs-item'>
-                            {resolveLogo(tokenInputState[token0Symbol].id)}
-                            <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
-                        </div>
-                        <div className='pool-pairs-item'>
-                            {resolveLogo(tokenInputState[token1Symbol].id)}
-                            <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
-                        </div>
-                        <div
-                            className='pool-pairs-arrow'
-                            onClick={(e) => {
-                                if (rightArrow) {
-                                    onRight();
-                                }
-                            }}
-                        >
-                            {/* {rightArrow && <img src={pngArrowRight} />} */}
-                        </div>
+                        {!isNANA && (
+                            <div className='pool-pairs-item'>
+                                {resolveLogo(tokenInputState[token0Symbol].id)}
+                                <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
+                            </div>
+                        )}
+                        {isNANA && (
+                            <div className='pool-pairs-item'>
+                                <div>
+                                    <img src={pngNANA} />
+                                </div>
+                                <span className='pool-pairs-name'>NANA</span>
+                            </div>
+                        )}
+                        {!isNANA && (
+                            <div className='pool-pairs-item'>
+                                {resolveLogo(tokenInputState[token1Symbol].id)}
+                                <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
+                            </div>
+                        )}
+                        {isNANA && (
+                            <div className='pool-pairs-item'>
+                                <img src={pngETH} />
+                                <span className='pool-pairs-name'>ETH</span>
+                            </div>
+                        )}
                     </div>
                     <div className='pool-separator' />
                     <div className='pool-details'>
-                        <div className='pool-details-row'>
-                            <div className='pool-details-banana'>
-                                <div className='pool-details-banana-row'>
-                                    <img src={pngDancingBanana} />
-                                    <img src={pngDancingBanana} />
-                                </div>
-                                <div className='pool-details-banana-row'>
-                                    <img src={pngDancingBanana} />
-                                    <img src={pngDancingBanana} />
-                                    <img src={pngDancingBanana} />
-                                </div>
-                            </div>
-                            <div className='pool-details-desc'>
-                                NANAS FOR YOU
-                            </div>
-                        </div>
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
                                 <img src={pngMoney} />
@@ -1387,13 +1412,15 @@ export const AddLiquidityV3 = ({
                         </div>
                     </div>
                 </div>
-                <div className='pair-text'>CHOOSE YOUR TOKENS TO DEPOSIT</div>
-                <Box
-                    display='flex'
-                    flexDirection='column'
-                    className='token-control-container'
-                >
-                    {isWETHPair && (
+                <div style={{ padding: '1.25rem 1.5rem' }}>
+                    <div className='pair-text'>
+                        CHOOSE YOUR TOKENS TO DEPOSIT
+                    </div>
+                    <Box
+                        display='flex'
+                        flexDirection='column'
+                        className='token-control-container'
+                    >
                         <Box
                             display='flex'
                             justifyContent='space-between'
@@ -1466,235 +1493,254 @@ export const AddLiquidityV3 = ({
                                 twoSide={true}
                             />
                         </Box>
-                    )}
-                    <Box
-                        display='flex'
-                        justifyContent='space-between'
-                        className={classNames('token-input-control', {
-                            active: isToken0Active,
-                            inactive: !isToken0Active,
-                        })}
-                    >
                         <Box
                             display='flex'
-                            justifyContent='flex-start'
-                            flexGrow='1'
-                            onClick={() => {
-                                if (
-                                    !isToken0Active &&
-                                    selectedSymbolCount === 2
-                                )
-                                    return;
-                                if (
-                                    isToken0Disabled ||
-                                    (token0Symbol === 'WETH' && disableWETH)
-                                )
-                                    return;
-                                dispatch({
-                                    type: 'toggle',
-                                    payload: { sym: token0Symbol },
-                                });
-                            }}
+                            justifyContent='space-between'
+                            className={classNames('token-input-control', {
+                                active: isToken0Active,
+                                inactive: !isToken0Active,
+                            })}
                         >
-                            <div
-                                style={{
-                                    flexGrow: 1,
-                                    display: 'flex',
-                                    alignItems: 'center',
+                            <Box
+                                display='flex'
+                                justifyContent='flex-start'
+                                flexGrow='1'
+                                onClick={() => {
+                                    if (
+                                        !isToken0Active &&
+                                        selectedSymbolCount === 2
+                                    )
+                                        return;
+                                    if (
+                                        isToken0Disabled ||
+                                        (token0Symbol === 'WETH' && disableWETH)
+                                    )
+                                        return;
+                                    dispatch({
+                                        type: 'toggle',
+                                        payload: { sym: token0Symbol },
+                                    });
                                 }}
-                                className={classNames('token-balance-wrapper', {
-                                    active: isToken0Active,
-                                })}
                             >
-                                <TokenWithBalance
-                                    id={tokenInputState[token0Symbol].id}
-                                    name={token0Symbol}
-                                    balance={balances?.[token0Symbol]?.balance}
-                                    decimals={
-                                        balances?.[token0Symbol]?.decimals
-                                    }
-                                    disabled={isToken0Disabled}
-                                />
-                            </div>
-                        </Box>
+                                <div
+                                    style={{
+                                        flexGrow: 1,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                    className={classNames(
+                                        'token-balance-wrapper',
+                                        {
+                                            active: isToken0Active,
+                                        },
+                                    )}
+                                >
+                                    <TokenWithBalance
+                                        id={tokenInputState[token0Symbol].id}
+                                        name={token0Symbol}
+                                        balance={
+                                            balances?.[token0Symbol]?.balance
+                                        }
+                                        decimals={
+                                            balances?.[token0Symbol]?.decimals
+                                        }
+                                        disabled={isToken0Disabled}
+                                    />
+                                </div>
+                            </Box>
 
-                        <TokenInput
-                            token={token0Symbol}
-                            amount={
-                                isToken0Active
-                                    ? tokenInputState[token0Symbol].amount
-                                    : ''
-                            }
-                            updateAmount={(amt: string) => {
-                                dispatch({
-                                    type: 'update-amount',
-                                    payload: {
-                                        sym: token0Symbol,
-                                        amount: amt,
-                                    },
-                                });
-                            }}
-                            handleTokenRatio={handleTokenRatio}
-                            balances={balances}
-                            disabled={
-                                disabledInput?.includes(token0Symbol) ||
-                                !isToken0Active
-                            }
-                            twoSide={true}
-                        />
-                    </Box>
-                    <Box
-                        display='flex'
-                        justifyContent='space-between'
-                        className={classNames('token-input-control', {
-                            active: isToken1Active,
-                            inactive: !isToken1Active,
-                        })}
-                    >
+                            <TokenInput
+                                token={token0Symbol}
+                                amount={
+                                    isToken0Active
+                                        ? tokenInputState[token0Symbol].amount
+                                        : ''
+                                }
+                                updateAmount={(amt: string) => {
+                                    dispatch({
+                                        type: 'update-amount',
+                                        payload: {
+                                            sym: token0Symbol,
+                                            amount: amt,
+                                        },
+                                    });
+                                }}
+                                handleTokenRatio={handleTokenRatio}
+                                balances={balances}
+                                disabled={
+                                    disabledInput?.includes(token0Symbol) ||
+                                    !isToken0Active
+                                }
+                                twoSide={true}
+                            />
+                        </Box>
                         <Box
                             display='flex'
-                            justifyContent='flex-start'
-                            flexGrow='1'
+                            justifyContent='space-between'
+                            className={classNames('token-input-control', {
+                                active: isToken1Active,
+                                inactive: !isToken1Active,
+                            })}
+                        >
+                            <Box
+                                display='flex'
+                                justifyContent='flex-start'
+                                flexGrow='1'
+                                onClick={() => {
+                                    if (
+                                        !isToken1Active &&
+                                        selectedSymbolCount === 2
+                                    )
+                                        return;
+                                    if (
+                                        isToken1Disabled ||
+                                        (token1Symbol === 'WETH' && disableWETH)
+                                    )
+                                        return;
+                                    dispatch({
+                                        type: 'toggle',
+                                        payload: { sym: token1Symbol },
+                                    });
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        flexGrow: 1,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                    className={classNames(
+                                        'token-balance-wrapper',
+                                        {
+                                            active: isToken1Active,
+                                        },
+                                    )}
+                                >
+                                    <TokenWithBalance
+                                        id={tokenInputState[token1Symbol].id}
+                                        name={token1Symbol}
+                                        balance={
+                                            balances?.[token1Symbol]?.balance
+                                        }
+                                        decimals={
+                                            balances?.[token1Symbol]?.decimals
+                                        }
+                                        disabled={isToken1Disabled}
+                                    />
+                                </div>
+                            </Box>
+                            <TokenInput
+                                token={token1Symbol}
+                                amount={
+                                    isToken1Active
+                                        ? tokenInputState[token1Symbol].amount
+                                        : ''
+                                }
+                                updateAmount={(amt: string) => {
+                                    dispatch({
+                                        type: 'update-amount',
+                                        payload: {
+                                            sym: token1Symbol,
+                                            amount: amt,
+                                        },
+                                    });
+                                }}
+                                handleTokenRatio={handleTokenRatio}
+                                balances={balances}
+                                disabled={
+                                    disabledInput?.includes(token1Symbol) ||
+                                    !isToken1Active
+                                }
+                                twoSide={true}
+                            />
+                        </Box>
+                    </Box>
+                    <br />
+                    <div className='pair-text'>CHOOSE A SENTIMENT</div>
+                    <Box
+                        display='flex'
+                        justifyContent='center'
+                        className='sentiment'
+                    >
+                        <div
+                            className={classNames({
+                                'sentiment-item': true,
+                                active: isFlipped
+                                    ? sentiment === 'bullish'
+                                    : sentiment === 'bearish',
+                            })}
+                            role='button'
                             onClick={() => {
-                                if (
-                                    !isToken1Active &&
-                                    selectedSymbolCount === 2
-                                )
-                                    return;
-                                if (
-                                    isToken1Disabled ||
-                                    (token1Symbol === 'WETH' && disableWETH)
-                                )
-                                    return;
-                                dispatch({
-                                    type: 'toggle',
-                                    payload: { sym: token1Symbol },
-                                });
+                                if (level > 1) {
+                                    setSentiment(
+                                        isFlipped ? 'bullish' : 'bearish',
+                                    );
+                                    trackSentimentInteraction(pool, 'bearish');
+                                }
                             }}
                         >
-                            <div
-                                style={{
-                                    flexGrow: 1,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                                className={classNames('token-balance-wrapper', {
-                                    active: isToken1Active,
-                                })}
-                            >
-                                <TokenWithBalance
-                                    id={tokenInputState[token1Symbol].id}
-                                    name={token1Symbol}
-                                    balance={balances?.[token1Symbol]?.balance}
-                                    decimals={
-                                        balances?.[token1Symbol]?.decimals
-                                    }
-                                    disabled={isToken1Disabled}
-                                />
-                            </div>
-                        </Box>
-                        <TokenInput
-                            token={token1Symbol}
-                            amount={
-                                isToken1Active
-                                    ? tokenInputState[token1Symbol].amount
-                                    : ''
-                            }
-                            updateAmount={(amt: string) => {
-                                dispatch({
-                                    type: 'update-amount',
-                                    payload: {
-                                        sym: token1Symbol,
-                                        amount: amt,
-                                    },
-                                });
+                            <img src={pngApySad} />
+                        </div>
+                        <div
+                            className={classNames({
+                                'sentiment-item': true,
+                                active: sentiment === 'neutral',
+                            })}
+                            role='button'
+                            onClick={() => {
+                                setSentiment('neutral');
+                                trackSentimentInteraction(pool, 'neutral');
                             }}
-                            handleTokenRatio={handleTokenRatio}
-                            balances={balances}
-                            disabled={
-                                disabledInput?.includes(token1Symbol) ||
-                                !isToken1Active
-                            }
-                            twoSide={true}
-                        />
+                        >
+                            <img src={pngApyNormal} />
+                        </div>
+                        <div
+                            className={classNames({
+                                'sentiment-item': true,
+                                active: isFlipped
+                                    ? sentiment === 'bearish'
+                                    : sentiment === 'bullish',
+                            })}
+                            role='button'
+                            onClick={() => {
+                                if (level > 1) {
+                                    setSentiment(
+                                        isFlipped ? 'bearish' : 'bullish',
+                                    );
+                                    trackSentimentInteraction(pool, 'bullish');
+                                }
+                            }}
+                        >
+                            <img src={pngApyHappy} />
+                        </div>
                     </Box>
-                </Box>
-                <br />
-                <div className='pair-text'>CHOOSE A SENTIMENT</div>
-                <Box
-                    display='flex'
-                    justifyContent='center'
-                    className='sentiment'
-                >
-                    <div
-                        className={classNames({
-                            'sentiment-item': true,
-                            active: isFlipped
-                                ? sentiment === 'bullish'
-                                : sentiment === 'bearish',
-                        })}
-                        role='button'
-                        onClick={() => {
-                            if (level > 1) {
-                                setSentiment(isFlipped ? 'bullish' : 'bearish');
-                                trackSentimentInteraction(pool, 'bearish');
-                            }
-                        }}
-                    >
-                        <img src={pngApySad} />
+                    <div className='pair-action'>
+                        <button
+                            className='pair-action-button silver'
+                            onClick={(e) => onSkipPairs()}
+                        >
+                            SKIP
+                        </button>
+                        <button
+                            className='pair-action-button green'
+                            onClick={(e) => onAddBasket()}
+                        >
+                            ADD
+                        </button>
                     </div>
-                    <div
-                        className={classNames({
-                            'sentiment-item': true,
-                            active: sentiment === 'neutral',
-                        })}
-                        role='button'
-                        onClick={() => {
-                            setSentiment('neutral');
-                            trackSentimentInteraction(pool, 'neutral');
-                        }}
-                    >
-                        <img src={pngApyNormal} />
-                    </div>
-                    <div
-                        className={classNames({
-                            'sentiment-item': true,
-                            active: isFlipped
-                                ? sentiment === 'bearish'
-                                : sentiment === 'bullish',
-                        })}
-                        role='button'
-                        onClick={() => {
-                            if (level > 1) {
-                                setSentiment(isFlipped ? 'bearish' : 'bullish');
-                                trackSentimentInteraction(pool, 'bullish');
-                            }
-                        }}
-                    >
-                        <img src={pngApyHappy} />
-                    </div>
-                </Box>
-                <div className='pair-action'>
-                    <button
-                        className='pair-action-button silver'
-                        onClick={(e) => onSkipPairs()}
-                    >
-                        SKIP
-                    </button>
-                    <button className='pair-action-button green'>ADD</button>
+                    {/* <br />
+                    <div>
+                        <LiquidityActionButton
+                            disabledInput={disabledInput}
+                            tokenInputState={tokenInputState}
+                            pendingApproval={pendingApproval}
+                            onClick={() => doAddLiquidity()}
+                            balances={balances}
+                            pendingBounds={pendingBounds}
+                            currentGasPrice={currentGasPrice}
+                        />
+                    </div> */}
                 </div>
-                {/* <br />
-                <div>
-                    <LiquidityActionButton
-                        disabledInput={disabledInput}
-                        tokenInputState={tokenInputState}
-                        pendingApproval={pendingApproval}
-                        onClick={() => doAddLiquidity()}
-                        balances={balances}
-                        pendingBounds={pendingBounds}
-                        currentGasPrice={currentGasPrice}
-                    />
-                </div> */}
             </div>
         </>
     );

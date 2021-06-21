@@ -170,18 +170,6 @@ export const LiquidityContainer = ({
 }): JSX.Element => {
     const { wallet } = useWallet();
 
-    // const { data: pools, isLoading: isTopPoolsLoading } = useTopPools();
-    // const { data: pool } = usePoolOverview(wallet.network, poolId);
-    // const [slippageTolerance, setSlippageTolerance] = useState(3.0);
-    // const [selectedGasPrice, setSelectedGasPrice] = useState<GasPriceSelection>(
-    //     GasPriceSelection.Fast,
-    // );
-    // const balances = useBalance({
-    //     pool,
-    // });
-    // debug.poolId = poolId;
-    // debug.balances = balances;
-
     const [currentItem, setCurrentItem] = useState<number>(0);
 
     const { data: randomPool } = usePoolOverview(wallet.network, poolId);
@@ -213,6 +201,13 @@ export const LiquidityContainer = ({
         }
 
         setView('wait');
+    };
+
+    const handleAddBasket = () => {
+        if (!wallet.account) {
+            handleWalletConnect();
+            return;
+        }
     };
 
     const handleSkipFinish = () => {
@@ -250,9 +245,11 @@ export const LiquidityContainer = ({
                                     balances={randomPoolBalances}
                                     gasPrices={gasPrices}
                                     level={level}
+                                    isNANA={false}
                                     leftArrow={false}
                                     rightArrow={true}
                                     onSkipPairs={() => handleSkip(1)}
+                                    onAddBasket={() => handleAddBasket()}
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                 />
@@ -265,9 +262,11 @@ export const LiquidityContainer = ({
                                     balances={randomPoolBalances}
                                     gasPrices={gasPrices}
                                     level={level}
+                                    isNANA={true}
                                     leftArrow={true}
                                     rightArrow={false}
                                     onSkipPairs={() => handleSkip(2)}
+                                    onAddBasket={() => handleAddBasket()}
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                 />
