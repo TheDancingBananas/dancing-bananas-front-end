@@ -91,6 +91,7 @@ function LandingContainer({
         const shouldRefresh = storage.shouldRefreshPool();
 
         const networkName = 'mainnet';
+        // const networkName = 'rinkeby';
 
         if (currentPoolId === '' || shouldRefresh) {
             const response = await fetch(

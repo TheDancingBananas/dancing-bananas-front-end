@@ -121,9 +121,9 @@
     }
 
     .pool-separator {
-        height: 1px;
+        height: 120px;
         background: #671CC9;
-        width: 80%;
+        width: 1px;
         margin-top: 15px;
     }
 
@@ -210,17 +210,6 @@
             img {
                 width: 34px !important;
                 margin-right: 8px;
-            }
-        }
-
-        &-banana {
-            &-row {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                img {
-                    width: 21px !important;
-                }
             }
         }
     }
