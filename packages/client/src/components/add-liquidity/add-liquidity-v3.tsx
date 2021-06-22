@@ -1335,7 +1335,7 @@ export const AddLiquidityV3 = ({
         <>
             <div className='add-v3-container'>
                 <div className='navigator'>
-                    <div
+                    {/* <div
                         className='navigator-arrow'
                         onClick={(e) => {
                             if (leftArrow) {
@@ -1344,11 +1344,11 @@ export const AddLiquidityV3 = ({
                         }}
                     >
                         {leftArrow && <img src={pngLeft} />}
-                    </div>
+                    </div> */}
                     <div className='navigator-title'>
                         {isNANA ? 'NANA POOL' : 'DANCING BANANA POOL'}
                     </div>
-                    <div
+                    {/* <div
                         className='navigator-arrow'
                         onClick={(e) => {
                             if (rightArrow) {
@@ -1357,7 +1357,7 @@ export const AddLiquidityV3 = ({
                         }}
                     >
                         {rightArrow && <img src={pngRight} />}
-                    </div>
+                    </div> */}
                 </div>
                 <div className={classNames('reward', { nana: isNANA })}>
                     <img src={pngBanana2} />

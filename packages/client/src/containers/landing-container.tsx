@@ -17,7 +17,13 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 import classNames from 'classnames';
-import { IconHome, IconReward, IconSearch, IconCart } from 'components/icon';
+import {
+    IconHome,
+    IconReward,
+    IconSearch,
+    IconCart,
+    IconShop,
+} from 'components/icon';
 
 import RewardContainer from './tabs/reward-container';
 import CartContainer from './tabs/cart-container';
@@ -128,7 +134,7 @@ function LandingContainer({
                             setTab('reward');
                         }}
                     >
-                        <IconReward
+                        <IconSearch
                             fill={tab === 'reward' ? '#000' : '#808080'}
                         />
                     </div>
@@ -141,7 +147,7 @@ function LandingContainer({
                             setTab('search');
                         }}
                     >
-                        <IconSearch
+                        <IconShop
                             fill={tab === 'search' ? '#000' : '#808080'}
                         />
                     </div>

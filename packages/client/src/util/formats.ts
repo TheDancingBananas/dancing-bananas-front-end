@@ -29,15 +29,27 @@ export const poolSymbol = (pool: PoolLike, separator = ' '): string => {
 };
 
 export const formatNumber = (val: number): string => {
+    let ret;
+
     if (val < Math.pow(10, 5)) {
-        return usdFormatter.format(parseFloat(val.toString()));
+        ret = usdFormatter.format(Math.round(parseFloat(val.toString())));
+    } else if (val < Math.pow(10, 8)) {
+        ret = usdFormatter.format(Math.round(val / 1000)).toString();
+    } else {
+        ret = usdFormatter.format(Math.round(val / 1000000)).toString();
+    }
+
+    ret = ret.substring(0, ret.length - 3);
+
+    if (val < Math.pow(10, 5)) {
+        return ret;
     }
 
     if (val < Math.pow(10, 8)) {
-        return `${usdFormatter.format(val / 1000)}K`;
+        return `${ret}K`;
     }
 
-    return `${usdFormatter.format(val / 1000000)}M`;
+    return `${ret}M`;
 };
 
 export type { PoolLike };

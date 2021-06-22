@@ -66,6 +66,7 @@
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px black;
             margin-left: 15px;
             border: 1px solid #000;
+            font-size: 20px;
         }
 
         &-amount {
@@ -128,15 +129,15 @@
     }
 
     .pool-details {
-        flex: 1;
         color: white;
         line-height: 20px;
         display: flex;
         justify-content: center;
         font-weight: bold;
-        width: 100%;
         margin-bottom: 20px;
-        width: 450px;
+        padding-left: 30px;
+        padding-right: 30px;
+        box-sizing: border-box;
 
         &-row {
             display: flex;
