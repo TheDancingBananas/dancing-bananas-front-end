@@ -2,7 +2,6 @@ import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
-import { Modal } from 'react-bootstrap';
 import { TelegramCTA } from 'components/telegram-cta';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
