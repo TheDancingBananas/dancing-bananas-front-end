@@ -62,6 +62,7 @@ type Props = {
     gasPrices: EthGasPrices | null;
     level: number;
     isNANA: boolean | false;
+    rewardBananas: number;
     leftArrow: boolean | false;
     rightArrow: boolean | false;
     onSkipPairs: () => void;
@@ -80,6 +81,7 @@ export const AddLiquidityV3 = ({
     gasPrices,
     level,
     isNANA,
+    rewardBananas,
     leftArrow,
     rightArrow,
     onSkipPairs,
@@ -1350,7 +1352,7 @@ export const AddLiquidityV3 = ({
                         {leftArrow && <img src={pngLeft} />}
                     </div> */}
                     <div className='navigator-title'>
-                        {isNANA ? 'NANA POOL' : 'DANCING BANANA POOL'}
+                        {isNANA ? 'NANA POOL' : 'DANCING BANANA POOLS'}
                     </div>
                     {/* <div
                         className='navigator-arrow'
@@ -1365,7 +1367,7 @@ export const AddLiquidityV3 = ({
                 </div>
                 <div className={classNames('reward', { nana: isNANA })}>
                     <img src={pngBanana2} />
-                    <div className='reward-count'>5</div>
+                    <div className='reward-count'>{rewardBananas}</div>
                     <div className='reward-amount'>
                         BONUS
                         <br />

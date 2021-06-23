@@ -23,6 +23,7 @@ import {
     IconSearch,
     IconCart,
     IconShop,
+    IconDollar,
 } from 'components/icon';
 
 import RewardContainer from './tabs/reward-container';
@@ -144,6 +145,19 @@ function LandingContainer({
                             fill={tab === 'reward' ? '#000' : '#808080'}
                         />
                     </div>
+                    {/* <div
+                        className={classNames('footer-tab', {
+                            active: tab === 'dollar',
+                        })}
+                        role='button'
+                        onClick={(e) => {
+                            setTab('dollar');
+                        }}
+                    >
+                        <IconDollar
+                            fill={tab === 'dollar' ? '#000' : '#808080'}
+                        />
+                    </div> */}
                     <div
                         className={classNames('footer-tab', {
                             active: tab === 'search',
