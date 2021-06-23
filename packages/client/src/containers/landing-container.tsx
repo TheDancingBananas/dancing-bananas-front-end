@@ -103,7 +103,13 @@ function LandingContainer({
                     />
                 )}
                 {tab === 'reward' && <RewardContainer />}
-                {tab === 'cart' && <CartContainer />}
+                {tab === 'cart' && (
+                    <CartContainer
+                        onBack={() => {
+                            setTab('home');
+                        }}
+                    />
+                )}
 
                 {/* {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
                 {tab === 'card' && <LiquidityContainer gasPrices={gasPrices} />} */}

@@ -113,7 +113,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'no-hover', 'btn-warn')}
+                    className={classNames('pair-action-button green')}
                 >
                     <Rings width='24px' height='24px' />
                     {' Approving '}
@@ -124,7 +124,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Connect Wallet'}
                 </button>
@@ -134,7 +134,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Re-Connect Wallet'}
                 </button>
@@ -144,7 +144,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Select Transaction Speed'}
                 </button>
@@ -154,7 +154,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Select Tokens'}
                 </button>
@@ -164,7 +164,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Enter Amount(s)'}
                 </button>
@@ -174,7 +174,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     {'Insufficient Funds'}
                 </button>
@@ -184,7 +184,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'no-hover', 'btn-warn')}
+                    className={classNames('pair-action-button green')}
                 >
                     <Rings width='24px' height='24px' />
                     {' Calculating Range '}
@@ -195,7 +195,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={false}
                     onClick={onClick}
-                    className={classNames('btn-addl')}
+                    className={classNames('pair-action-button green')}
                 >
                     {' Add Liquidity'}
                 </button>
@@ -205,7 +205,7 @@ export const LiquidityActionButton = ({
                 <button
                     disabled={true}
                     onClick={onClick}
-                    className={classNames('btn-addl', 'btn-negative')}
+                    className={classNames('pair-action-button green')}
                 >
                     <Rings width='24px' height='24px' />
                     {' Awaiting Details'}

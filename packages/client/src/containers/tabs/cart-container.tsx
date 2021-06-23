@@ -10,11 +10,19 @@ import pngETHToken from 'styles/images/eth.png';
 import pngBanana1 from 'styles/images/banana-1.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 
-const CartContainer = (): JSX.Element | null => {
+const CartContainer = ({
+    onBack,
+}: {
+    onBack: () => void;
+}): JSX.Element | null => {
     return (
         <div className='cart-container'>
             <div className='cart-container-head'>
-                <img className='back-image' src={pngArrowLeft} />
+                <img
+                    className='back-image'
+                    src={pngArrowLeft}
+                    onClick={(e) => onBack()}
+                />
                 <img className='head-image' src={pngBananaBasket} />
             </div>
             <div className='cart-container-card'>
