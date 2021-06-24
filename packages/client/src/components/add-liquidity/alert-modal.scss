@@ -1,0 +1,47 @@
+.add-liquidity-alert-modal {
+    margin-top: 150px;
+    background: #fff;
+    border-radius: 14px;
+    border: 2.11435px solid #000000;
+
+    .alert-modal-header {
+        width: 100%;
+    }
+
+    .alert-modal-close {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        button {
+            border: none;
+            outline: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            background: #000;
+            color: #fff;
+            font-size: 16px;
+        }
+    }
+
+    .alert-modal-header-text {
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: #fff;
+        text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px black;
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+    }
+
+    .alert-modal-description {
+        margin-left: 15%;
+        width: 70%;
+        text-align: center;
+        color: #969AA0;
+        font-size: 14px;
+        line-height: 18px;
+        padding-bottom: 30px;
+    }
+}

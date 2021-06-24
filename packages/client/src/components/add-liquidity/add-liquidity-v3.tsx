@@ -56,6 +56,8 @@ import pngLeft from 'styles/images/left-arrow.png';
 import pngRight from 'styles/images/right-arrow.png';
 import pngBanana2 from 'styles/images/banana-2.png';
 
+import AlertModal from './alert-modal';
+
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
@@ -89,6 +91,12 @@ export const AddLiquidityV3 = ({
     onLeft,
     onRight,
 }: Props): JSX.Element | null => {
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertTitle, setAlertTitle] = useState<string>('');
+    const [alertDescription, setAlertDescription] = useState<string>('');
+
+    const handleCloseAlert = () => setShowAlert(false);
+
     const [priceImpact, setPriceImpact] = useState('0');
     const [pendingApproval, setPendingApproval] = useState(false);
     const { setPendingTx } = usePendingTx();
@@ -191,7 +199,7 @@ export const AddLiquidityV3 = ({
     // }
     // For Level 1 is Standard
     if (gasPrices) {
-        currentGasPrice = gasPrices.standard;
+        currentGasPrice = gasPrices.fast;
     }
 
     const [sentiment, setSentiment] = useState<Sentiment>('neutral');
@@ -1337,9 +1345,103 @@ export const AddLiquidityV3 = ({
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
 
+    const isDisabled = (symbol: string) =>
+        disabledInput && disabledInput.includes(symbol);
+
+    const handleAddBasket = () => {
+        // setAlertTitle('INSUFFICIENT FUNDS!');
+        // setAlertDescription('PLEASE SELECT ANOTHER AMOUNT OR ANOTHER TOKEN');
+        // setShowAlert(true);
+
+        if (!wallet?.account) {
+            setAlertTitle('CONNECT YOUR WALLET!');
+            setAlertDescription('PLEASE CONNECT YOUR WALLET');
+            setShowAlert(true);
+            return;
+        }
+
+        if (
+            wallet?.providerName === 'walletconnect' &&
+            !wallet?.provider?.connected
+        ) {
+            setAlertTitle('CONNECT YOUR WALLET!');
+            setAlertDescription('PLEASE RE-CONNECT YOUR WALLET');
+            setShowAlert(true);
+            return;
+        }
+
+        if (pendingApproval) {
+            setAlertTitle('APPROVING NOW');
+            setAlertDescription('PLEASE WAIT UNTIL APPROVE IS DONE');
+            setShowAlert(true);
+            return;
+        }
+
+        if (tokenInputState?.selectedTokens.length === 0) {
+            setAlertTitle('SELECT A TOKEN');
+            setAlertDescription('PLEASE SELECT A TOKEN');
+            setShowAlert(true);
+            return;
+        }
+
+        const numOfTokens = tokenInputState?.selectedTokens?.length ?? 0;
+
+        for (let i = 0; i < numOfTokens; i++) {
+            const symbol = tokenInputState?.selectedTokens[i];
+            if (!tokenInputState[symbol].amount && !isDisabled(symbol)) {
+                setAlertTitle('AMOUNT IS EMPTY');
+                setAlertDescription('PLEASE INPUT AMOUNT');
+                setShowAlert(true);
+                return;
+            }
+            const tokenAmount = new BigNumber(tokenInputState[symbol].amount);
+
+            if ((!tokenAmount || tokenAmount.lte(0)) && !isDisabled(symbol)) {
+                setAlertTitle('AMOUNT IS EMPTY');
+                setAlertDescription('PLEASE INPUT AMOUNT');
+                setShowAlert(true);
+                return;
+            }
+        }
+
+        for (let i = 0; i < numOfTokens; i++) {
+            const symbol = tokenInputState?.selectedTokens[i];
+            const tokenAmount = new BigNumber(tokenInputState[symbol].amount);
+            const tokenBalance =
+                ethers.utils.formatUnits(
+                    balances?.[symbol]?.balance || 0,
+                    parseInt(balances?.[symbol]?.decimals || '0', 10),
+                ) || '0';
+
+            if (tokenAmount.gt(tokenBalance)) {
+                setAlertTitle('INSUFFICIENT FUNDS');
+                setAlertDescription(
+                    'PLEASE SELECT ANOTHER AMOUNT OR ANOTHER TOKEN',
+                );
+                setShowAlert(true);
+                return;
+            }
+        }
+
+        if (pendingBounds) {
+            setAlertTitle('PENDING...');
+            setAlertDescription('');
+            setShowAlert(true);
+            return;
+        }
+
+        doAddLiquidity();
+    };
+
     return (
         <>
             <div className='add-v3-container'>
+                <AlertModal
+                    titleText={alertTitle}
+                    descriptionText={alertDescription}
+                    show={showAlert}
+                    setShow={setShowAlert}
+                />
                 <div className='navigator'>
                     {/* <div
                         className='navigator-arrow'
@@ -1729,7 +1831,7 @@ export const AddLiquidityV3 = ({
                         >
                             SKIP
                         </button>
-                        <LiquidityActionButton
+                        {/* <LiquidityActionButton
                             disabledInput={disabledInput}
                             tokenInputState={tokenInputState}
                             pendingApproval={pendingApproval}
@@ -1737,13 +1839,13 @@ export const AddLiquidityV3 = ({
                             balances={balances}
                             pendingBounds={pendingBounds}
                             currentGasPrice={currentGasPrice}
-                        />
-                        {/* <button
+                        /> */}
+                        <button
                             className='pair-action-button green'
-                            onClick={(e) => onAddBasket()}
+                            onClick={(e) => handleAddBasket()}
                         >
                             ADD
-                        </button> */}
+                        </button>
                     </div>
                     <br />
                     <div></div>
