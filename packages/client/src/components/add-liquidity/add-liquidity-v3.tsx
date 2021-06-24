@@ -1354,8 +1354,8 @@ export const AddLiquidityV3 = ({
         // setShowAlert(true);
 
         if (!wallet?.account) {
-            setAlertTitle('CONNECT YOUR WALLET!');
-            setAlertDescription('PLEASE CONNECT YOUR WALLET');
+            setAlertTitle('CONNECT WALLET');
+            setAlertDescription('APE MUST CONNECT WALLET');
             setShowAlert(true);
             return;
         }
@@ -1364,22 +1364,22 @@ export const AddLiquidityV3 = ({
             wallet?.providerName === 'walletconnect' &&
             !wallet?.provider?.connected
         ) {
-            setAlertTitle('CONNECT YOUR WALLET!');
-            setAlertDescription('PLEASE RE-CONNECT YOUR WALLET');
+            setAlertTitle('RECONNECT WALLET!');
+            setAlertDescription('APE MUST RECONNECT WALLET');
             setShowAlert(true);
             return;
         }
 
         if (pendingApproval) {
             setAlertTitle('APPROVING NOW');
-            setAlertDescription('PLEASE WAIT UNTIL APPROVE IS DONE');
+            setAlertDescription('APE APPROVE THE TRANSACTION');
             setShowAlert(true);
             return;
         }
 
         if (tokenInputState?.selectedTokens.length === 0) {
-            setAlertTitle('SELECT A TOKEN');
-            setAlertDescription('PLEASE SELECT A TOKEN');
+            setAlertTitle('SELECT TOKEN');
+            setAlertDescription('APE MUST SELECT A TOKEN FIRST!');
             setShowAlert(true);
             return;
         }
@@ -1389,16 +1389,16 @@ export const AddLiquidityV3 = ({
         for (let i = 0; i < numOfTokens; i++) {
             const symbol = tokenInputState?.selectedTokens[i];
             if (!tokenInputState[symbol].amount && !isDisabled(symbol)) {
-                setAlertTitle('AMOUNT IS EMPTY');
-                setAlertDescription('PLEASE INPUT AMOUNT');
+                setAlertTitle('INPUT AMOUNT');
+                setAlertDescription('APE MUST TYPE AMOUNT OF TOKEN');
                 setShowAlert(true);
                 return;
             }
             const tokenAmount = new BigNumber(tokenInputState[symbol].amount);
 
             if ((!tokenAmount || tokenAmount.lte(0)) && !isDisabled(symbol)) {
-                setAlertTitle('AMOUNT IS EMPTY');
-                setAlertDescription('PLEASE INPUT AMOUNT');
+                setAlertTitle('INPUT AMOUNT');
+                setAlertDescription('APE MUST TYPE AMOUNT OF TOKEN');
                 setShowAlert(true);
                 return;
             }
@@ -1414,18 +1414,16 @@ export const AddLiquidityV3 = ({
                 ) || '0';
 
             if (tokenAmount.gt(tokenBalance)) {
-                setAlertTitle('INSUFFICIENT FUNDS');
-                setAlertDescription(
-                    'PLEASE SELECT ANOTHER AMOUNT OR ANOTHER TOKEN',
-                );
+                setAlertTitle('INSUFFICIENT AMOUNT');
+                setAlertDescription('APE NOT HAVE ENOUGH TOKEN!');
                 setShowAlert(true);
                 return;
             }
         }
 
         if (pendingBounds) {
-            setAlertTitle('PENDING...');
-            setAlertDescription('');
+            setAlertTitle('PENDING NOW');
+            setAlertDescription('APE WAIT WHILE BLOCKCHAIN WORK');
             setShowAlert(true);
             return;
         }
