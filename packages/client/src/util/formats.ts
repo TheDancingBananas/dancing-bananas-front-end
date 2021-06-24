@@ -31,24 +31,40 @@ export const poolSymbol = (pool: PoolLike, separator = ' '): string => {
 export const formatNumber = (val: number): string => {
     let ret;
 
-    if (val < Math.pow(10, 5)) {
-        ret = usdFormatter.format(Math.round(parseFloat(val.toString())));
-    } else if (val < Math.pow(10, 8)) {
-        ret = usdFormatter.format(Math.round(val / 1000)).toString();
+    if (val < Math.pow(10, 4)) {
+        ret = val.toFixed(2);
+    } else if (val < Math.pow(10, 6)) {
+        ret = (val / 1000).toFixed(2);
     } else {
-        ret = usdFormatter.format(Math.round(val / 1000000)).toString();
+        ret = (val / 1000000).toFixed(2);
     }
 
-    ret = ret.substring(0, ret.length - 3);
+    ret = usdFormatter.format(parseFloat(ret));
 
-    if (val < Math.pow(10, 5)) {
+    if (val < Math.pow(10, 4)) {
+        ret = ret.substring(0, ret.length - 3);
         return ret;
     }
 
-    if (val < Math.pow(10, 8)) {
+    if (val < Math.pow(10, 6)) {
+        ret = ret.substring(0, ret.length - 3);
         return `${ret}K`;
     }
 
+    if (val < Math.pow(10, 7)) {
+        if (val % 1000000 === 0) {
+            ret = ret.substring(0, ret.length - 3);
+            return `${ret}M`;
+        } else {
+            ret = ret.substring(0, ret.length - 1);
+            if (ret.endsWith('0')) {
+                ret = ret.substring(0, ret.length - 2);
+            }
+            return `${ret}M`;
+        }
+    }
+
+    ret = ret.substring(0, ret.length - 3);
     return `${ret}M`;
 };
 
