@@ -2027,7 +2027,7 @@ export const AddLiquidityV3 = ({
                             className='pair-action-button green'
                             onClick={(e) => handleAddBasket()}
                         >
-                            ADD
+                            ADD-To-BASKET
                         </button>
                     </div>
                     <br />
