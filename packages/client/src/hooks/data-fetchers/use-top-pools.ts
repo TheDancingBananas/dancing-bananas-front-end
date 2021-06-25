@@ -6,6 +6,9 @@ import {
 } from '@sommelier/shared-types/src/api';
 import { debug } from 'util/debug';
 import config from 'config/app';
+
+import { storage } from 'util/localStorage';
+
 // For Easy Import
 export type TopPool = TopPoolType;
 export interface UseTopPools {
@@ -27,12 +30,17 @@ export const useTopPools = (): UseTopPools => {
         wallet: { network },
     } = useWallet();
 
+    const oldPoolId = storage.getCurrentPoolId();
+    console.log('oldPoolId', oldPoolId ? oldPoolId : 'no id');
+
     const networkName = network ? config.networks[network].name : 'mainnet';
     // const networkName = 'rinkeby';
 
     const getTopPools = async () => {
         const response = await fetch(
-            `/api/v1/${networkName}/randomPool?count=${50}`,
+            `/api/v1/${networkName}/randomPool?count=${50}&old=${
+                oldPoolId ? oldPoolId : '111'
+            }`,
         );
         if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
@@ -56,12 +64,16 @@ export const useRandomPool = (): UseRandomPool => {
         wallet: { network },
     } = useWallet();
 
+    const oldPoolId = storage.getCurrentPoolId();
+
     const networkName = network ? config.networks[network].name : 'mainnet';
     // const networkName = 'rinkeby';
 
     const getRandomPool = async () => {
         const response = await fetch(
-            `/api/v1/${networkName}/randomPool?count=${50}`,
+            `/api/v1/${networkName}/randomPool?count=${50}&old=${
+                oldPoolId ? oldPoolId : '222'
+            }`,
         );
         if (!response.ok) throw new Error(`Failed to fetch top pools`);
 

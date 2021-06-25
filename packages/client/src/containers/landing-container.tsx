@@ -44,26 +44,33 @@ function LandingContainer({
 
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
 
-    const getRandomPool = async () => {
+    const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();
 
         const networkName = 'mainnet';
         // const networkName = 'rinkeby';
 
         if (currentPoolId === '' || shouldRefresh) {
+            console.log('old pool id', oldPool);
             const response = await fetch(
-                `/api/v1/${networkName}/randomPool?count=${50}`,
+                `/api/v1/${networkName}/randomPool?count=${50}&old=${
+                    oldPool ? oldPool : '000'
+                }`,
             );
             if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
             const data = await (response.json() as Promise<string>);
             console.log('new Id', data);
             setCurrentPoolId(data);
+            storage.setCurrentPoolId(data);
         }
     };
 
     useEffect(() => {
-        getRandomPool();
+        const oldPooldId = storage.getCurrentPoolId();
+        console.log('oldPoolId', oldPooldId);
+
+        getRandomPool(oldPooldId);
     }, [currentPoolId]);
 
     const handleRefreshPool = () => {

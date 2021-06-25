@@ -74,13 +74,18 @@ async function getEthPrice(
 
 // GET /pools
 // should gen the query types from the joi schema?
-type GetTopPoolsQuery = { count: number; sort: 'volumeUSD' | 'liquidity' };
+type GetTopPoolsQuery = {
+    count: number;
+    sort: 'volumeUSD' | 'liquidity';
+    old: string | '';
+};
 const getTopPoolsValidator = celebrate({
     [Segments.QUERY]: Joi.object().keys({
         // If you change the default values for count or sort, you'll ned to update
         // the cache warming work in packages/workers
         count: Joi.number().min(1).max(1000).default(100),
         sort: Joi.string().valid('volumeUSD', 'liquidity').default('volumeUSD'),
+        old: Joi.string().default(''),
     }),
     [Segments.PARAMS]: networkSchema,
 });
@@ -110,8 +115,16 @@ async function getRandomPool(
     // We should add a union type for all validated queries
     // or find a better TS integration with Celebrate
     const { count, sort }: GetTopPoolsQuery = <any>req.query;
+    // console.log('old', old);
 
     const data = await fetcher.getTopPools(count, sort);
+    // const findIndex = data.findIndex((d) => old && d.id.toString() === old.toString())
+    // if (findIndex >= 0) {
+    //     data.splice(findIndex, 1);
+    // }
+
+    // console.log("############################");
+    // console.log(data);
 
     const randomIndex = getRandomArbitrary(0, data.length - 1);
     const randomPool = data[randomIndex];
