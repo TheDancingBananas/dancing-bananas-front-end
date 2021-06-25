@@ -6,7 +6,7 @@ import { UniswapV3Fetcher } from 'services/uniswap-v3/fetcher';
 import UniswapFetcher from 'services/uniswap';
 import BitqueryFetcher from 'services/bitquery/fetcher';
 // import { _getPeriodIndicators } from 'api/controllers/market-data';
-import _getPeriodIndicators from 'api/controllers/market-data';
+import { _getBitqueryPeriodIndicators as _getPeriodIndicators } from 'api/controllers/market-data';
 
 export {
     _getPeriodIndicators,
