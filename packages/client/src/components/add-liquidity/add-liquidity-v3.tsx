@@ -1788,6 +1788,7 @@ export const AddLiquidityV3 = ({
                             }}
                         >
                             <img src={pngApySad} />
+                            <span>BULLISH</span>
                         </div>
                         <div
                             className={classNames({
@@ -1801,6 +1802,7 @@ export const AddLiquidityV3 = ({
                             }}
                         >
                             <img src={pngApyNormal} />
+                            <span>NEUTRAL</span>
                         </div>
                         <div
                             className={classNames({
@@ -1820,6 +1822,7 @@ export const AddLiquidityV3 = ({
                             }}
                         >
                             <img src={pngApyHappy} />
+                            <span>BEARISH</span>
                         </div>
                     </Box>
                     <div className='pair-action'>
@@ -1842,7 +1845,7 @@ export const AddLiquidityV3 = ({
                             className='pair-action-button green'
                             onClick={(e) => handleAddBasket()}
                         >
-                            ADD
+                            ADD-To-BASKET
                         </button>
                     </div>
                     <br />

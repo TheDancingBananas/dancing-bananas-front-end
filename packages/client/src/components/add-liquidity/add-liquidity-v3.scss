@@ -562,6 +562,20 @@
     opacity: 0.5;
 }
 
+.sentiment-item {
+    display: flex;
+    flex-direction: column;
+
+    img {
+        width: 55px !important;
+    }
+
+    span {
+        padding-top: 5px;
+        color: #fff;
+    }
+}
+
 @media (max-width: 500px) {
     .token-control-container {
         > div {
