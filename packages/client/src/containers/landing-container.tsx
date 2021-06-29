@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { EthGasPrices } from '@sommelier/shared-types';
+import { EthGasPrices, LiquidityBasketData } from '@sommelier/shared-types';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
 import { TelegramCTA } from 'components/telegram-cta';
@@ -41,8 +41,8 @@ function LandingContainer({
     const { wallet } = useWallet();
 
     const [tab, setTab] = useState<string>('home');
-
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
+    const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();
@@ -88,6 +88,29 @@ function LandingContainer({
         }
     }, []);
 
+    const handleAddBasket = (data: LiquidityBasketData) => {
+        const findIndex = basketData.findIndex(
+            (item) =>
+                item.poolId === data.poolId &&
+                item.actionType === data.actionType,
+        );
+
+        if (findIndex < 0) {
+            basketData.push(data);
+        } else {
+            basketData[findIndex] = {
+                ...data,
+            };
+        }
+
+        setBasketData([...basketData]);
+        setTab('cart');
+    };
+
+    useEffect(() => {
+        console.log(basketData);
+    }, [basketData]);
+
     return (
         <div>
             <div className='main-header-container'>
@@ -108,11 +131,15 @@ function LandingContainer({
                         poolId={currentPoolId}
                         onRefreshPool={() => handleRefreshPool()}
                         handleWalletConnect={() => showWalletModal()}
+                        onAddBasket={(data: LiquidityBasketData) =>
+                            handleAddBasket(data)
+                        }
                     />
                 )}
                 {tab === 'reward' && <RewardContainer />}
                 {tab === 'cart' && (
                     <CartContainer
+                        cartData={basketData}
                         onBack={() => {
                             setTab('home');
                         }}

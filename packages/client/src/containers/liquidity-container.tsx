@@ -16,7 +16,7 @@ import {
 } from 'hooks/data-fetchers';
 import { useWallet } from 'hooks/use-wallet';
 import { debug } from 'util/debug';
-import { EthGasPrices } from '@sommelier/shared-types';
+import { EthGasPrices, LiquidityBasketData } from '@sommelier/shared-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
@@ -162,11 +162,13 @@ export const LiquidityContainer = ({
     poolId,
     onRefreshPool,
     handleWalletConnect,
+    onAddBasket,
 }: {
     gasPrices: EthGasPrices | null;
     poolId: string;
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
+    onAddBasket: (data: LiquidityBasketData) => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
 
@@ -203,11 +205,13 @@ export const LiquidityContainer = ({
         setView('wait');
     };
 
-    const handleAddBasket = () => {
+    const handleAddBasket = (data: LiquidityBasketData) => {
         if (!wallet.account) {
             handleWalletConnect();
             return;
         }
+
+        onAddBasket(data);
     };
 
     const handleSkipFinish = () => {
@@ -250,7 +254,9 @@ export const LiquidityContainer = ({
                                     leftArrow={false}
                                     rightArrow={true}
                                     onSkipPairs={() => handleSkip(1)}
-                                    onAddBasket={() => handleAddBasket()}
+                                    onAddBasket={(data: LiquidityBasketData) =>
+                                        handleAddBasket(data)
+                                    }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                 />
@@ -268,7 +274,9 @@ export const LiquidityContainer = ({
                                     leftArrow={true}
                                     rightArrow={false}
                                     onSkipPairs={() => handleSkip(2)}
-                                    onAddBasket={() => handleAddBasket()}
+                                    onAddBasket={(data: LiquidityBasketData) =>
+                                        handleAddBasket(data)
+                                    }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                 />

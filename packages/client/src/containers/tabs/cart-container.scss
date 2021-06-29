@@ -4,6 +4,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .white {
+        color: #fff;
+    }
+
+    .green {
+        color: #71FFB9;
+    }
+
+    .dark {
+        color: #210946
+    }
+
+    .pink {
+        color: #FF90D0;
+    }
+
+    .caption {
+        margin-top:  15px;
+        margin-bottom: 10px;
+    }
 }
 
 .cart-container-head {
@@ -54,7 +75,7 @@
         }
 
         .cart-header-col {
-            color: #E7EBF2;
+            color: #fff;
             font-size: 12.8755px;
             line-height: 15px;
         }
@@ -66,7 +87,7 @@
             box-sizing: border-box;
             box-shadow: 0px 2.28293px 0px rgba(0, 0, 0, 0.25);
             border-radius: 4.56585px;
-            padding: 5.70732px 22.8293px;
+            padding: 9.70732px 12.8293px;
             display: flex;
             align-items: center;
         }
@@ -103,10 +124,108 @@
         .cart-table-text2 {
             color: #71FFB9;
         }
+
+        .cart-token-image {
+            img {
+                width: 21px;
+                border-radius: 11px;
+                margin-right: 3px;
+            }
+        }
+    
+        .cart-token-name {
+            color: #fff;
+            padding-left: 3px;
+        }
+    
+        .show-cart-item-detail {
+            margin-left: 15px;
+            width: 10px;
+            cursor: pointer
+        }
+
+        .cart-table-row-details {
+            border-top: none;
+            border-left: 1.14146px solid #000;
+            border-right: 1.14146px solid #000;
+            border-bottom: 1.14146px solid #000;
+            margin-top: -10px;
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
+
+            &.hide {
+                display: none;
+            }
+
+            .row-detail-head {
+                border-bottom: 1px solid #5a3596;
+                padding-top: 6px;
+                padding-bottom: 8px;
+            }
+
+            .row-detail-foot {
+                border-top: 1px solid #5a3596;
+                padding-top: 6px;
+                padding-bottom: 8px;
+            }
+
+            .row-detail-body {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                display: flex;
+                align-items: center;
+            }
+
+            .row-detail-left {
+                flex: 1;
+
+                img {
+                    width: 22px;
+                    border-radius: 11px;
+                    margin-right: 10px;
+                }
+            }
+
+            .row-detail-right {
+                padding-right: 20px;
+
+                button {
+                    width: 57px;
+                    height: 23px;
+                    background: #E7EBF2;
+                    border: 1px solid #000000;
+                    box-sizing: border-box;
+                    box-shadow: 0px 2.41383px 0px rgba(0, 0, 0, 0.25);
+                    border-radius: 5px;
+                    outline: none;
+                    color: #fff;
+                    text-shadow: 0px 1.20692px 0px rgba(0, 0, 0, 1);
+                    -webkit-text-stroke-width: 0.5px;
+                    -webkit-text-stroke-color: black;
+                }
+            }
+
+            .row-detail-token {
+                margin-top: 8px;
+            }
+        }
+    }
+
+    .cart-reward-wrapper {
+        background: #671CC9;
+        border: 0.876068px solid #000000;
+        box-sizing: border-box;
+        /* Button without blur */
+
+        box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+        padding: 5px 20px;
     }
 
     .cart-award {
-        margin-top: 45px;
+        margin-top: 15px;
 
         .cart-award-item {
             display: flex;
@@ -123,6 +242,9 @@
         }
 
         .cart-award-description {
+            display: flex;
+            align-items: center;
+
             img {
                 height: 23px;
                 margin-left: 8px;

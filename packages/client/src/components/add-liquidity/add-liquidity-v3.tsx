@@ -35,7 +35,11 @@ import { useWallet } from 'hooks/use-wallet';
 import { usePendingTx, PendingTx } from 'hooks/use-pending-tx';
 import { useMarketData } from 'hooks';
 import { LiquidityActionButton } from 'components/add-liquidity/liquidity-action-button';
-import { EthGasPrices, LiquidityBand } from '@sommelier/shared-types';
+import {
+    EthGasPrices,
+    LiquidityBand,
+    LiquidityBasketData,
+} from '@sommelier/shared-types';
 import { PoolOverview } from 'hooks/data-fetchers';
 import { debug } from 'util/debug';
 import Sentry, { SentryError } from 'util/sentry';
@@ -68,7 +72,7 @@ type Props = {
     leftArrow: boolean | false;
     rightArrow: boolean | false;
     onSkipPairs: () => void;
-    onAddBasket: () => void;
+    onAddBasket: (data: LiquidityBasketData) => void;
     onLeft: () => void;
     onRight: () => void;
 };
@@ -729,6 +733,10 @@ export const AddLiquidityV3 = ({
         if (!currentGasPrice) {
             throw new Error('Gas price not selected.');
         }
+
+        console.log(tokenInputState);
+
+        console.log(pool);
 
         let hash: string | undefined;
         let addType: string;
@@ -1428,7 +1436,70 @@ export const AddLiquidityV3 = ({
             return;
         }
 
-        doAddLiquidity();
+        // doAddLiquidity();
+        // doAddBasket();
+
+        if (!pool || !provider || !indicators || !bounds.position) return;
+        if (!currentGasPrice) {
+            throw new Error('Gas price not selected.');
+        }
+
+        console.log(tokenInputState);
+
+        console.log(pool);
+
+        const poolId = pool.id;
+        const poolName = `${pool.token0.symbol}-${pool.token1.symbol}`;
+
+        const token0Address = pool.token0.id;
+        const token0Name = pool.token0.symbol;
+
+        const token1Address = pool.token1.id;
+        const token1Name = pool.token1.symbol;
+
+        const isOneSide =
+            tokenInputState.selectedTokens.length === 1 ? true : false;
+
+        const selectedToken0 = tokenInputState.selectedTokens[0];
+        const lToken0Address = tokenInputState[selectedToken0].id;
+        const lToken0Name = tokenInputState[selectedToken0].symbol;
+        const lToken0Amount = tokenInputState[selectedToken0].amount;
+
+        const selectedToken1 = isOneSide
+            ? null
+            : tokenInputState.selectedTokens[1];
+        const lToken1Address = selectedToken1
+            ? tokenInputState[selectedToken1].id
+            : null;
+        const lToken1Name = selectedToken1
+            ? tokenInputState[selectedToken1].symbol
+            : null;
+        const lToken1Amount = selectedToken1
+            ? tokenInputState[selectedToken1].amount
+            : null;
+
+        const volumeUSD = pool.volumeUSD;
+
+        const poolInfo: LiquidityBasketData = {
+            poolId,
+            poolName,
+            token0Address,
+            token0Name,
+            token1Address,
+            token1Name,
+            isOneSide,
+            lToken0Address,
+            lToken0Name,
+            lToken0Amount,
+            lToken1Address,
+            lToken1Name,
+            lToken1Amount,
+            actionType: 'add',
+            volumeUSD,
+            isNANA,
+        };
+
+        onAddBasket(poolInfo);
     };
 
     return (
@@ -1509,7 +1580,7 @@ export const AddLiquidityV3 = ({
                             <div className='pool-details-value green'>
                                 <img src={pngMoney} />
                                 {formatNumber(
-                                    (Number(pool.volumeUSD) / 100) * 0.3,
+                                    (Number(pool.volumeUSD) / 100) * 0.1,
                                 )}
                             </div>
                             <div className='pool-details-desc'>
@@ -1845,7 +1916,7 @@ export const AddLiquidityV3 = ({
                             className='pair-action-button green'
                             onClick={(e) => handleAddBasket()}
                         >
-                            ADD-To-BASKET
+                            ADD
                         </button>
                     </div>
                     <br />
