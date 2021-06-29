@@ -86,6 +86,7 @@ function LandingContainer({
     };
 
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
+    const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();
