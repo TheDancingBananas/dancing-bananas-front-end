@@ -32,6 +32,29 @@ const CartContainer = ({
         }
     };
 
+    if (cartData.length === 0) {
+        return (
+            <div className='cart-container'>
+                <div className='cart-container-empty-card'>
+                    <p className='title'>BANANA BASKET</p>
+                    <p
+                        className='title'
+                        style={{ paddingTop: 40, fontSize: 20 }}
+                    >
+                        OH NO!
+                        <br />
+                        EMPTY BASKET
+                    </p>
+                    <p className='sub-title' style={{ paddingTop: 10 }}>
+                        ADD LIQUIDITY FROM A<br />
+                        DANCING BANANA POOL TO FILL
+                        <br />
+                        YOUR BASKET
+                    </p>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className='cart-container'>
             <div className='cart-container-head'>

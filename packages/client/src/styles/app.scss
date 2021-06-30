@@ -857,32 +857,48 @@ p {
 
 .connect-wallet-button {
     color: var(--faceDeep);
-    width: 100%;
     max-width: 200px;
+    min-width: 110px;
     max-height: 38px;
     font-size: 1rem;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    // text-overflow: ellipsis;
     font-weight: 600;
     background: transparent;
     border: none;
     outline: none;
     // border: 1px solid var(--borderAccent);
-    padding: 0.5rem 1.25rem;
-    width: 200px;
+    padding: 7.76px;
     text-transform: uppercase;
     display: flex;
     align-items: center;
     justify-content: center;
 
     img {
-        height: 40px;
+        height: 25px;
         margin-right: 10px;
     }
 
     span {
         padding-top: 3px;
+    }
+
+    &.black {
+        background: #000000;
+        border: 1px solid #000000;
+        box-sizing: border-box;
+        border-radius: 4.79872px;
+    }
+
+    &.yellow {
+        background: #FFDF00;
+        border: 1.16431px solid #000000;
+        box-sizing: border-box;
+        border-radius: 4.79872px;
+        text-shadow: 0px 1.19968px 0px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
     }
 }
 

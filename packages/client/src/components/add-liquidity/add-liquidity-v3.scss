@@ -43,7 +43,7 @@
         padding: 1rem 1.75rem;
         justify-content: center;
         color: #fff;
-        background: #671CC9;
+        background: #FF90D0;
         box-sizing: border-box;
         // margin-left: -1px;
 
@@ -52,27 +52,27 @@
         }
 
         img {
-            width: 40px !important;
+            width: 35px !important;
         }
 
         &-count {
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            background: #FF90D0;
+            // background: #FF90D0;
             display: flex;
             justify-content: center;
             align-items: center;
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px black;
-            margin-left: 15px;
-            border: 1px solid #000;
-            font-size: 20px;
+            margin-left: 5px;
+            // border: 1px solid #000;
+            font-size: 22px;
         }
 
         &-amount {
             text-align: left;
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px black;
-            margin-left: 15px;
+            margin-left: 5px;
         }
     }
 

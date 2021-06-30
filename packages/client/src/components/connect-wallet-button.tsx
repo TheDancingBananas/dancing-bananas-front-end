@@ -28,23 +28,35 @@ function ConnectWalletButton({
     return (
         <div>
             {!account && (
-                <button className='connect-wallet-button' onClick={onClick}>
+                <button
+                    className='connect-wallet-button black'
+                    onClick={onClick}
+                >
                     <img src={pngWallet} /> Connect Wallet
                 </button>
             )}
             {account && (
-                <div style={{ display: 'flex' }}>
-                    <button className='connect-wallet-button' onClick={onClick}>
+                <div
+                    style={{
+                        display: 'flex',
+                        width: 450,
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <button
+                        className='connect-wallet-button black'
+                        onClick={onClick}
+                    >
                         <img src={pngWallet} />
                         {formatAddress(account.toString())}
                     </button>
-                    <button className='connect-wallet-button'>
+                    <button className='connect-wallet-button black'>
                         <img src={pngEth} />
                         {parseFloat(
                             ethers.utils.formatUnits(ethBalance, 18),
                         ).toFixed(2)}
                     </button>
-                    <button className='connect-wallet-button'>
+                    <button className='connect-wallet-button yellow'>
                         <img src={pngBanana} />
                         {100}
                     </button>
