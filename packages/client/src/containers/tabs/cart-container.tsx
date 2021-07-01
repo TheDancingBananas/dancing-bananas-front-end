@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import './cart-container.scss';
 
 import pngBananaBasket from 'styles/images/banana-basket.png';
+import pngEmptyBasket from 'styles/images/empty-basket.png';
 import pngNANA from 'styles/images/tokens/nana.png';
 import pngArrowLeft from 'styles/images/left.png';
 import pngBanana1 from 'styles/images/banana-1.png';
@@ -35,6 +36,9 @@ const CartContainer = ({
     if (cartData.length === 0) {
         return (
             <div className='cart-container'>
+                <div className='cart-container-head'>
+                    <img className='head-image' src={pngEmptyBasket} />
+                </div>
                 <div className='cart-container-empty-card'>
                     <p className='title'>BANANA BASKET</p>
                     <p
