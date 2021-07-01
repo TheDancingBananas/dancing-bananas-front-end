@@ -1,0 +1,186 @@
+.task-container {
+    width: 100%;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .white {
+        color: #fff;
+    }
+
+    .green {
+        color: #71FFB9;
+    }
+
+    .dark {
+        color: #210946
+    }
+
+    .pink {
+        color: #FF90D0;
+    }
+
+    .caption {
+        margin-top:  15px;
+        margin-bottom: 10px;
+    }
+}
+
+.task-container-head {
+    z-index: 500;
+    width: 450px;
+    margin-top: 40px;
+
+    .head-image {
+        display: block;
+        width: 182px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .back-image {
+        position: absolute;
+        height: 21px;
+        margin-top: 50px;
+        margin-left: 25px;
+        cursor: pointer;
+    }
+}
+
+.task-container-empty-card {
+    width: 450px;
+    min-width: 225px;
+    min-height: 470px;
+    // background: radial-gradient(var(--bgDefault), var(--bgPrimary));
+    background: #7033e5;
+    border: 3px solid #000;
+
+    border-radius: 16px;
+    padding: 90px 10px;
+
+    margin-top: -90px;
+
+    .title {
+        font-size: 25px;
+        line-height: 30px;
+        text-align: center;
+        color: #FFF;
+        text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+    }
+
+    .sub-title {
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        color: #E7EBF2;
+    }
+}
+
+.task-container-card {
+    width: 450px;
+    min-width: 225px;
+    min-height: 300px;
+    // background: radial-gradient(var(--bgDefault), var(--bgPrimary));
+    background: #7033e5;
+    border: 3px solid #000;
+
+    border-radius: 16px;
+    padding: 110px 1.5rem 1.25rem;
+    margin-top: -60px;
+
+    .task-title {
+        font-size: 18px;
+        line-height: 30px;
+        color: #fff;
+        text-shadow: -1px 0 rgba(0, 0, 0, 0.25), 0 1px rgba(0, 0, 0, 0.25), 1px 0 rgba(0, 0, 0, 0.25), 0 -1px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+        margin-bottom: 3px;
+    }
+
+    .task-sub-title {
+        font-size: 13px;
+        line-height: 18px;
+        text-align: center;
+        color: #E7EBF2;
+    }
+
+    .task-content {
+        margin-top: 33px;
+    }
+
+    .task-item {
+        width: 100%;
+        height: 56px;
+        background: #E7EBF2;
+        border: 2px solid #000000;
+        box-sizing: border-box;
+        border-radius: 5.83px;
+        font-size: 15px;
+        line-height: 18px;
+        color: #fff;
+        text-shadow: -1px 0 rgba(0, 0, 0, 0.75), 0 1px rgba(0, 0, 0, 0.75), 1px 0 rgba(0, 0, 0, 0.75), 0 -1px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+    }
+
+    .reward-divider {
+        display: flex;
+        align-items: center;
+
+        .line {
+            height: 1px;
+            background: #000;
+            flex: 1;
+        }
+        span {
+            color: #fff;
+            font-size: 13px;
+            line-height: 16px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .level-up-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 56px;
+        background: #DD00B3;
+        border: 2px solid #000000;
+        box-sizing: border-box;
+        border-radius: 5.83px;
+        font-size: 18.861px;
+        line-height: 23px;
+        color: #fff;
+        text-shadow: -1px 0 rgba(0, 0, 0, 0.75), 0 1px rgba(0, 0, 0, 0.75), 1px 0 rgba(0, 0, 0, 0.75), 0 -1px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: #000;
+        margin-bottom: 80px;
+
+        .level-up-cost {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+
+            img {
+                height: 23px;
+            }
+
+            span { 
+                font-size: 12px;
+                line-height: 14px;
+                text-shadow: none;
+                -webkit-text-stroke-width: 0px;
+            }
+        }
+    }
+}

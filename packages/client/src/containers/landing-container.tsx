@@ -28,6 +28,7 @@ import {
 
 import ShopContainer from './tabs/shop-container';
 import CartContainer from './tabs/cart-container';
+import TaskContainer from './tabs/task-container';
 
 import { storage } from 'util/localStorage';
 
@@ -40,7 +41,7 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
 
-    const [tab, setTab] = useState<string>('shop');
+    const [tab, setTab] = useState<string>('task');
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
@@ -136,6 +137,13 @@ function LandingContainer({
                         }
                     />
                 )}
+                {tab === 'task' && (
+                    <TaskContainer
+                        onBack={() => {
+                            setTab('home');
+                        }}
+                    />
+                )}
                 {tab === 'shop' && <ShopContainer />}
                 {tab === 'cart' && (
                     <CartContainer
@@ -168,15 +176,15 @@ function LandingContainer({
                     </div>
                     <div
                         className={classNames('footer-tab', {
-                            active: tab === 'reward',
+                            active: tab === 'task',
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('reward');
+                            setTab('task');
                         }}
                     >
                         <IconSearch
-                            fill={tab === 'reward' ? '#000' : '#808080'}
+                            fill={tab === 'task' ? '#000' : '#808080'}
                         />
                     </div>
                     {/* <div
