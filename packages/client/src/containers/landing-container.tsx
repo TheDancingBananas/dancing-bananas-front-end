@@ -41,7 +41,7 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
 
-    const [tab, setTab] = useState<string>('task');
+    const [tab, setTab] = useState<string>('home');
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
