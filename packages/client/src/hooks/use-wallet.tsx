@@ -16,7 +16,8 @@ import { debug } from 'util/debug';
 const cookies = new Cookies();
 
 const wcProvider = new WalletConnectProvider({
-    infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+    infuraId: '24559873278a4505abdaf7d7d3ea57c7',
+    //infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
     qrcodeModalOptions: {
         mobileLinks: ['trust', 'argent', 'ledger'],
     },
