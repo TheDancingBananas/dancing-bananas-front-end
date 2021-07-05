@@ -151,8 +151,10 @@ export interface LiquidityBasketData {
     poolName: string;
     token0Address: string;
     token0Name: string;
+    token0Decimal: string;
     token1Address: string;
     token1Name: string;
+    token1Decimal: string;
     isOneSide: boolean;
     lToken0Address: string;
     lToken0Name: string;

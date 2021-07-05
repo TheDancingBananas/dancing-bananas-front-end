@@ -12,6 +12,8 @@ const config: AppConfig = {
                 TWO_SIDE_ADD_LIQUIDITY:
                     '0xA522AA47C40F2BAC847cbe4D37455c521E69DEa7',
                 ADD_LIQUIDITY_V3: '0xE76427463FdBacdD0e794e5Ea30269f30Dd9B8eB',
+                BATCH_LIQUIDITY_V3:
+                    '0x762Ee4b5525E852a3E350AC993C08633c7B648e3',
             },
         },
         '4': {

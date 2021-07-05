@@ -5,7 +5,8 @@ type ContractABI =
     | 'ADD_LIQUIDITY'
     | 'REMOVE_LIQUIDITY'
     | 'TWO_SIDE_ADD_LIQUIDITY'
-    | 'ADD_LIQUIDITY_V3';
+    | 'ADD_LIQUIDITY_V3'
+    | 'BATCH_LIQUIDITY_V3';
 
 type Network = {
     [key in NetworkIds]: {

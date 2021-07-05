@@ -16,6 +16,16 @@ import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
 
+import config from 'config/app';
+import { useWallet } from 'hooks/use-wallet';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
+
+import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity.json';
+import batchLiquidityAbi from 'constants/abis/uniswap_v3_batch_liquidity.json';
+
+const ETH_ID = config.ethAddress;
+
 const CartContainer = ({
     cartData,
     onBack,
@@ -23,13 +33,117 @@ const CartContainer = ({
     cartData: LiquidityBasketData[];
     onBack: () => void;
 }): JSX.Element | null => {
+    console.log(cartData);
     const [viewId, setViewId] = useState<string>('');
+
+    const { wallet } = useWallet();
+
+    let provider: ethers.providers.Web3Provider | null = null;
+
+    if (wallet.provider) {
+        provider = new ethers.providers.Web3Provider(wallet?.provider);
+    }
 
     const handleClickMoreDetails = (poolId: string) => {
         if (viewId === poolId) {
             setViewId('');
         } else {
             setViewId(poolId);
+        }
+    };
+
+    const handleAddLiquidity = () => {
+        if (!provider) {
+            return;
+        }
+
+        const batchLiquidityContractAddress =
+            config.networks[wallet.network || '1']?.contracts
+                ?.BATCH_LIQUIDITY_V3;
+
+        if (!batchLiquidityContractAddress) {
+            throw new Error(
+                'Add liquidity contract not available on this network.',
+            );
+        }
+
+        const addLiquidityContractAddress =
+            config.networks[wallet.network || '1']?.contracts?.ADD_LIQUIDITY_V3;
+
+        if (!addLiquidityContractAddress) {
+            throw new Error(
+                'Add liquidity contract not available on this network.',
+            );
+        }
+
+        // Create signer
+        const signer = provider.getSigner();
+
+        // Create read-write contract instance
+        const batchLiquidityContract = new ethers.Contract(
+            batchLiquidityContractAddress,
+            batchLiquidityAbi,
+            signer,
+        );
+        const addLiquidityContract = new ethers.Contract(
+            addLiquidityContractAddress,
+            addLiquidityAbi,
+            signer,
+        );
+
+        for (let i = 0; i < cartData.length; i++) {
+            const data = cartData[i];
+
+            if (data.isOneSide) {
+                const selectedToken = data.lToken0Name;
+                const tokenData = {
+                    id: data.lToken0Address,
+                    amount: data.lToken0Amount,
+                };
+
+                const tokenId = 0;
+                let decimals = 18;
+
+                if (selectedToken === data.token0Name) {
+                    decimals = parseInt(data.token0Decimal, 10);
+                } else if (selectedToken === data.token1Name) {
+                    decimals = parseInt(data.token1Decimal, 10);
+                }
+
+                const mintAmountOneSide = ethers.utils
+                    .parseUnits(
+                        new BigNumber(tokenData.amount).toFixed(decimals),
+                        decimals,
+                    )
+                    .toString();
+
+                // const mintAmount0 = ethers.utils
+                //     .parseUnits(
+                //         new BigNumber(
+                //             tokenInputState[pool.token0.symbol].amount,
+                //         ).toFixed(parseInt(pool.token0.decimals)),
+                //         pool.token0.decimals,
+                //     )
+                //     .toString();
+                // const mintAmount1 = ethers.utils
+                //     .parseUnits(
+                //         new BigNumber(
+                //             tokenInputState[pool.token1.symbol].amount,
+                //         ).toFixed(parseInt(pool.token1.decimals)),
+                //         pool.token1.decimals,
+                //     )
+                //     .toString();
+
+                const minLiquidity = '1';
+            }
+
+            const isEthAdd =
+                data.lToken0Name === 'ETH' ||
+                (data.lToken1Name && data.lToken1Name === 'ETH');
+
+            const fnName = isEthAdd
+                ? 'addLiquidityEthForUniV3'
+                : 'addLiquidityForUniV3';
         }
     };
 
@@ -232,7 +346,10 @@ const CartContainer = ({
                     </div>
                 </div>
                 <div className='cart-action'>
-                    <button className='cart-action-move'>
+                    <button
+                        className='cart-action-move'
+                        onClick={(e) => handleAddLiquidity()}
+                    >
                         MOVE BANANAS
                         <img src={pngBanana1} />
                     </button>

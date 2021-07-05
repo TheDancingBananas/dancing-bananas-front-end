@@ -1453,9 +1453,11 @@ export const AddLiquidityV3 = ({
 
         const token0Address = pool.token0.id;
         const token0Name = pool.token0.symbol;
+        const token0Decimal = pool.token0.decimals;
 
         const token1Address = pool.token1.id;
         const token1Name = pool.token1.symbol;
+        const token1Decimal = pool.token1.decimals;
 
         const isOneSide =
             tokenInputState.selectedTokens.length === 1 ? true : false;
@@ -1480,13 +1482,20 @@ export const AddLiquidityV3 = ({
 
         const volumeUSD = pool.volumeUSD;
 
+        console.log('************************************');
+        console.log(pool);
+        console.log(tokenInputState);
+        console.log('************************************');
+
         const poolInfo: LiquidityBasketData = {
             poolId,
             poolName,
             token0Address,
             token0Name,
+            token0Decimal,
             token1Address,
             token1Name,
+            token1Decimal,
             isOneSide,
             lToken0Address,
             lToken0Name,
