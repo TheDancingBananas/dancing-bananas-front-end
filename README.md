@@ -82,3 +82,11 @@ This will setup an ssh tunnel from your local @ port 8000 to the subgraph runnin
 ## TODOs
 
 You can see all TODOs for this repo in the [Issues](https://github.com/PeggyJV/il-loss-charts/issues) section. Feel free to submit any suggestion as an issue!
+
+
+## Deploy
+
+Prerequisite Install [gcloud sdk](https://cloud.google.com/sdk/docs/install)
+
+`gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy app.yaml`
+
