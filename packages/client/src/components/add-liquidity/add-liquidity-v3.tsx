@@ -75,6 +75,8 @@ type Props = {
     onAddBasket: (data: LiquidityBasketData) => void;
     onLeft: () => void;
     onRight: () => void;
+    onAddSuccess: () => void;
+    onStatus: (status: boolean) => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -94,6 +96,8 @@ export const AddLiquidityV3 = ({
     onAddBasket,
     onLeft,
     onRight,
+    onAddSuccess,
+    onStatus,
 }: Props): JSX.Element | null => {
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertTitle, setAlertTitle] = useState<string>('');
@@ -757,6 +761,8 @@ export const AddLiquidityV3 = ({
                 getTokensWithAmounts() as Record<string, TokenInputAmount>,
             );
 
+            onStatus(true);
+
             toastWarn(`Confirming tx ${compactHash(hash)}`);
             setPendingTx &&
                 setPendingTx(
@@ -773,8 +779,11 @@ export const AddLiquidityV3 = ({
 
                 const { status } = txStatus;
 
+                onStatus(false);
+
                 if (status === 1) {
-                    toastSuccess(`Confirmed tx ${compactHash(hash)}`);
+                    // toastSuccess(`Confirmed tx ${compactHash(hash)}`);
+                    onAddSuccess();
                     setPendingTx &&
                         setPendingTx(
                             (state: PendingTx): PendingTx =>
@@ -993,7 +1002,8 @@ export const AddLiquidityV3 = ({
 
             // setApprovalState('pending');
             if (approveHash) {
-                toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                // toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1004,6 +1014,7 @@ export const AddLiquidityV3 = ({
                     );
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
+                onStatus(false);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1258,7 +1269,8 @@ export const AddLiquidityV3 = ({
 
             // setApprovalState('pending');
             if (approveHash) {
-                toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                // toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1269,6 +1281,7 @@ export const AddLiquidityV3 = ({
                     );
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
+                onStatus(false);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1506,6 +1519,7 @@ export const AddLiquidityV3 = ({
             actionType: 'add',
             volumeUSD,
             isNANA,
+            func: doAddLiquidity,
         };
 
         onAddBasket(poolInfo);

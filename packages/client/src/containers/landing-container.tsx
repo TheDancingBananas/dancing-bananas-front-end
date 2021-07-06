@@ -29,8 +29,11 @@ import {
 import ShopContainer from './tabs/shop-container';
 import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
+import SuccessContainer from './tabs/success-container';
 
 import { storage } from 'util/localStorage';
+
+import pngWait from 'styles/images/wait.png';
 
 function LandingContainer({
     setShowConnectWallet,
@@ -44,6 +47,8 @@ function LandingContainer({
     const [tab, setTab] = useState<string>('home');
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
+
+    const [pendingTransaction, setPendingTransaction] = useState(false);
 
     const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();
@@ -108,6 +113,14 @@ function LandingContainer({
         setTab('cart');
     };
 
+    const handleTransactionSuccess = () => {
+        setTab('transactionSuccess');
+    };
+
+    const handleChangePendingStatus = (status: boolean) => {
+        setPendingTransaction(status);
+    };
+
     useEffect(() => {
         console.log(basketData);
     }, [basketData]);
@@ -119,6 +132,17 @@ function LandingContainer({
                     {<ConnectWalletButton onClick={showWalletModal} />}
                 </div>
             </div>
+            {pendingTransaction && (
+                <div className='pending-transaction-board'>
+                    <img src={pngWait} className='pending-transaction-image' />
+                    <p className='pending-transaction-text'>
+                        YOUR TRANSACTION IS BEING CONFIRMED
+                        <br />
+                        ESTIMATED DURATION:{' '}
+                        <span style={{ color: '#FFDF00' }}>2 MINS</span>
+                    </p>
+                </div>
+            )}
             <Box
                 display='flex'
                 flexDirection='column'
@@ -135,10 +159,21 @@ function LandingContainer({
                         onAddBasket={(data: LiquidityBasketData) =>
                             handleAddBasket(data)
                         }
+                        onAddSuccess={() => handleTransactionSuccess()}
+                        onStatus={(status: boolean) =>
+                            handleChangePendingStatus(status)
+                        }
                     />
                 )}
                 {tab === 'task' && (
                     <TaskContainer
+                        onBack={() => {
+                            setTab('home');
+                        }}
+                    />
+                )}
+                {tab === 'transactionSuccess' && (
+                    <SuccessContainer
                         onBack={() => {
                             setTab('home');
                         }}

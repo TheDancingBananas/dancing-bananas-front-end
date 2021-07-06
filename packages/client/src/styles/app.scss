@@ -902,6 +902,34 @@ p {
     }
 }
 
+.pending-transaction-board {
+    background: #E7EBF2;
+    display: flex;
+    width: 460px;
+    height: 76px;
+    position: fixed;
+    top: 0;
+    left: calc(50vw - 235px);
+    box-sizing: border-box;
+    padding: 19px;
+    z-index: 9999;
+
+    .pending-transaction-image {
+        width: 32px;
+        height: 32px;
+    }
+
+    .pending-transaction-text {
+        font-size: 14px;
+        line-height: 17px;
+        color: #FFFFFF;
+        text-shadow: 0px 1.20692px 0px rgba(0, 0, 0, 0.75);
+        margin-left: 15px;
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+    }
+}
+
 .connect-wallet-modal {
     .dropdown {
         outline: none;

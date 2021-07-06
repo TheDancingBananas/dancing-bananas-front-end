@@ -145,6 +145,8 @@ const CartContainer = ({
                 ? 'addLiquidityEthForUniV3'
                 : 'addLiquidityForUniV3';
         }
+
+        cartData[0].func();
     };
 
     if (cartData.length === 0) {
