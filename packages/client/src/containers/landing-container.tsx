@@ -38,6 +38,8 @@ import pngWait from 'styles/images/wait.png';
 
 import { storage } from 'util/localStorage';
 
+import pngWait from 'styles/images/wait.png';
+
 function LandingContainer({
     gasPrices,
 }: {
@@ -164,6 +166,14 @@ function LandingContainer({
         setPendingTransaction(status);
     };
 
+    const handleTransactionSuccess = () => {
+        setTab('transactionSuccess');
+    };
+
+    const handleChangePendingStatus = (status: boolean) => {
+        setPendingTransaction(status);
+    };
+
     useEffect(() => {
         console.log(basketData);
     }, [basketData]);
@@ -203,6 +213,10 @@ function LandingContainer({
                             data: LiquidityBasketData,
                             navigateToBasket: boolean,
                         ) => handleAddBasket(data, navigateToBasket)}
+                        onAddSuccess={() => handleTransactionSuccess()}
+                        onStatus={(status: boolean) =>
+                            handleChangePendingStatus(status)
+                        }
                         onAddSuccess={() => handleTransactionSuccess()}
                         onStatus={(status: boolean) =>
                             handleChangePendingStatus(status)

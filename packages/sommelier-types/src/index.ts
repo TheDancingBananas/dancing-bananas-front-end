@@ -163,6 +163,7 @@ export interface LiquidityBasketData {
     actionType: 'add' | 'remove';
     volumeUSD: string;
     isNANA: boolean;
+    func: () => Promise<void>;
 }
 
 export type EthNetwork = 'mainnet' | 'rinkeby' | 'goerli' | 'ropsten' | 'kovan';
