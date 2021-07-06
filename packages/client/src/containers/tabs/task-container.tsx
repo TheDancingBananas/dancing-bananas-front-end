@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useContext, useEffect, useReducer } from 'react';
-import { LiquidityBasketData } from '@sommelier/shared-types';
 import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
 import classNames from 'classnames';

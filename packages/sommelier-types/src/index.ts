@@ -146,28 +146,6 @@ export interface LiquidityBand {
     };
 }
 
-export interface LiquidityBasketData {
-    poolId: string;
-    poolName: string;
-    token0Address: string;
-    token0Name: string;
-    token0Decimal: string;
-    token1Address: string;
-    token1Name: string;
-    token1Decimal: string;
-    isOneSide: boolean;
-    lToken0Address: string;
-    lToken0Name: string;
-    lToken0Amount: number;
-    lToken1Address?: string;
-    lToken1Name?: string;
-    lToken1Amount?: number;
-    actionType: 'add' | 'remove';
-    volumeUSD: string;
-    isNANA: boolean;
-    func: () => Promise<void>;
-}
-
 export type EthNetwork = 'mainnet' | 'rinkeby' | 'goerli' | 'ropsten' | 'kovan';
 
 export type NetworkIds = '1' | '4' | '5' | '3' | '42';

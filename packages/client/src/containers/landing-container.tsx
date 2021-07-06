@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { EthGasPrices, LiquidityBasketData } from '@sommelier/shared-types';
+import { EthGasPrices } from '@sommelier/shared-types';
+import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
 import { TelegramCTA } from 'components/telegram-cta';
@@ -182,10 +183,15 @@ function LandingContainer({
                 {tab === 'shop' && <ShopContainer />}
                 {tab === 'cart' && (
                     <CartContainer
+                        gasPrices={gasPrices}
                         cartData={basketData}
                         onBack={() => {
                             setTab('home');
                         }}
+                        onAddSuccess={() => handleTransactionSuccess()}
+                        onStatus={(status: boolean) =>
+                            handleChangePendingStatus(status)
+                        }
                     />
                 )}
 

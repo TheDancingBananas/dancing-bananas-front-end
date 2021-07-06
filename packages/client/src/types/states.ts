@@ -121,3 +121,31 @@ export interface TokenInputAmount {
     amount: string;
     selected: boolean;
 }
+
+export interface LiquidityBasketData {
+    poolId: string;
+    poolName: string;
+    token0Address: string;
+    token0Name: string;
+    token0Decimal: string;
+    token1Address: string;
+    token1Name: string;
+    token1Decimal: string;
+    isOneSide: boolean;
+    lToken0Address: string;
+    lToken0Name: string;
+    lToken0Amount: number;
+    lToken1Address?: string;
+    lToken1Name?: string;
+    lToken1Amount?: number;
+    actionType: 'add' | 'remove';
+    volumeUSD: string;
+    isNANA: boolean;
+    token0Amount: string;
+    token1Amount: string;
+    ethAmount: string;
+    bounds: BoundsState;
+    feeTier: string;
+    balances: WalletBalances;
+    func: () => Promise<void>;
+}

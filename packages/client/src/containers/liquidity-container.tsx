@@ -16,7 +16,8 @@ import {
 } from 'hooks/data-fetchers';
 import { useWallet } from 'hooks/use-wallet';
 import { debug } from 'util/debug';
-import { EthGasPrices, LiquidityBasketData } from '@sommelier/shared-types';
+import { EthGasPrices } from '@sommelier/shared-types';
+import { LiquidityBasketData } from 'types/states';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
