@@ -38,7 +38,7 @@ import { ethers } from 'ethers';
 import { toastSuccess, toastWarn, toastError } from 'util/toasters';
 import Sentry, { SentryError } from 'util/sentry';
 
-import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity.json';
+import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity_2.json';
 import batchLiquidityAbi from 'constants/abis/uniswap_v3_batch_liquidity.json';
 import erc20Abi from 'constants/abis/erc20.json';
 
@@ -293,9 +293,7 @@ const CartContainer = ({
 
                     let approveHash: string | undefined;
                     try {
-                        const {
-                            hash,
-                        } = await erc20Contract.approve(
+                        const { hash } = await erc20Contract.approve(
                             addLiquidityContractAddress,
                             baseApproveAmount,
                             {
@@ -328,7 +326,7 @@ const CartContainer = ({
 
                 const encodedABI = addLiquidityInterface.encodeFunctionData(
                     'investTokenForUniPair',
-                    [tokenData.id, mintAmountOneSide, tokenId, mintParams],
+                    [tokenId, tokenData.id, mintAmountOneSide, mintParams],
                 );
 
                 batchParams.push(encodedABI);
