@@ -243,7 +243,7 @@ const CartContainer = ({
                         .times(100)
                         .toFixed();
 
-                    const tokenAmount = new BigNumber(amountDesired);
+                    // const tokenAmount = new BigNumber(amountDesired);
 
                     if (data.balances?.[tokenSymbol]) {
                         const baseTokenAmount = ethers.utils.formatUnits(
@@ -332,13 +332,174 @@ const CartContainer = ({
                 batchParams.push(encodedABI);
             }
 
-            const isEthAdd =
-                data.lToken0Name === 'ETH' ||
-                (data.lToken1Name && data.lToken1Name === 'ETH');
+            // Two side token
+            if (!data.isOneSide) {
+                const isEthAdd =
+                    data.lToken0Name === 'ETH' ||
+                    (data.lToken1Name && data.lToken1Name === 'ETH');
 
-            const fnName = isEthAdd
-                ? 'addLiquidityEthForUniV3'
-                : 'addLiquidityForUniV3';
+                const fnName = isEthAdd
+                    ? 'addLiquidityEthForUniV3'
+                    : 'addLiquidityForUniV3';
+
+                const symbol0 = data.token0Name;
+                const symbol1 = data.token1Name;
+
+                const tokenId = 0;
+
+                const mintAmount0 = ethers.utils
+                    .parseUnits(
+                        new BigNumber(data.token0Amount).toFixed(
+                            parseInt(data.token0Decimal),
+                        ),
+                        data.token0Decimal,
+                    )
+                    .toString();
+
+                const mintAmount1 = ethers.utils
+                    .parseUnits(
+                        new BigNumber(data.token1Amount).toFixed(
+                            parseInt(data.token1Decimal),
+                        ),
+                        data.token1Decimal,
+                    )
+                    .toString();
+
+                const mintParams = [
+                    data.token0Address, // token0
+                    data.token1Address, // token1
+                    data.feeTier, // feeTier
+                    data.bounds.position.tickLower, // tickLower
+                    data.bounds.position.tickUpper, // tickUpper
+                    mintAmount0, // amount0Desired
+                    mintAmount1, // amount1Desired
+                    0,
+                    0,
+                    wallet.account, // recipient
+                    Math.floor(Date.now() / 1000) + 86400000, // deadline
+                ];
+
+                for (const tokenSymbol of [data.token0Name, data.token1Name]) {
+                    // IF WETH, check if ETH is selected - if not, approve WETH
+                    // IF NOT WETH, approve
+                    const tokenAddress =
+                        tokenSymbol === data.token0Name
+                            ? data.token0Address
+                            : data.token1Address;
+
+                    if (tokenSymbol === 'WETH') {
+                        if (
+                            data.lToken0Name === 'ETH' ||
+                            (data.lToken1Name && data.lToken1Name === 'ETH')
+                        ) {
+                            continue;
+                        }
+                    }
+
+                    const erc20Contract = new ethers.Contract(
+                        tokenAddress,
+                        erc20Abi,
+                        signer,
+                    );
+
+                    const amountDesired =
+                        tokenSymbol === data.token0Name
+                            ? mintAmount0
+                            : mintAmount1;
+
+                    const baseApproveAmount = new BigNumber(amountDesired)
+                        .times(100)
+                        .toFixed();
+
+                    const tokenAmount = new BigNumber(amountDesired);
+
+                    if (data.balances[tokenSymbol]) {
+                        const baseTokenAmount = ethers.utils.formatUnits(
+                            amountDesired,
+                            data.balances[tokenSymbol]?.decimals,
+                        );
+
+                        const tokenAllowance = ethers.utils.formatUnits(
+                            data.balances[tokenSymbol]?.allowance?.[
+                                addLiquidityContractAddress
+                            ],
+                            data.balances[tokenSymbol]?.decimals,
+                        );
+
+                        // skip approval on allowance
+                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance))
+                            continue;
+                    }
+
+                    // Call the contract and sign
+                    let approvalEstimate: ethers.BigNumber;
+
+                    try {
+                        approvalEstimate = await erc20Contract.estimateGas.approve(
+                            addLiquidityContractAddress,
+                            baseApproveAmount,
+                            { gasPrice: baseGasPrice },
+                        );
+
+                        // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
+                        approvalEstimate = approvalEstimate.add(
+                            approvalEstimate.div(3),
+                        );
+                    } catch (err) {
+                        // handleGasEstimationError(err, {
+                        //     type: 'approve',
+                        //     account: wallet.account,
+                        //     to: tokenInputState[tokenSymbol].id,
+                        //     target: addLiquidityContractAddress,
+                        //     amount: baseApproveAmount,
+                        //     gasPrice: baseGasPrice,
+                        // });
+                        continue;
+                    }
+
+                    // Approve the add liquidity contract to spend entry tokens
+                    let approveHash: string | undefined;
+                    try {
+                        const {
+                            hash,
+                        } = await erc20Contract.approve(
+                            addLiquidityContractAddress,
+                            baseApproveAmount,
+                            {
+                                gasPrice: baseGasPrice,
+                                gasLimit: approvalEstimate,
+                            },
+                        );
+                        approveHash = hash;
+                    } catch (e) {
+                        continue;
+                    }
+
+                    // setApprovalState('pending');
+                    if (approveHash) {
+                        onStatus(true);
+                        await provider.waitForTransaction(approveHash);
+                        onStatus(false);
+                    }
+                }
+
+                if (
+                    data.lToken0Name === 'ETH' ||
+                    (data.lToken1Name && data.lToken1Name === 'ETH')
+                ) {
+                    const ethAmount = ethers.utils.parseEther(
+                        new BigNumber(data.ethAmount).toFixed(18),
+                    );
+                    baseMsgValue = baseMsgValue.add(ethAmount);
+                }
+
+                const encodedABI = addLiquidityInterface.encodeFunctionData(
+                    fnName,
+                    [tokenId, mintParams],
+                );
+
+                batchParams.push(encodedABI);
+            }
         }
 
         const value = baseMsgValue.toString();
