@@ -262,6 +262,11 @@ function LandingContainer({
                         }}
                     >
                         <IconCart fill={tab === 'cart' ? '#000' : '#808080'} />
+                        {basketData.length > 0 && (
+                            <div className='basket-count'>
+                                {basketData.length}
+                            </div>
+                        )}
                     </div>
                 </div>
             </Box>
