@@ -1574,7 +1574,21 @@ export const AddLiquidityV3 = ({
                         {leftArrow && <img src={pngLeft} />}
                     </div> */}
                     <div className='navigator-title'>
-                        {isNANA ? 'NANA POOL' : 'DANCING BANANA POOLS'}
+                        {isNANA && (
+                            <span className='navigator-title-nana'>
+                                NANA POOL
+                            </span>
+                        )}
+                        {!isNANA && (
+                            <>
+                                <span className='navigator-title-main'>
+                                    DANCING BANANA
+                                </span>
+                                <span className='navigator-title-sub'>
+                                    UNISWAP V3 POOLS
+                                </span>
+                            </>
+                        )}
                     </div>
                     {/* <div
                         className='navigator-arrow'
