@@ -38,30 +38,6 @@ type PoolPath = Path & {
     poolId: string;
 };
 
-const networks = Object.keys(config.uniswap.v3.networks);
-
-// TODO: move this to utils
-const poolIdParamsSchema = Joi.object().keys({
-    poolId: Joi.string()
-        .custom(validateEthAddress, 'Validate Pool Id')
-        .required(),
-    network: Joi.string()
-        .valid(...networks)
-        .required(),
-});
-const poolIdValidator = celebrate({
-    [Segments.PARAMS]: poolIdParamsSchema,
-});
-
-const networkSchema = Joi.object().keys({
-    network: Joi.string()
-        .valid(...networks)
-        .required(),
-});
-const networkValidator = celebrate({
-    [Segments.PARAMS]: networkSchema,
-});
-
 // GET /ethPrice
 async function getEthPrice(
     req: Request<Path, unknown, unknown, unknown>,
