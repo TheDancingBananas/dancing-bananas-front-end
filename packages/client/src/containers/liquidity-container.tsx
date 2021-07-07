@@ -171,7 +171,7 @@ export const LiquidityContainer = ({
     poolId: string;
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
-    onAddBasket: (data: LiquidityBasketData) => void;
+    onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
 }): JSX.Element => {
@@ -210,13 +210,20 @@ export const LiquidityContainer = ({
         setView('wait');
     };
 
-    const handleAddBasket = (data: LiquidityBasketData) => {
+    const handleAddBasket = (
+        data: LiquidityBasketData,
+        navigateToBasket: boolean,
+    ) => {
         if (!wallet.account) {
             handleWalletConnect();
             return;
         }
 
-        onAddBasket(data);
+        onAddBasket(data, navigateToBasket);
+
+        if (!navigateToBasket) {
+            handleSkip(1);
+        }
     };
 
     const handleSkipFinish = () => {
@@ -260,7 +267,7 @@ export const LiquidityContainer = ({
                                     rightArrow={true}
                                     onSkipPairs={() => handleSkip(1)}
                                     onAddBasket={(data: LiquidityBasketData) =>
-                                        handleAddBasket(data)
+                                        handleAddBasket(data, false)
                                     }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
@@ -284,7 +291,7 @@ export const LiquidityContainer = ({
                                     rightArrow={false}
                                     onSkipPairs={() => handleSkip(2)}
                                     onAddBasket={(data: LiquidityBasketData) =>
-                                        handleAddBasket(data)
+                                        handleAddBasket(data, true)
                                     }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
