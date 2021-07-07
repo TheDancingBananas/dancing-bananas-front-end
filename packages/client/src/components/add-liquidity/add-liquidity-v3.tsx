@@ -1582,7 +1582,7 @@ export const AddLiquidityV3 = ({
                         {!isNANA && (
                             <>
                                 <span className='navigator-title-main'>
-                                    DANCING BANANA
+                                    DANCING BANANAS
                                 </span>
                                 <span className='navigator-title-sub'>
                                     UNISWAP V3 POOLS
