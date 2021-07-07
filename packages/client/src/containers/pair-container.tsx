@@ -70,7 +70,7 @@ function PairContainer({
         // add new pair id to the URL
         window.history.replaceState(
             null,
-            'Sommelier.finance',
+            'dancingbananas.fun',
             `/pair?id=${pairId}&timeWindow=${timeWindow}`,
         );
     }
