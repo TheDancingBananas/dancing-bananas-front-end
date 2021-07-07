@@ -1601,7 +1601,7 @@ export const AddLiquidityV3 = ({
                         {rightArrow && <img src={pngRight} />}
                     </div> */}
                 </div>
-                <div className={classNames('reward', { nana: isNANA })}>
+                <div className={classNames('reward')}>
                     <img src={pngBanana2} />
                     <div className='reward-count'>{rewardBananas}</div>
                     <div className='reward-amount'>
@@ -1655,7 +1655,7 @@ export const AddLiquidityV3 = ({
                     </div>
                 </div>
                 <div style={{ padding: '1.25rem 1.5rem' }}>
-                    <div className='pair-text'>
+                    <div className={classNames('pair-text', { nana: isNANA })}>
                         CHOOSE YOUR TOKENS TO DEPOSIT
                     </div>
                     <Box
@@ -1900,7 +1900,9 @@ export const AddLiquidityV3 = ({
                         </Box>
                     </Box>
                     <br />
-                    <div className='pair-text'>CHOOSE A SENTIMENT</div>
+                    <div className={classNames('pair-text', { nana: isNANA })}>
+                        CHOOSE A SENTIMENT
+                    </div>
                     <Box
                         display='flex'
                         justifyContent='center'
