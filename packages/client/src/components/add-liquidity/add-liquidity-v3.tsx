@@ -1643,7 +1643,6 @@ export const AddLiquidityV3 = ({
                     <div className='pool-details'>
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
-                                <img src={pngMoney} />
                                 {formatNumber(
                                     (Number(pool.volumeUSD) / 100) * 0.1,
                                 )}
@@ -1668,6 +1667,7 @@ export const AddLiquidityV3 = ({
                                 display='flex'
                                 justifyContent='space-between'
                                 className={classNames('token-input-control', {
+                                    nana: isNANA,
                                     active: isTokenETHActive,
                                     inactive: !isTokenETHActive,
                                 })}
@@ -1675,7 +1675,6 @@ export const AddLiquidityV3 = ({
                                 <Box
                                     display='flex'
                                     justifyContent='flex-start'
-                                    flexGrow='1'
                                     onClick={() => {
                                         if (
                                             !isTokenETHActive &&
@@ -1706,6 +1705,7 @@ export const AddLiquidityV3 = ({
                                             balance={balances?.['ETH']?.balance}
                                             decimals={'18'}
                                             disabled={isTokenETHDisabled}
+                                            isNANA={isNANA}
                                         />
                                     </div>
                                 </Box>
@@ -1734,6 +1734,7 @@ export const AddLiquidityV3 = ({
                                         !isTokenETHActive
                                     }
                                     twoSide={true}
+                                    isNANA={isNANA}
                                 />
                             </Box>
                         )}
@@ -1741,6 +1742,7 @@ export const AddLiquidityV3 = ({
                             display='flex'
                             justifyContent='space-between'
                             className={classNames('token-input-control', {
+                                nana: isNANA,
                                 active: isToken0Active,
                                 inactive: !isToken0Active,
                             })}
@@ -1748,7 +1750,6 @@ export const AddLiquidityV3 = ({
                             <Box
                                 display='flex'
                                 justifyContent='flex-start'
-                                flexGrow='1'
                                 onClick={() => {
                                     if (
                                         !isToken0Active &&
@@ -1789,6 +1790,7 @@ export const AddLiquidityV3 = ({
                                             balances?.[token0Symbol]?.decimals
                                         }
                                         disabled={isToken0Disabled}
+                                        isNANA={isNANA}
                                     />
                                 </div>
                             </Box>
@@ -1816,12 +1818,14 @@ export const AddLiquidityV3 = ({
                                     !isToken0Active
                                 }
                                 twoSide={true}
+                                isNANA={isNANA}
                             />
                         </Box>
                         <Box
                             display='flex'
                             justifyContent='space-between'
                             className={classNames('token-input-control', {
+                                nana: isNANA,
                                 active: isToken1Active,
                                 inactive: !isToken1Active,
                             })}
@@ -1829,7 +1833,6 @@ export const AddLiquidityV3 = ({
                             <Box
                                 display='flex'
                                 justifyContent='flex-start'
-                                flexGrow='1'
                                 onClick={() => {
                                     if (
                                         !isToken1Active &&
@@ -1870,6 +1873,7 @@ export const AddLiquidityV3 = ({
                                             balances?.[token1Symbol]?.decimals
                                         }
                                         disabled={isToken1Disabled}
+                                        isNANA={isNANA}
                                     />
                                 </div>
                             </Box>
@@ -1896,6 +1900,7 @@ export const AddLiquidityV3 = ({
                                     !isToken1Active
                                 }
                                 twoSide={true}
+                                isNANA={isNANA}
                             />
                         </Box>
                     </Box>
@@ -1911,6 +1916,7 @@ export const AddLiquidityV3 = ({
                         <div
                             className={classNames({
                                 'sentiment-item': true,
+                                nana: isNANA,
                                 active: isFlipped
                                     ? sentiment === 'bullish'
                                     : sentiment === 'bearish',
@@ -1931,6 +1937,7 @@ export const AddLiquidityV3 = ({
                         <div
                             className={classNames({
                                 'sentiment-item': true,
+                                nana: isNANA,
                                 active: sentiment === 'neutral',
                             })}
                             role='button'
@@ -1945,6 +1952,7 @@ export const AddLiquidityV3 = ({
                         <div
                             className={classNames({
                                 'sentiment-item': true,
+                                nana: isNANA,
                                 active: isFlipped
                                     ? sentiment === 'bearish'
                                     : sentiment === 'bullish',
