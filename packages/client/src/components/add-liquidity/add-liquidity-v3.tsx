@@ -1932,7 +1932,7 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            <img src={pngApySad} />
+                            <img src={pngApyHappy} />
                             <span>BULLISH</span>
                         </div>
                         <div
@@ -1968,7 +1968,7 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            <img src={pngApyHappy} />
+                            <img src={pngApySad} />
                             <span>BEARISH</span>
                         </div>
                     </Box>
