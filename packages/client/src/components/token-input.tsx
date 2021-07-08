@@ -49,7 +49,9 @@ export const TokenInput = ({
                     }
                 }}
             />
-            <span>{toBalanceStr(token, balances)}</span>
+            <span style={{ color: 'lightgrey' }}>
+                {toBalanceStr(token, balances)}
+            </span>
         </div>
         <button
             className={classNames('token-input-max', { nana: isNANA })}
