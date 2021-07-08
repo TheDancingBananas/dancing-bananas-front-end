@@ -41,7 +41,7 @@ export const TokenWithBalance = ({
             className='balance'
             alignItems='flex-end'
         >
-            {/* <div>
+            <div>
                 <span style={{ color: 'var(--faceSecondary)' }}>Balance</span>
             </div>
             <div className='balance-string'>
