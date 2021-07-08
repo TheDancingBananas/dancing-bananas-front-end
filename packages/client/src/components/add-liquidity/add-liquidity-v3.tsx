@@ -1639,7 +1639,8 @@ export const AddLiquidityV3 = ({
                             </div>
                         )}
                     </div>
-                    <div className='pool-separator' />
+                    {!isNANA && <div className='pool-separator' />}
+                    {isNANA && <div className='pool-banana-separator' />}
                     <div className='pool-details'>
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
