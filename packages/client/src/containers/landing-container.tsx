@@ -2,7 +2,6 @@ import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
-import { TelegramCTA } from 'components/telegram-cta';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import PendingTx from 'components/pending-tx';
@@ -41,8 +40,10 @@ import { storage } from 'util/localStorage';
 import pngWait from 'styles/images/wait.png';
 
 function LandingContainer({
+    setShowConnectWallet,
     gasPrices,
 }: {
+    setShowConnectWallet: (wallet: boolean) => void;
     gasPrices: EthGasPrices | null;
 }): JSX.Element {
     const { wallet } = useWallet();

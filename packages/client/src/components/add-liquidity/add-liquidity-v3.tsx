@@ -70,7 +70,7 @@ import AlertModal from './alert-modal';
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
-    shortUrl: string | null;
+    shortUrl?: string | null;
     gasPrices: EthGasPrices | null;
     level: number;
     isNANA: boolean | false;
@@ -1649,7 +1649,10 @@ export const AddLiquidityV3 = ({
                     <div className='pool-pairs'>
                         {!isNANA && (
                             <div className='pool-pairs-item'>
-                                {resolveLogo(tokenInputState[token0Symbol].id)}
+                                {resolveLogo(
+                                    tokenInputState[token0Symbol].id,
+                                    '44px',
+                                )}
                                 <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
                             </div>
                         )}
@@ -1663,7 +1666,10 @@ export const AddLiquidityV3 = ({
                         )}
                         {!isNANA && (
                             <div className='pool-pairs-item'>
-                                {resolveLogo(tokenInputState[token1Symbol].id)}
+                                {resolveLogo(
+                                    tokenInputState[token1Symbol].id,
+                                    '44px',
+                                )}
                                 <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
                             </div>
                         )}

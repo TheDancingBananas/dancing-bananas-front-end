@@ -101,9 +101,9 @@ export function PoolSearch({
                 noOptionsText={'Invalid Pair'}
                 loadingText={'...loading'}
                 onChange={(_, pool) => {
-                    setValue(pool);
-                    pool && history.push(`/pools?id=${pool?.id}`);
-                    trackPoolSelected(pool);
+                    // setValue(pool);
+                    // pool && history.push(`/pools?id=${pool?.id}`);
+                    // trackPoolSelected(pool);
                 }}
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                 getOptionLabel={poolOptionLabel}
