@@ -4,6 +4,8 @@ import config from 'config/app';
 import logoMappings from 'constants/trustwallet-mappings.json';
 import { Pair } from 'constants/prop-types';
 
+import pngETH from 'styles/images/eth.png';
+
 function TokenWithLogo(
     side: 'left' | 'right',
 ): (
@@ -42,13 +44,19 @@ function TokenWithLogo(
 
 TokenWithLogo.displayName = 'TokenWithLogo';
 
+const weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+
 export function resolveLogo(addressLower?: string): JSX.Element {
-    if (addressLower?.toLowerCase() === config.ethAddress.toLowerCase()) {
+    console.log(addressLower);
+    if (
+        addressLower?.toLowerCase() === config.ethAddress.toLowerCase() ||
+        addressLower?.toLowerCase() === weth.toLowerCase()
+    ) {
         // Show ETH logo
         const imgUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png`;
         return (
             <span>
-                <img src={imgUrl} alt='🍇' />
+                <img src={pngETH} alt='🍇' />
             </span>
         );
     }

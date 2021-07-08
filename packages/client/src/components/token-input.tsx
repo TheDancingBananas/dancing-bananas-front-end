@@ -22,6 +22,7 @@ type TokenInputProps = {
     balances: WalletBalances;
     twoSide: boolean;
     disabled: boolean;
+    isNANA?: boolean | false;
 };
 export const TokenInput = ({
     token,
@@ -31,9 +32,10 @@ export const TokenInput = ({
     balances,
     twoSide,
     disabled,
+    isNANA,
 }: TokenInputProps): JSX.Element => (
     <div className={classNames({ 'token-input': true, disabled })}>
-        <div className='token-input-balances'>
+        <div className={classNames('token-input-balances', { nana: isNANA })}>
             <input
                 placeholder='0.00'
                 value={amount}
@@ -50,7 +52,7 @@ export const TokenInput = ({
             <span>{toBalanceStr(token, balances)}</span>
         </div>
         <button
-            className='token-input-max'
+            className={classNames('token-input-max', { nana: isNANA })}
             disabled={!balances?.[token] || disabled}
             onClick={() => {
                 updateAmount(toBalanceStr(token, balances));

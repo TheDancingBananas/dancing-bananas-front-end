@@ -3,18 +3,23 @@ import { Box } from '@material-ui/core';
 import { ethers } from 'ethers';
 import classNames from 'classnames';
 
+import pngETH from 'styles/images/eth.png';
+import pngNANA from 'styles/images/tokens/nana.png';
+
 export const TokenWithBalance = ({
     id,
     name,
     balance,
     decimals,
     disabled,
+    isNANA,
 }: {
     id: string;
     name: string;
     balance: ethers.BigNumber;
     decimals?: string;
     disabled: boolean;
+    isNANA?: boolean | false;
 }): JSX.Element => (
     <Box
         display='flex'
@@ -22,16 +27,21 @@ export const TokenWithBalance = ({
         alignItems='center'
         className='token-with-balance'
     >
-        <div className={classNames('token-logo', { disable: disabled })}>
+        <div
+            className={classNames('token-logo', {
+                disable: disabled,
+                nana: isNANA,
+            })}
+        >
             {resolveLogo(id)}&nbsp;{name}
         </div>
-        <Box
+        {/* <Box
             display='flex'
             flexDirection='column'
             className='balance'
             alignItems='flex-end'
         >
-            {/* <div>
+            <div>
                 <span style={{ color: 'var(--faceSecondary)' }}>Balance</span>
             </div>
             <div className='balance-string'>
@@ -39,7 +49,7 @@ export const TokenWithBalance = ({
                     balance || 0,
                     parseInt(decimals || '0', 10),
                 )}
-            </div> */}
-        </Box>
+            </div>
+        </Box> */}
     </Box>
 );
