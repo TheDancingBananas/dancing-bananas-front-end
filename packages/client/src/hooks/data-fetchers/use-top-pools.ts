@@ -27,7 +27,7 @@ export interface UseRandomPool {
 
 export const useTopPools = (): UseTopPools => {
     const {
-        wallet: { network },
+        wallet: { network = '1' },
     } = useWallet();
 
     const oldPoolId = storage.getCurrentPoolId();

@@ -3,12 +3,12 @@ import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
-import { TelegramCTA } from 'components/telegram-cta';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import PendingTx from 'components/pending-tx';
-import { useMediaQuery } from 'react-responsive';
 import { LiquidityContainer } from 'containers/liquidity-container';
+import { useMediaQuery } from 'react-responsive';
+import { AppHeader } from 'components/app-header/app-header';
 import { Box } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -32,9 +32,8 @@ import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
 
-import { storage } from 'util/localStorage';
-
 import pngWait from 'styles/images/wait.png';
+import { storage } from 'util/localStorage';
 
 function LandingContainer({
     setShowConnectWallet,
@@ -84,6 +83,13 @@ function LandingContainer({
         console.log('handle refresh');
         setCurrentPoolId('');
     };
+
+    useEffect(() => {
+        const oldPooldId = storage.getCurrentPoolId();
+        console.log('oldPoolId', oldPooldId);
+
+        getRandomPool(oldPooldId);
+    }, [currentPoolId]);
 
     const showWalletModal = () => setShowConnectWallet(true);
 

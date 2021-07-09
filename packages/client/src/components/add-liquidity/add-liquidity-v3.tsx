@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useContext, useEffect, useReducer } from 'react';
+import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { Price, Token, TokenAmount } from '@uniswap/sdk-core';
+import { Price, Token } from '@uniswap/sdk-core';
 import {
     FeeAmount,
     Pool,
@@ -27,6 +27,10 @@ import {
     faCheckCircle,
     faBan,
     faExchangeAlt,
+    faCopy,
+    faAngleDoubleDown,
+    faAngleDoubleUp,
+    faArrowsAltV,
 } from '@fortawesome/free-solid-svg-icons';
 import { ThreeDots } from 'react-loading-icons';
 import { compactHash } from 'util/formats';
@@ -66,6 +70,7 @@ import AlertModal from './alert-modal';
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
+    shortUrl?: string | null;
     gasPrices: EthGasPrices | null;
     level: number;
     isNANA: boolean | false;
@@ -87,6 +92,7 @@ const ETH_ID = config.ethAddress;
 export const AddLiquidityV3 = ({
     pool,
     balances,
+    shortUrl,
     gasPrices,
     level,
     isNANA,
@@ -120,34 +126,53 @@ export const AddLiquidityV3 = ({
     }>({ status: false, message: <p>Warning placeholder</p> });
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     // State here is used to compute what tokens are being used to add liquidity with.
-    const initialState: Record<string, any> = {
-        [token0Symbol]: {
-            id: pool?.token0?.id,
-            name: pool?.token0?.name,
-            symbol: pool?.token0?.symbol,
-            amount: '',
-            selected: false,
-        },
-        [token1Symbol]: {
-            id: pool?.token1?.id,
-            name: pool?.token1?.name,
-            symbol: pool?.token1?.symbol,
-            amount: '',
-            selected: false,
-        },
-        ETH: {
-            id: ETH_ID,
-            symbol: 'ETH',
-            name: 'Ethereum',
-            amount: '',
-            selected: true,
-        },
-        selectedTokens: ['ETH'],
-    };
+    const [copiedShortUrl, setCopiedShortUrl] = useState<boolean>(false);
+    const initialState: Record<string, any> = useMemo(
+        () => ({
+            [token0Symbol]: {
+                id: pool?.token0?.id,
+                name: pool?.token0?.name,
+                symbol: pool?.token0?.symbol,
+                amount: '',
+                selected: false,
+            },
+            [token1Symbol]: {
+                id: pool?.token1?.id,
+                name: pool?.token1?.name,
+                symbol: pool?.token1?.symbol,
+                amount: '',
+                selected: false,
+            },
+            ETH: {
+                id: ETH_ID,
+                symbol: 'ETH',
+                name: 'Ethereum',
+                amount: '',
+                selected: true,
+            },
+            selectedTokens: ['ETH'],
+        }),
+        [
+            pool?.token0?.id,
+            pool?.token0?.name,
+            pool?.token0?.symbol,
+            pool?.token1?.id,
+            pool?.token1?.name,
+            pool?.token1?.symbol,
+            token0Symbol,
+            token1Symbol,
+        ],
+    );
 
+    const init = (initialState: Record<string, any>) => {
+        return initialState;
+    };
     const reducer = (
         state: { [x: string]: any },
-        action: { type: any; payload: { sym: any; amount?: any } },
+        action: {
+            type: any;
+            payload: { sym: any; amount?: any } | Record<string, any>;
+        },
     ) => {
         let sym: string;
         let amt: string;
@@ -190,12 +215,14 @@ export const AddLiquidityV3 = ({
                     ...state,
                     [sym]: { ...state[sym], amount: amt },
                 };
+            case 'reset':
+                return init(action.payload);
             default:
                 throw new Error();
         }
     };
 
-    const [tokenInputState, dispatch] = useReducer(reducer, initialState);
+    const [tokenInputState, dispatch] = useReducer(reducer, initialState, init);
 
     // const [token, setToken] = useState('ETH');
     // TODO calculate price impact
@@ -222,6 +249,9 @@ export const AddLiquidityV3 = ({
     >([new BigNumber(0), new BigNumber(0)]);
     const { wallet } = useWallet();
 
+    useEffect(() => {
+        dispatch({ type: 'reset', payload: initialState });
+    }, [initialState, pool]);
     let provider: ethers.providers.Web3Provider | null = null;
     if (wallet.provider) {
         provider = new ethers.providers.Web3Provider(wallet?.provider);
@@ -644,6 +674,7 @@ export const AddLiquidityV3 = ({
         const notEnoughETH =
             err.message.match(/exceeds allowance/) ||
             err.message.match(/insufficient funds/);
+        const highSlippage = err.message.match(/slippage/i);
 
         let toastMsg =
             'Could not estimate gas for this transaction. Check your parameters or try a different pool.';
@@ -651,6 +682,9 @@ export const AddLiquidityV3 = ({
         if (notEnoughETH) {
             toastMsg =
                 'Not enough ETH to pay gas for this transaction. If you are using ETH, try reducing the entry amount.';
+        } else if (highSlippage) {
+            toastMsg =
+                'Slippage too high to submit this transaction. Try adding a smaller amount or adding both tokens.';
         }
 
         toastError(toastMsg);
@@ -1115,9 +1149,12 @@ export const AddLiquidityV3 = ({
 
         const tokenId = 0;
         let decimals = 18;
-        if (selectedToken === pool.token0.symbol) {
+        if (
+            selectedToken === pool.token0.symbol ||
+            (selectedToken === 'ETH' && pool.token0.symbol === 'WETH')
+        ) {
             decimals = parseInt(pool.token0.decimals, 10);
-        } else if (selectedToken === pool.token1.symbol) {
+        } else {
             decimals = parseInt(pool.token1.decimals, 10);
         }
         const mintAmountOneSide = ethers.utils
@@ -1144,17 +1181,11 @@ export const AddLiquidityV3 = ({
             )
             .toString();
 
-        const minLiquidity = '1';
-        // TODO: Determine slippage once we know price impact of swaps
-        // const slippageRatio = new BigNumber(slippageTolerance as number).div(
-        //     100
-        // );
-
-        // const slippageCoefficient = new BigNumber(1).minus(slippageRatio);
-
-        // const liquiditySquared = new BigNumber(mintAmount0).times(mintAmount1);
-        // const minLiquidity = liquiditySquared.times(slippageCoefficient).sqrt().toFixed(0);
-        // const baseMinLiquidity = ethers.utils.parseUnits()
+        const liquidity = new BigNumber(bounds.position.liquidity.toString())
+            .exponentiatedBy(2)
+            .div(2)
+            .sqrt();
+        const minLiquidity = liquidity.times(0.97).toFixed(0);
 
         const sqrtPriceAX96 = TickMath.getSqrtRatioAtTick(
             bounds.position.tickLower,
@@ -1162,6 +1193,11 @@ export const AddLiquidityV3 = ({
         const sqrtPriceBX96 = TickMath.getSqrtRatioAtTick(
             bounds.position.tickUpper,
         );
+
+        debug.mintAmounts = {
+            liquidity,
+            minLiquidity,
+        };
 
         const mintParams = [
             pool.token0.id, // token0
@@ -1177,8 +1213,6 @@ export const AddLiquidityV3 = ({
         ];
 
         debug.mintParams = mintParams;
-        console.log('MINT PARAMS', mintAmountOneSide, tokenData.id, mintParams);
-
         const baseGasPrice = ethers.utils
             .parseUnits(currentGasPrice.toString(), 9)
             .toString();
@@ -1366,6 +1400,7 @@ export const AddLiquidityV3 = ({
     const disableWETH = tokenInputState['ETH'].selected;
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
+    const baseCoinId = isFlipped ? pool.token0.id : pool.token1.id;
 
     const isDisabled = (symbol: string) =>
         disabledInput && disabledInput.includes(symbol);
@@ -1614,7 +1649,10 @@ export const AddLiquidityV3 = ({
                     <div className='pool-pairs'>
                         {!isNANA && (
                             <div className='pool-pairs-item'>
-                                {resolveLogo(tokenInputState[token0Symbol].id)}
+                                {resolveLogo(
+                                    tokenInputState[token0Symbol].id,
+                                    '44px',
+                                )}
                                 <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
                             </div>
                         )}
@@ -1628,7 +1666,10 @@ export const AddLiquidityV3 = ({
                         )}
                         {!isNANA && (
                             <div className='pool-pairs-item'>
-                                {resolveLogo(tokenInputState[token1Symbol].id)}
+                                {resolveLogo(
+                                    tokenInputState[token1Symbol].id,
+                                    '44px',
+                                )}
                                 <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
                             </div>
                         )}

@@ -120,12 +120,18 @@
         margin-top: 15px;
     }
 
+    .pool-separator {
+        height: 120px;
+        background: #671CC9;
+        width: 1px;
+        margin-top: 15px;
+    }
+
     .pool-pairs {
         display: flex;
         justify-content: space-around;
         align-items: center;
         flex: 1;
-        box-sizing: border-box;
         box-sizing: border-box;
 
         &-item {
@@ -288,6 +294,12 @@
         justify-content: space-between;
         align-items: stretch;
     }
+    .liquidity-range-container {
+        margin-top: 1em;
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
     .preview {
         background: var(--bgDeep);
         font-size: 0.85rem;
@@ -299,6 +311,43 @@
         }
         .face-positive {
             color: var(--facePositive);
+        }
+    }
+    .liquidity-range-label {
+        display: flex;
+        align-items: center;
+    }
+    .liquidity-range {
+        font-size: 0.85rem;
+        // background: var(--bgDefault);
+        // padding: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .liquidity-range-price-input {
+            // font-size: 1rem;
+            background: var(--bgDeep);
+            padding: 0.25rem;
+            border-radius: 4px;
+            border: 1px solid var(--bgDeep);
+            color: var(--faceDeep);
+            &:hover,
+            &:focus,
+            &:active,
+            &:focus-visible {
+                border: 1px solid var(--objPrimaryAlt);
+                box-shadow: none;
+                outline: none;
+            }
+            // &.left {
+            text-align: right;
+            // }
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         }
     }
     .btn-addl {
@@ -390,8 +439,12 @@
         text-align: center;
     }
 
-    .sentiment-button + .sentiment-button {
-        // margin-left: 1em;
+    .shorts-button {
+        cursor: pointer;
+        padding: 5px 10px;
+        background: var(--objPrimary);
+        color: var(--faceDefault);
+        border-radius: 4px;
     }
 
     .token-select {
@@ -420,13 +473,14 @@
             box-shadow: none;
             border: 0;
             border-radius: 4px;
-            background: var(--objDefault);
+            background: var(--objDeep);
             color: var(--faceDisabled);
         }
         button.active {
             background: var(--bgDeep);
             color: var(--objPositiveAlt);
-            background: linear-gradient(var(--objPrimary), var(--objDefault));
+            // background: linear-gradient(var(--objPrimary), var(--objDefault));
+            background: var(--objPrimary);
             color: var(--objPositiveAlt);
             border-bottom-right-radius: 0;
             border-top-right-radius: 0;
@@ -468,6 +522,25 @@
             opacity: 0.5;
         }
     }
+    // .token-input-control {
+    //     border: 1px solid var(--borderDefault);
+    // }
+    // .token-input-control.active {
+    //     // border: 1px solid var(--objPositiveAlt);
+    //     border-radius: 4px;
+    //     // background: var(--bgDeep);
+    //     background: linear-gradient(var(--objPrimary), var(--objDefault));
+    // }
+    // .token-input-control.inactive {
+    //     border: 1px solid var(--borderDefault);
+    //     border-radius: 4px;
+    //     background: var(--objDefault);
+    // }
+    // .token-input-control.disable {
+    //     border: 1px solid var(--objDisabledAlt);
+    //     border-radius: 4px;
+    //     background: var(--objDisabled);
+    // }
 
     .token-with-logo {
         display: inline-flex;
@@ -636,7 +709,7 @@
 }
 
 .token-input.disabled {
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .sentiment-item {
@@ -666,12 +739,17 @@
         > div {
             display: flex;
             flex-direction: column;
-            border: 1px solid red;
         }
     }
     .add-v3-container {
         .sentiment {
             flex-direction: column;
+        }
+        .liquidity-range {
+            flex-direction: column;
+        }
+        .token-select {
+            margin: 0;
         }
     }
 }

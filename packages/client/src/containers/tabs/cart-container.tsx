@@ -57,7 +57,7 @@ const CartContainer = ({
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
 }): JSX.Element | null => {
-    console.log(cartData);
+    // console.log(cartData);
     const [viewId, setViewId] = useState<string>('');
 
     const { wallet } = useWallet();
@@ -460,9 +460,7 @@ const CartContainer = ({
                     // Approve the add liquidity contract to spend entry tokens
                     let approveHash: string | undefined;
                     try {
-                        const {
-                            hash,
-                        } = await erc20Contract.approve(
+                        const { hash } = await erc20Contract.approve(
                             addLiquidityContractAddress,
                             baseApproveAmount,
                             {
