@@ -8,8 +8,6 @@ import pngWallet from 'styles/images/wallet.png';
 import pngEth from 'styles/images/eth.png';
 import pngBanana from 'styles/images/dancing-banana.png';
 
-import pngWallet from 'styles/images/wallet.png';
-
 function ConnectWalletButton({
     onClick,
 }: {

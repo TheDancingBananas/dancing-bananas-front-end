@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Modal } from 'react-bootstrap';
@@ -31,13 +32,8 @@ import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
 
-import { storage } from 'util/localStorage';
-
 import pngWait from 'styles/images/wait.png';
-
 import { storage } from 'util/localStorage';
-
-import pngWait from 'styles/images/wait.png';
 
 function LandingContainer({
     setShowConnectWallet,
@@ -88,42 +84,12 @@ function LandingContainer({
         setCurrentPoolId('');
     };
 
-    const [currentPoolId, setCurrentPoolId] = useState<string>('');
-    const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
-
-    const getRandomPool = async (oldPool: string | null) => {
-        const shouldRefresh = storage.shouldRefreshPool();
-
-        const networkName = 'mainnet';
-        // const networkName = 'rinkeby';
-
-        if (currentPoolId === '' || shouldRefresh) {
-            console.log('old pool id', oldPool);
-            const response = await fetch(
-                `/api/v1/${networkName}/randomPool?count=${50}&old=${
-                    oldPool ? oldPool : '000'
-                }`,
-            );
-            if (!response.ok) throw new Error(`Failed to fetch top pools`);
-
-            const data = await (response.json() as Promise<string>);
-            console.log('new Id', data);
-            setCurrentPoolId(data);
-            storage.setCurrentPoolId(data);
-        }
-    };
-
     useEffect(() => {
         const oldPooldId = storage.getCurrentPoolId();
         console.log('oldPoolId', oldPooldId);
 
         getRandomPool(oldPooldId);
     }, [currentPoolId]);
-
-    const handleRefreshPool = () => {
-        console.log('handle refresh');
-        setCurrentPoolId('');
-    };
 
     const showWalletModal = () => setShowConnectWallet(true);
 
@@ -157,14 +123,6 @@ function LandingContainer({
         if (navigateToBasket) {
             setTab('cart');
         }
-    };
-
-    const handleTransactionSuccess = () => {
-        setTab('transactionSuccess');
-    };
-
-    const handleChangePendingStatus = (status: boolean) => {
-        setPendingTransaction(status);
     };
 
     const handleTransactionSuccess = () => {
@@ -214,10 +172,6 @@ function LandingContainer({
                             data: LiquidityBasketData,
                             navigateToBasket: boolean,
                         ) => handleAddBasket(data, navigateToBasket)}
-                        onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean) =>
-                            handleChangePendingStatus(status)
-                        }
                         onAddSuccess={() => handleTransactionSuccess()}
                         onStatus={(status: boolean) =>
                             handleChangePendingStatus(status)

@@ -20,10 +20,16 @@ import {
 } from '@sommelier/shared-types/src/api'; // how do we export at root level?
 import { memoize } from 'util/memoizer-redis';
 import { hourMs, secondMs } from 'util/date';
-//import shortLinks from 'services/short-links';
+// import shortLinks from 'services/short-links';
 import catchAsyncRoute from 'api/util/catch-async-route';
 import config from '@config';
 import validateEthAddress from 'api/util/validate-eth-address';
+import {
+    poolIdParamsSchema,
+    poolIdValidator,
+    networkSchema,
+    networkValidator,
+} from 'api/util/validators';
 import { getRandomArbitrary } from 'util/math';
 
 // poolToPair(pool: Pool): IUniswapPair {

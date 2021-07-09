@@ -260,7 +260,6 @@ export const LiquidityContainer = ({
         setCurrentItem(1);
     };
 
-    const str = 
     return (
         <>
             {randomPool && view === 'pairs' && (
