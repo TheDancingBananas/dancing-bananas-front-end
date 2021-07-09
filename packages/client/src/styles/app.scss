@@ -1257,53 +1257,53 @@ th .caret-4-desc:after {
         margin-bottom: 1rem;
     }
 }
-@media (max-width: 765px) {
-    .nav-button-container {
-        flex-direction: column;
-        align-items: flex-end;
-        .join-community-button {
-            margin-right: 0;
-            margin-bottom: 0.3rem;
-        }
-    }
-    .pair-controls {
-        align-items: center;
-        margin-bottom: 0;
-    }
-    .pair-and-pool-stats,
-    .lp-input-with-stats {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-    .app-body {
-        width: 100%;
-        padding: 0 1rem;
-    }
-}
-@media (max-width: 500px) {
-    html {
-        font-size: 12px;
-    }
-    .app-body {
-        width: 100%;
-        font-size: 12px;
-    }
-    .pool-stats-container {
-        grid-template-columns: 1fr;
-    }
-    .nav-button-container {
-        align-items: center;
-    }
-    .main-header-container {
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        > * {
-            margin: 5px 0;
-        }
-        .telegram-cta {
-            margin: 0;
-        }
-    }
-}
+//@media (max-width: 765px) {
+//    .nav-button-container {
+//        flex-direction: column;
+//        align-items: flex-end;
+//        .join-community-button {
+//            margin-right: 0;
+//            margin-bottom: 0.3rem;
+//        }
+//    }
+//    .pair-controls {
+//        align-items: center;
+//        margin-bottom: 0;
+//    }
+//    .pair-and-pool-stats,
+//    .lp-input-with-stats {
+//        flex-direction: column;
+//        align-items: center;
+//        width: 100%;
+//    }
+//    .app-body {
+//        width: 100%;
+//        padding: 0 1rem;
+//    }
+//}
+//@media (max-width: 500px) {
+//    html {
+//        font-size: 12px;
+//    }
+//    .app-body {
+//        width: 100%;
+//        font-size: 12px;
+//    }
+//    .pool-stats-container {
+//        grid-template-columns: 1fr;
+//    }
+//    .nav-button-container {
+//        align-items: center;
+//    }
+//    .main-header-container {
+//        flex-direction: column;
+//        justify-content: space-between;
+//        align-items: center;
+//        > * {
+//            margin: 5px 0;
+//        }
+//        .telegram-cta {
+//            margin: 0;
+//        }
+//    }
+//}

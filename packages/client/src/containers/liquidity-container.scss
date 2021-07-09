@@ -1,5 +1,5 @@
 .carousel-container {
-    width: 650px;
+    //width: 650px;
     min-height: 750px;
     max-height: 900px;
     box-sizing: border-box;
@@ -14,8 +14,8 @@
 }
 
 .liquidity-container {
-    width: 450px;
-    min-width: 225px;
+    width: 450px !important;
+    //min-width: 225px;
     // background: radial-gradient(var(--bgDefault), var(--bgPrimary));
     background: #7033e5;
     border: 3px solid #000;
@@ -98,11 +98,11 @@
     z-index: 1;
 }
 
-@media (max-width: 800px) {
-    .liquidity-container {
-        width: 100%;
-    }
-}
+//@media (max-width: 800px) {
+//    .liquidity-container {
+//        width: 100%;
+//    }
+//}
 
 @media (max-width: 500px) {
     .transaction-speed {
