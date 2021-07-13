@@ -31,6 +31,7 @@ import ShopContainer from './tabs/shop-container';
 import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
+import PositionManagerContainer from './tabs/position-manager-container';
 
 import pngWait from 'styles/images/wait.png';
 import { storage } from 'util/localStorage';
@@ -223,9 +224,13 @@ function LandingContainer({
                         }
                     />
                 )}
-
-                {/* {tab === 'search' && <LiquidityContainer gasPrices={gasPrices} />}
-                {tab === 'card' && <LiquidityContainer gasPrices={gasPrices} />} */}
+                {tab === 'positionManager' && (
+                    <PositionManagerContainer
+                        onBack={() => {
+                            setTab('home');
+                        }}
+                    />
+                )}
             </Box>
             <Box
                 display='flex'
@@ -257,19 +262,21 @@ function LandingContainer({
                             fill={tab === 'task' ? '#000' : '#808080'}
                         />
                     </div>
-                    {/* <div
+                    <div
                         className={classNames('footer-tab', {
                             active: tab === 'dollar',
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('dollar');
+                            setTab('positionManager');
                         }}
                     >
                         <IconDollar
-                            fill={tab === 'dollar' ? '#000' : '#808080'}
+                            fill={
+                                tab === 'positionManager' ? '#000' : '#808080'
+                            }
                         />
-                    </div> */}
+                    </div>
                     <div
                         className={classNames('footer-tab', {
                             active: tab === 'shop',
