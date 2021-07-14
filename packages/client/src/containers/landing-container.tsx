@@ -32,6 +32,7 @@ import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
 import PositionManagerContainer from './tabs/position-manager-container';
+import PositionDetailContainer from './tabs/position-detail-container';
 
 import pngWait from 'styles/images/wait.png';
 import { storage } from 'util/localStorage';
@@ -229,6 +230,16 @@ function LandingContainer({
                         onBack={() => {
                             setTab('home');
                         }}
+                        onSelectPosition={() => {
+                            setTab('positionDetail');
+                        }}
+                    />
+                )}
+                {tab === 'positionDetail' && (
+                    <PositionDetailContainer
+                        onBack={() => {
+                            setTab('positionManager');
+                        }}
                     />
                 )}
             </Box>
@@ -264,7 +275,9 @@ function LandingContainer({
                     </div>
                     <div
                         className={classNames('footer-tab', {
-                            active: tab === 'dollar',
+                            active:
+                                tab === 'positionManager' ||
+                                tab === 'positionDetail',
                         })}
                         role='button'
                         onClick={(e) => {
@@ -273,7 +286,10 @@ function LandingContainer({
                     >
                         <IconDollar
                             fill={
-                                tab === 'positionManager' ? '#000' : '#808080'
+                                tab === 'positionManager' ||
+                                tab === 'positionDetail'
+                                    ? '#000'
+                                    : '#808080'
                             }
                         />
                     </div>

@@ -61,13 +61,22 @@ const PositionItem = ({
     liquidity,
     active = true,
     closedDate,
+    onSelect,
 }: {
     liquidity?: number;
     active?: boolean | true;
     closedDate?: string | '';
+    onSelect?: () => void;
 }) => {
     return (
-        <div className='position-item'>
+        <div
+            className='position-item'
+            onClick={(e) => {
+                if (onSelect) {
+                    onSelect();
+                }
+            }}
+        >
             {active && (
                 <div className='position-item-header'>
                     <img
@@ -115,8 +124,10 @@ const PositionItem = ({
 
 const PositionManagerContainer = ({
     onBack,
+    onSelectPosition,
 }: {
     onBack: () => void;
+    onSelectPosition: () => void;
 }): JSX.Element | null => {
     const [positionType, setPositionType] = useState<'positive' | 'negative'>(
         'positive',
@@ -162,21 +173,25 @@ const PositionManagerContainer = ({
                                 liquidity={
                                     positionType === 'positive' ? 200 : -22.34
                                 }
+                                onSelect={() => onSelectPosition()}
                             />
                             <PositionItem
                                 liquidity={
                                     positionType === 'positive' ? 150 : -83
                                 }
+                                onSelect={() => onSelectPosition()}
                             />
                             <PositionItem
                                 liquidity={
                                     positionType === 'positive' ? 300 : -400
                                 }
+                                onSelect={() => onSelectPosition()}
                             />
                             <PositionItem
                                 liquidity={
                                     positionType === 'positive' ? 9800 : -1442
                                 }
+                                onSelect={() => onSelectPosition()}
                             />
                         </div>
                     )}
