@@ -1,21 +1,13 @@
 import { useState, useEffect } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
-import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
-import PendingTx from 'components/pending-tx';
 import { LiquidityContainer } from 'containers/liquidity-container';
-import { useMediaQuery } from 'react-responsive';
-import { AppHeader } from 'components/app-header/app-header';
 import { Box } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faDiscord,
-    faTwitter,
-    faTelegram,
-} from '@fortawesome/free-brands-svg-icons';
+
+import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
 import {
@@ -37,6 +29,8 @@ import PositionDetailContainer from './tabs/position-detail-container';
 import pngWait from 'styles/images/wait.png';
 import { storage } from 'util/localStorage';
 
+import { V3PositionData } from '@sommelier/shared-types/src/api';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -51,6 +45,8 @@ function LandingContainer({
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
+
+    // const positionList = usePositionManagers();
 
     const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();

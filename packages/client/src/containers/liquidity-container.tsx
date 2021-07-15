@@ -59,32 +59,6 @@ export const LiquidityContext = createContext<Partial<LiquidityContext>>(
     initialContext,
 );
 
-// const SearchHeader = ({
-//     setPoolId,
-// }: {
-//     setPoolId: Dispatch<SetStateAction<string | null>>;
-// }) => {
-//     return (
-//         <>
-//             <Box
-//                 display='flex'
-//                 justifyContent='space-between'
-//                 flexDirection='column'
-//                 className='search-header'
-//             >
-//                 <div style={{ fontSize: '1', color: 'var(--faceDeep)' }}>
-//                     {'Search Pairings'}
-//                 </div>
-//                 &nbsp;
-//                 <PoolSearch setPoolId={setPoolId} />
-//                 {/* <div className='transaction-settings'>
-//                     <FontAwesomeIcon icon={faCog} />
-//                 </div> */}
-//             </Box>
-//         </>
-//     );
-// };
-
 // const TransactionSettings = ({
 //     gasPrices,
 // }: {

@@ -52,17 +52,11 @@ import { formatUSD, formatNumber } from 'util/formats';
 import { trackSentimentInteraction, trackAddLiquidityTx } from 'util/mixpanel';
 import classNames from 'classnames';
 
-import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngApyHappy from 'styles/images/apy-happy.png';
 import pngApyNormal from 'styles/images/apy-normal.png';
 import pngApySad from 'styles/images/apy-sad.png';
-import pngArrowLeft from 'styles/images/left.png';
-import pngArrowRight from 'styles/images/right.png';
-import pngMoney from 'styles/images/money.png';
 import pngETH from 'styles/images/eth.png';
 import pngNANA from 'styles/images/tokens/nana.png';
-import pngLeft from 'styles/images/left-arrow.png';
-import pngRight from 'styles/images/right-arrow.png';
 import pngBanana2 from 'styles/images/banana-2.png';
 
 import AlertModal from './alert-modal';
