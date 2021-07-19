@@ -138,15 +138,19 @@
             align-items: center;
 
             img {
-                width: 44px !important;
+                width: 70px !important;
                 border-radius: 22px;
             }
             .no-image {
                 display: inline-block;
+                width: 70px !important;
+                height: 70px !important;
             }
             .no-image:after {
                 content: '🍇';
-                font-size: 30px;
+                font-size: 50px;
+                width: 70px !important;
+                height: 70px !important;
             }
         }
 

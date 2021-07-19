@@ -54,7 +54,7 @@ export function resolveLogo(addressLower?: string, size = '24px'): JSX.Element {
         // Show ETH logo
         return (
             <span>
-                <img src={pngETH} alt='🍇' height={size} />
+                <img src={pngETH} alt='🍇' height={size} width={size} />
             </span>
         );
     }
@@ -70,7 +70,7 @@ export function resolveLogo(addressLower?: string, size = '24px'): JSX.Element {
     const imgUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
     return (
         <span>
-            <img src={imgUrl} alt='🍇' height={size} />
+            <img src={imgUrl} alt='🍇' height={size} width={size} />
         </span>
     );
 }
