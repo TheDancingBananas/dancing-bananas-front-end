@@ -30,7 +30,7 @@
         &-title {
             flex: 1;
             text-align: center;
-            
+
             color: #fff;
             text-shadow: -1.4px 0 rgba(0, 0, 0, 0.75), 0 1.4px rgba(0, 0, 0, 0.75), 1.4px 0 rgba(0, 0, 0, 0.75), 0 -1.4px rgba(0, 0, 0, 0.75);
             -webkit-text-stroke-width: 0.5px;
@@ -79,16 +79,13 @@
         }
 
         &-count {
-            width: 40px;
             height: 40px;
             border-radius: 8px;
-            // background: #FF90D0;
             display: flex;
             justify-content: center;
             align-items: center;
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px black;
             margin-left: 5px;
-            // border: 1px solid #000;
             font-size: 31px;
         }
 
@@ -198,7 +195,7 @@
 
             font-size: 31px;
             line-height: 25px;
-        
+
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px rgba(0, 0, 0, 0.75);
             -webkit-text-stroke-width: 0.5px;
             -webkit-text-stroke-color: black;
