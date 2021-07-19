@@ -278,7 +278,7 @@ export const LiquidityContainer = ({
                                     gasPrices={gasPrices}
                                     level={level}
                                     isNANA={false}
-                                    rewardBananas={50}
+                                    rewardBananas={100}
                                     leftArrow={false}
                                     rightArrow={true}
                                     onSkipPairs={() => handleSkip(1)}
@@ -302,7 +302,7 @@ export const LiquidityContainer = ({
                                     gasPrices={gasPrices}
                                     level={level}
                                     isNANA={true}
-                                    rewardBananas={10}
+                                    rewardBananas={100}
                                     leftArrow={true}
                                     rightArrow={false}
                                     onSkipPairs={() => handleSkip(2)}
