@@ -205,6 +205,7 @@ export const AddLiquidityV3 = ({
             case 'update-amount':
                 sym = action.payload.sym;
                 amt = action.payload.amount;
+                console.log('redux log', sym, amt);
                 return {
                     ...state,
                     [sym]: { ...state[sym], amount: amt },
@@ -306,9 +307,10 @@ export const AddLiquidityV3 = ({
         return { baseTokenCurrency, quoteTokenCurrency, uniPool };
     };
 
-    const getBoundPricesAndTicks = (indicators: {
-        [indicatorName: string]: LiquidityBand;
-    }) => {
+    const getBoundPricesAndTicks = ([lowerBound, upperBound]: [
+        number,
+        number,
+    ]) => {
         const {
             baseTokenCurrency,
             quoteTokenCurrency,
@@ -321,11 +323,6 @@ export const AddLiquidityV3 = ({
             uniPool,
         };
         (window as any).bounds = bounds;
-
-        debug.indicators = indicators;
-
-        const indicator = indicators[SELECTED_INDICATOR_NAME];
-        const [lowerBound, upperBound] = indicator.bounds[sentiment];
 
         debug.lowerBound = lowerBound;
         debug.upperBound = upperBound;
@@ -417,6 +414,43 @@ export const AddLiquidityV3 = ({
         const totalAmount = selectedAmount;
 
         if (Number.isNaN(totalAmount) || !totalAmount || !pool) {
+            return;
+        }
+
+        if (!isWETHPair && selectedToken === 'ETH') {
+            const totalLockedUSD = new BigNumber(pool.totalValueLockedUSD);
+            const totalLockedETH = new BigNumber(pool.totalValueLockedETH);
+
+            const ethPrice: BigNumber = totalLockedUSD.div(totalLockedETH);
+
+            const shouldToken0SelectedAmount = new BigNumber(
+                selectedAmount,
+            ).div(new BigNumber(pool.token0.derivedETH));
+
+            console.log('update action', {
+                type: 'update-amount',
+                payload: {
+                    sym: pool.token0.symbol,
+                    amount: shouldToken0SelectedAmount.toString(),
+                },
+            });
+            dispatch({
+                type: 'update-amount',
+                payload: {
+                    sym: pool.token0.symbol,
+                    amount: shouldToken0SelectedAmount.toString(),
+                },
+            });
+            console.log('eth in non-eth pool');
+            console.log(
+                pool.token0.symbol,
+                shouldToken0SelectedAmount.toString(),
+            );
+            handleTokenRatio(
+                pool.token0.symbol,
+                shouldToken0SelectedAmount.toString(),
+            );
+
             return;
         }
 
@@ -553,7 +587,7 @@ export const AddLiquidityV3 = ({
         (window as any).bounds = bounds;
 
         const { prices, ticks, ticksFromPrice } = getBoundPricesAndTicks(
-            indicators,
+            indicators[SELECTED_INDICATOR_NAME].bounds[sentiment],
         );
 
         const [lowerBound, upperBound] = prices;
@@ -695,7 +729,9 @@ export const AddLiquidityV3 = ({
 
     useEffect(() => {
         if (indicators) {
-            const bounds = getBoundPricesAndTicks(indicators);
+            debug.indicators = indicators;
+            const indicator = indicators[SELECTED_INDICATOR_NAME];
+            const bounds = getBoundPricesAndTicks(indicator.bounds[sentiment]);
             setBounds(bounds);
             setPendingBounds(false);
         }
@@ -1437,6 +1473,9 @@ export const AddLiquidityV3 = ({
 
         const numOfTokens = tokenInputState?.selectedTokens?.length ?? 0;
 
+        console.log('tokenInputState', tokenInputState);
+        console.log('bounds', bounds);
+
         for (let i = 0; i < numOfTokens; i++) {
             const symbol = tokenInputState?.selectedTokens[i];
             if (!tokenInputState[symbol].amount && !isDisabled(symbol)) {
@@ -1487,7 +1526,7 @@ export const AddLiquidityV3 = ({
             throw new Error('Gas price not selected.');
         }
 
-        console.log(tokenInputState);
+        console.log('token input state', tokenInputState);
 
         console.log(pool);
 
@@ -1698,82 +1737,82 @@ export const AddLiquidityV3 = ({
                         flexDirection='column'
                         className='token-control-container'
                     >
-                        {isWETHPair && (
+                        {/* {isWETHPair && ( */}
+                        <Box
+                            display='flex'
+                            justifyContent='space-between'
+                            className={classNames('token-input-control', {
+                                nana: isNANA,
+                                active: isTokenETHActive,
+                                inactive: !isTokenETHActive,
+                            })}
+                        >
                             <Box
                                 display='flex'
-                                justifyContent='space-between'
-                                className={classNames('token-input-control', {
-                                    nana: isNANA,
-                                    active: isTokenETHActive,
-                                    inactive: !isTokenETHActive,
-                                })}
+                                justifyContent='flex-start'
+                                onClick={() => {
+                                    if (
+                                        !isTokenETHActive &&
+                                        selectedSymbolCount === 2
+                                    )
+                                        return;
+                                    if (isTokenETHDisabled) return;
+                                    dispatch({
+                                        type: 'toggle',
+                                        payload: { sym: 'ETH' },
+                                    });
+                                }}
                             >
-                                <Box
-                                    display='flex'
-                                    justifyContent='flex-start'
-                                    onClick={() => {
-                                        if (
-                                            !isTokenETHActive &&
-                                            selectedSymbolCount === 2
-                                        )
-                                            return;
-                                        if (isTokenETHDisabled) return;
-                                        dispatch({
-                                            type: 'toggle',
-                                            payload: { sym: 'ETH' },
-                                        });
+                                <div
+                                    style={{
+                                        flexGrow: 1,
+                                        display: 'flex',
+                                        alignItems: 'center',
                                     }}
+                                    className={classNames(
+                                        'token-balance-wrapper',
+                                        { active: isTokenETHActive },
+                                    )}
                                 >
-                                    <div
-                                        style={{
-                                            flexGrow: 1,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                        className={classNames(
-                                            'token-balance-wrapper',
-                                            { active: isTokenETHActive },
-                                        )}
-                                    >
-                                        <TokenWithBalance
-                                            id={tokenInputState['ETH']?.id}
-                                            name={'ETH'}
-                                            balance={balances?.['ETH']?.balance}
-                                            decimals={'18'}
-                                            disabled={isTokenETHDisabled}
-                                            isNANA={isNANA}
-                                        />
-                                    </div>
-                                </Box>
-                                <TokenInput
-                                    token={'ETH'}
-                                    // we update ETH tokenInputState with whatever WETH amounts to
-                                    // dont show it in the UI if inactive
-                                    amount={
-                                        isTokenETHActive
-                                            ? tokenInputState['ETH'].amount
-                                            : ''
-                                    }
-                                    updateAmount={(amt: string) => {
-                                        dispatch({
-                                            type: 'update-amount',
-                                            payload: {
-                                                sym: 'ETH',
-                                                amount: amt,
-                                            },
-                                        });
-                                    }}
-                                    handleTokenRatio={handleTokenRatio}
-                                    balances={balances}
-                                    disabled={
-                                        disabledInput?.includes('ETH') ||
-                                        !isTokenETHActive
-                                    }
-                                    twoSide={true}
-                                    isNANA={isNANA}
-                                />
+                                    <TokenWithBalance
+                                        id={tokenInputState['ETH']?.id}
+                                        name={'ETH'}
+                                        balance={balances?.['ETH']?.balance}
+                                        decimals={'18'}
+                                        disabled={isTokenETHDisabled}
+                                        isNANA={isNANA}
+                                    />
+                                </div>
                             </Box>
-                        )}
+                            <TokenInput
+                                token={'ETH'}
+                                // we update ETH tokenInputState with whatever WETH amounts to
+                                // dont show it in the UI if inactive
+                                amount={
+                                    isTokenETHActive
+                                        ? tokenInputState['ETH'].amount
+                                        : ''
+                                }
+                                updateAmount={(amt: string) => {
+                                    dispatch({
+                                        type: 'update-amount',
+                                        payload: {
+                                            sym: 'ETH',
+                                            amount: amt,
+                                        },
+                                    });
+                                }}
+                                handleTokenRatio={handleTokenRatio}
+                                balances={balances}
+                                disabled={
+                                    disabledInput?.includes('ETH') ||
+                                    !isTokenETHActive
+                                }
+                                twoSide={true}
+                                isNANA={isNANA}
+                            />
+                        </Box>
+                        {/* )} */}
                         <Box
                             display='flex'
                             justifyContent='space-between'
