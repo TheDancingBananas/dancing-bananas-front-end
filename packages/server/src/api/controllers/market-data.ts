@@ -185,6 +185,10 @@ async function getUniswapPoolDailyOHLC(
         startDate,
         endDate,
     );
+    // const result = await UniswapFetcher.getPoolDailyDataLastDays(
+    //     poolId as string,
+    //     1,
+    // );
     const ohlc = convertUniswapToOHLC(result[0]);
     return ohlc;
 }

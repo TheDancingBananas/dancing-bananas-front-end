@@ -338,6 +338,7 @@ export interface QueryPoolDayDatasArgs {
   orderBy?: Maybe<Scalars['String']>;
   orderDirection?: Maybe<Scalars['String']>;
   where?: Maybe<PoolDayDatasWhere>;
+  first?: Maybe<Scalars['Int']>;
 }
 
 
@@ -585,6 +586,33 @@ export type GetEthPriceQuery = (
   )> }
 );
 
+export type GetLastDailyDataQueryVariables = Exact<{
+  pool: Scalars['ID'];
+  orderBy: Scalars['String'];
+  orderDirection: Scalars['String'];
+  first: Scalars['Int'];
+}>;
+
+
+export type GetLastDailyDataQuery = (
+  { __typename?: 'Query' }
+  & { poolDayDatas: Array<(
+    { __typename?: 'PoolDayData' }
+    & Pick<PoolDayData, 'id' | 'date' | 'liquidity' | 'sqrtPrice' | 'open' | 'high' | 'low' | 'close' | 'token0Price' | 'token1Price' | 'volumeToken0' | 'volumeToken1' | 'volumeUSD' | 'tvlUSD' | 'txCount'>
+    & { pool: (
+      { __typename?: 'Pool' }
+      & Pick<Pool, 'id' | 'token0Price' | 'token1Price'>
+      & { token0: (
+        { __typename?: 'Token' }
+        & Pick<Token, 'id' | 'name' | 'symbol'>
+      ), token1: (
+        { __typename?: 'Token' }
+        & Pick<Token, 'id' | 'name' | 'symbol'>
+      ) }
+    ) }
+  )> }
+);
+
 export type GetPoolDailyDataQueryVariables = Exact<{
   pool: Scalars['ID'];
   orderBy: Scalars['String'];
@@ -669,10 +697,10 @@ export type GetPoolsOverviewQuery = (
     & Pick<Pool, 'id' | 'createdAtTimestamp' | 'feeTier' | 'liquidity' | 'sqrtPrice' | 'token0Price' | 'token1Price' | 'tick' | 'volumeToken0' | 'volumeToken1' | 'volumeUSD' | 'totalValueLockedToken0' | 'totalValueLockedToken1' | 'totalValueLockedETH' | 'totalValueLockedUSD'>
     & { token0: (
       { __typename?: 'Token' }
-      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
     ), token1: (
       { __typename?: 'Token' }
-      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
     ) }
   )> }
 );
@@ -692,13 +720,13 @@ export type GetPositionSnapshotsQuery = (
       & Pick<Position, 'liquidity' | 'depositedToken0' | 'depositedToken1' | 'withdrawnToken0' | 'withdrawnToken1' | 'collectedFeesToken0' | 'collectedFeesToken1' | 'feeGrowthInside0LastX128' | 'feeGrowthInside1LastX128'>
       & { pool: (
         { __typename?: 'Pool' }
-        & Pick<Pool, 'id' | 'token0Price' | 'token1Price' | 'sqrtPrice' | 'liquidity'>
+        & Pick<Pool, 'id' | 'feeTier' | 'tick' | 'token0Price' | 'token1Price' | 'sqrtPrice' | 'liquidity'>
         & { token0: (
           { __typename?: 'Token' }
-          & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+          & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
         ), token1: (
           { __typename?: 'Token' }
-          & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+          & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
         ) }
       ), tickLower: (
         { __typename?: 'Tick' }
@@ -723,7 +751,7 @@ export type GetPositionsQuery = (
     & Pick<Position, 'id' | 'owner' | 'liquidity' | 'depositedToken0' | 'depositedToken1' | 'withdrawnToken0' | 'withdrawnToken1' | 'collectedFeesToken0' | 'collectedFeesToken1' | 'feeGrowthInside0LastX128' | 'feeGrowthInside1LastX128'>
     & { pool: (
       { __typename?: 'Pool' }
-      & Pick<Pool, 'id' | 'token0Price' | 'token1Price' | 'sqrtPrice' | 'liquidity'>
+      & Pick<Pool, 'id' | 'feeTier' | 'tick' | 'token0Price' | 'token1Price' | 'sqrtPrice' | 'liquidity'>
       & { token0: (
         { __typename?: 'Token' }
         & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
@@ -758,10 +786,10 @@ export type GetTopPoolsQuery = (
     & Pick<Pool, 'id' | 'createdAtTimestamp' | 'feeTier' | 'liquidity' | 'sqrtPrice' | 'token0Price' | 'token1Price' | 'volumeToken0' | 'volumeToken1' | 'volumeUSD' | 'totalValueLockedToken0' | 'totalValueLockedToken1' | 'totalValueLockedETH' | 'totalValueLockedUSD'>
     & { token0: (
       { __typename?: 'Token' }
-      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
     ), token1: (
       { __typename?: 'Token' }
-      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals'>
+      & Pick<Token, 'id' | 'name' | 'symbol' | 'decimals' | 'derivedETH'>
     ) }
   )> }
 );
@@ -771,6 +799,47 @@ export const GetEthPriceDocument = gql`
     query getEthPrice($id: ID!, $blockNumber: Int) {
   bundle(id: $id, block: $blockNumber) {
     ethPriceUSD
+  }
+}
+    `;
+export const GetLastDailyDataDocument = gql`
+    query getLastDailyData($pool: ID!, $orderBy: String!, $orderDirection: String!, $first: Int!) {
+  poolDayDatas(
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    first: $first
+    where: {pool: $pool}
+  ) {
+    id
+    date
+    pool {
+      id
+      token0 {
+        id
+        name
+        symbol
+      }
+      token1 {
+        id
+        name
+        symbol
+      }
+      token0Price
+      token1Price
+    }
+    liquidity
+    sqrtPrice
+    open
+    high
+    low
+    close
+    token0Price
+    token1Price
+    volumeToken0
+    volumeToken1
+    volumeUSD
+    tvlUSD
+    txCount
   }
 }
     `;
@@ -896,12 +965,14 @@ export const GetPoolsOverviewDocument = gql`
       name
       symbol
       decimals
+      derivedETH
     }
     token1 {
       id
       name
       symbol
       decimals
+      derivedETH
     }
   }
 }
@@ -914,17 +985,21 @@ export const GetPositionSnapshotsDocument = gql`
     position {
       pool {
         id
+        feeTier
+        tick
         token0 {
           id
           name
           symbol
           decimals
+          derivedETH
         }
         token1 {
           id
           name
           symbol
           decimals
+          derivedETH
         }
         token0Price
         token1Price
@@ -974,6 +1049,8 @@ export const GetPositionsDocument = gql`
     owner
     pool {
       id
+      feeTier
+      tick
       token0 {
         id
         name
@@ -1044,12 +1121,14 @@ export const GetTopPoolsDocument = gql`
       name
       symbol
       decimals
+      derivedETH
     }
     token1 {
       id
       name
       symbol
       decimals
+      derivedETH
     }
   }
 }
@@ -1059,6 +1138,9 @@ export function getSdk<C>(requester: Requester<C>) {
   return {
     getEthPrice(variables: GetEthPriceQueryVariables, options?: C): Promise<GetEthPriceQuery> {
       return requester<GetEthPriceQuery, GetEthPriceQueryVariables>(GetEthPriceDocument, variables, options);
+    },
+    getLastDailyData(variables: GetLastDailyDataQueryVariables, options?: C): Promise<GetLastDailyDataQuery> {
+      return requester<GetLastDailyDataQuery, GetLastDailyDataQueryVariables>(GetLastDailyDataDocument, variables, options);
     },
     getPoolDailyData(variables: GetPoolDailyDataQueryVariables, options?: C): Promise<GetPoolDailyDataQuery> {
       return requester<GetPoolDailyDataQuery, GetPoolDailyDataQueryVariables>(GetPoolDailyDataDocument, variables, options);
