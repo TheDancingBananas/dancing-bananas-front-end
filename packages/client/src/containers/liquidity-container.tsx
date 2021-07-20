@@ -243,6 +243,7 @@ export const LiquidityContainer = ({
                         showIndicators={false}
                         showStatus={false}
                         selectedItem={currentItem}
+                        swipeable={false}
                     >
                         <div className='liquidity-carousel-item'>
                             <Box className='liquidity-container'>
