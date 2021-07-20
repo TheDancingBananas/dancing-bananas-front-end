@@ -575,15 +575,17 @@
             align-items: center;
 
             input {
-                font-size: 12px !important;
-                line-height: 13px !important;
+                font-size: 18px !important;
+                line-height: 18.2px !important;
+                height: 17.6px !important;
                 color: #fff !important;
                 -webkit-text-stroke-width: 0.5px;
                 -webkit-text-stroke-color: black;
             }
             input::placeholder {
-                font-size: 12px;
-                line-height: 13px;
+                font-size: 18px;
+                line-height: 18.2px;
+                height: 17.6px !important;
                 color: #fff;
                 -webkit-text-stroke-width: 0.4px;
                 -webkit-text-stroke-color: black;
@@ -591,7 +593,7 @@
 
             span {
                 color: #fff;
-                font-size: 14px;
+                font-size: 12px;
                 line-height: 12px;
                 padding-top: 6px;
             }
@@ -674,7 +676,8 @@
             color: #fff;
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 1.25rem;
+            font-size: 18px;
+            //font-size: 1.25rem;
 
             img {
                 height: 30px !important;

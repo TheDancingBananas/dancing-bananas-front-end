@@ -49,7 +49,7 @@ export const TokenInput = ({
                     }
                 }}
             />
-            <span style={{ color: 'lightgrey' }}>
+            <span style={{ color: 'lightgrey', height: '25' }}>
                 {toBalanceStr(token, balances)}
             </span>
         </div>
@@ -61,8 +61,8 @@ export const TokenInput = ({
                 handleTokenRatio(token, toBalanceStr(token, balances));
             }}
         >
-            <div>MAX</div>
-            <span>BALANCE</span>
+            <div style={{ fontSize: '18px' }}>MAX</div>
+            <span style={{ fontSize: '12px' }}>BALANCE</span>
         </button>
     </div>
 );
