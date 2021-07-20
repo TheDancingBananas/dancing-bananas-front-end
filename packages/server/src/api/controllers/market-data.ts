@@ -180,10 +180,14 @@ async function getUniswapPoolDailyOHLC(
     const endDate = endOfDay(now);
     const startDate = startOfDay(subDays(now, 1));
 
-    const result = await UniswapFetcher.getHistoricalDailyData(
+    // const result = await UniswapFetcher.getHistoricalDailyData(
+    //     poolId as string,
+    //     startDate,
+    //     endDate,
+    // );
+    const result = await UniswapFetcher.getPoolDailyDataLastDays(
         poolId as string,
-        startDate,
-        endDate,
+        1,
     );
     const ohlc = convertUniswapToOHLC(result[0]);
     return ohlc;

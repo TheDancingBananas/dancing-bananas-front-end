@@ -417,6 +417,8 @@ export const AddLiquidityV3 = ({
             return;
         }
 
+        console.log('poolinfo', pool);
+
         if (!isWETHPair && selectedToken === 'ETH') {
             const totalLockedUSD = new BigNumber(pool.totalValueLockedUSD);
             const totalLockedETH = new BigNumber(pool.totalValueLockedETH);
