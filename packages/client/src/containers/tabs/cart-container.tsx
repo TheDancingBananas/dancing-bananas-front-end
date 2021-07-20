@@ -57,7 +57,7 @@ const CartContainer = ({
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
 }): JSX.Element | null => {
-    // console.log(cartData);
+    console.log('cart', cartData);
     const [viewId, setViewId] = useState<string>('');
 
     const { wallet } = useWallet();
@@ -239,9 +239,11 @@ const CartContainer = ({
                             ? mintAmount0
                             : mintAmount1;
 
-                    const baseApproveAmount = new BigNumber(amountDesired)
-                        .times(100)
-                        .toFixed();
+                    // const baseApproveAmount = new BigNumber(amountDesired)
+                    //     .times(100)
+                    //     .toFixed();
+                    const baseApproveAmount =
+                        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
                     // const tokenAmount = new BigNumber(amountDesired);
 
@@ -268,7 +270,7 @@ const CartContainer = ({
 
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
-                            addLiquidityContractAddress,
+                            batchLiquidityContractAddress,
                             baseApproveAmount,
                             { gasPrice: baseGasPrice },
                         );
@@ -294,7 +296,7 @@ const CartContainer = ({
                     let approveHash: string | undefined;
                     try {
                         const { hash } = await erc20Contract.approve(
-                            addLiquidityContractAddress,
+                            batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
                                 gasPrice: baseGasPrice,
@@ -323,6 +325,12 @@ const CartContainer = ({
                     );
                     baseMsgValue = baseMsgValue.add(ethAmount);
                 }
+
+                console.log('one side params------------------');
+                console.log('tokenId', tokenId);
+                console.log('tokenData id', tokenData.id);
+                console.log('mintAmoountOneSide', mintAmountOneSide);
+                console.log('mint params', mintParams);
 
                 const encodedABI = addLiquidityInterface.encodeFunctionData(
                     'investTokenForUniPair',
@@ -407,9 +415,11 @@ const CartContainer = ({
                             ? mintAmount0
                             : mintAmount1;
 
-                    const baseApproveAmount = new BigNumber(amountDesired)
-                        .times(100)
-                        .toFixed();
+                    // const baseApproveAmount = new BigNumber(amountDesired)
+                    //     .times(100)
+                    //     .toFixed();
+                    const baseApproveAmount =
+                        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
                     const tokenAmount = new BigNumber(amountDesired);
 
@@ -436,7 +446,7 @@ const CartContainer = ({
 
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
-                            addLiquidityContractAddress,
+                            batchLiquidityContractAddress,
                             baseApproveAmount,
                             { gasPrice: baseGasPrice },
                         );
@@ -461,7 +471,7 @@ const CartContainer = ({
                     let approveHash: string | undefined;
                     try {
                         const { hash } = await erc20Contract.approve(
-                            addLiquidityContractAddress,
+                            batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
                                 gasPrice: baseGasPrice,
@@ -491,6 +501,10 @@ const CartContainer = ({
                     baseMsgValue = baseMsgValue.add(ethAmount);
                 }
 
+                console.log('params------------------');
+                console.log('fnName', fnName);
+                console.log('tokenId', tokenId);
+                console.log(mintParams);
                 const encodedABI = addLiquidityInterface.encodeFunctionData(
                     fnName,
                     [tokenId, mintParams],

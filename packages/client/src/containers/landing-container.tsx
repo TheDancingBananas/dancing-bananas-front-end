@@ -1,21 +1,13 @@
 import { useState, useEffect } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
-import { Modal } from 'react-bootstrap';
 import { useWallet } from 'hooks/use-wallet';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
-import PendingTx from 'components/pending-tx';
 import { LiquidityContainer } from 'containers/liquidity-container';
-import { useMediaQuery } from 'react-responsive';
-import { AppHeader } from 'components/app-header/app-header';
 import { Box } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faDiscord,
-    faTwitter,
-    faTelegram,
-} from '@fortawesome/free-brands-svg-icons';
+
+// import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
 import {
@@ -37,6 +29,8 @@ import PositionDetailContainer from './tabs/position-detail-container';
 import pngWait from 'styles/images/wait.png';
 import { storage } from 'util/localStorage';
 
+import { V3PositionData } from '@sommelier/shared-types/src/api';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -51,6 +45,8 @@ function LandingContainer({
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
+
+    // const positionList = usePositionManagers();
 
     const getRandomPool = async (oldPool: string | null) => {
         const shouldRefresh = storage.shouldRefreshPool();
@@ -68,6 +64,9 @@ function LandingContainer({
             if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
             const data = await (response.json() as Promise<string>);
+            // const data = '0x6c6bc977e13df9b0de53b251522280bb72383700';
+            // 0x7858e59e0c01ea06df3af3d20ac7b0003275d4bf usdc usdt
+            // 0x69d91b94f0aaf8e8a2586909fa77a5c2c89818d5 hex usdc
             console.log('new Id', data);
             setCurrentPoolId(data);
             storage.setCurrentPoolId(data);
