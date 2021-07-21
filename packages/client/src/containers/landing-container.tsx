@@ -272,7 +272,7 @@ function LandingContainer({
                             fill={tab === 'task' ? '#000' : '#808080'}
                         />
                     </div>
-                    <div
+                    {/* <div
                         className={classNames('footer-tab', {
                             active:
                                 tab === 'positionManager' ||
@@ -291,7 +291,7 @@ function LandingContainer({
                                     : '#808080'
                             }
                         />
-                    </div>
+                    </div> */}
                     <div
                         className={classNames('footer-tab', {
                             active: tab === 'shop',

@@ -18,6 +18,8 @@ import pngChevronDown from 'styles/images/chevron-down.png';
 import pngFireWorks from 'styles/images/fireworks.png';
 import pngTick from 'styles/images/tick.png';
 
+import { storage } from 'util/localStorage';
+
 const SuccessContainer = ({
     onBack,
 }: {
@@ -34,7 +36,13 @@ const SuccessContainer = ({
                     <br />
                     SUCCESSFULLY CONFIRMED
                 </p>
-                <button className='success-back' onClick={(e) => onBack()}>
+                <button
+                    className='success-back'
+                    onClick={(e) => {
+                        storage.setTask('complete');
+                        onBack();
+                    }}
+                >
                     BACK TO HOME
                 </button>
             </div>
