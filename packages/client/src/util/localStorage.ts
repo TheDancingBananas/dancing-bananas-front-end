@@ -40,6 +40,24 @@ const getRemainingWaitingTime = (): number => {
     return SKIP_DURATION - currentTime + lastSkipTime;
 };
 
+const setLevel = (level: string): void => {
+    localStorage.setItem('level', level);
+};
+
+const getLevel = (): string => {
+    const value = localStorage.getItem('level');
+    return value ? value : '1';
+};
+
+const setTask = (task: string): void => {
+    localStorage.setItem('task', task);
+};
+
+const getTask = (): string => {
+    const value = localStorage.getItem('task');
+    return value ? value : 'incomplete';
+};
+
 export const storage = {
     setCurrentPoolId,
     getCurrentPoolId,
@@ -49,4 +67,8 @@ export const storage = {
     getRemainingWaitingTime,
     setSkipStatus,
     getSkip,
+    setLevel,
+    getLevel,
+    setTask,
+    getTask,
 };

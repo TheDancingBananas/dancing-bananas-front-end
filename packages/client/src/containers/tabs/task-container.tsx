@@ -4,17 +4,22 @@ import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
 import classNames from 'classnames';
 
+import { storage } from 'util/localStorage';
+
 import './task-container.scss';
 
 import pngSearch from 'styles/images/search.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngArrowLeft from 'styles/images/left-arrow.png';
+import pngTickBlack from 'styles/images/tick-black.png';
 
 const TaskContainer = ({
     onBack,
 }: {
     onBack: () => void;
 }): JSX.Element | null => {
+    const taskCompleteStatus = storage.getTask();
+
     return (
         <div className='task-container'>
             <div className='task-container-head'>
@@ -32,9 +37,17 @@ const TaskContainer = ({
                     FOR LEVEL UP
                 </p>
                 <div className='task-content'>
-                    <button className='task-item' onClick={(e) => onBack()}>
-                        ADD LIQUIDITY 1 TIME
-                    </button>
+                    {taskCompleteStatus === 'incomplete' && (
+                        <button className='task-item' onClick={(e) => onBack()}>
+                            ADD LIQUIDITY 1 TIME
+                        </button>
+                    )}
+                    {taskCompleteStatus === 'complete' && (
+                        <button className='task-item' onClick={(e) => onBack()}>
+                            TASK COMPLETED
+                            <img src={pngTickBlack} style={{ marginLeft: 5 }} />
+                        </button>
+                    )}
                 </div>
                 <div className='reward-divider'>
                     <div className='line'></div>

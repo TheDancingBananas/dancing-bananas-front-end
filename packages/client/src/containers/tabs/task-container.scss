@@ -126,6 +126,9 @@
         text-shadow: -1px 0 rgba(0, 0, 0, 0.75), 0 1px rgba(0, 0, 0, 0.75), 1px 0 rgba(0, 0, 0, 0.75), 0 -1px rgba(0, 0, 0, 0.75);
         -webkit-text-stroke-width: 0.5px;
         -webkit-text-stroke-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .reward-divider {
