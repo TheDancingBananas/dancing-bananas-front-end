@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-    title: Sommelier Impermanent Loss App
-    description: 🍷 The Finest AMM Tools for LPs
+    title: Dancing Bananas
+    description: Fun Food for Apes
     version: 1.0.0
 servers:
     - url: /api/v1
