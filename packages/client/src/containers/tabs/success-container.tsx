@@ -39,7 +39,6 @@ const SuccessContainer = ({
                 <button
                     className='success-back'
                     onClick={(e) => {
-                        storage.setTask('complete');
                         onBack();
                     }}
                 >

@@ -25,6 +25,7 @@ import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
 import PositionManagerContainer from './tabs/position-manager-container';
 import PositionDetailContainer from './tabs/position-detail-container';
+import LevelUpContainer from './tabs/level-up-container';
 
 import pngWait from 'styles/images/wait.png';
 import { storage } from 'util/localStorage';
@@ -45,6 +46,10 @@ function LandingContainer({
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
+
+    const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
+        storage.getTask(),
+    );
 
     // const positionList = usePositionManagers();
 
@@ -145,15 +150,18 @@ function LandingContainer({
 
     const handleTransactionSuccess = () => {
         setTab('transactionSuccess');
+        setLevelCompleteStatus('complete');
+        storage.setTask('complete');
+        setBasketData([]);
     };
 
     const handleChangePendingStatus = (status: boolean) => {
         setPendingTransaction(status);
     };
 
-    useEffect(() => {
-        console.log(basketData);
-    }, [basketData]);
+    // useEffect(() => {
+    //     console.log(basketData);
+    // }, [basketData]);
 
     return (
         <div>
@@ -201,12 +209,23 @@ function LandingContainer({
                         onBack={() => {
                             setTab('home');
                         }}
+                        onLevelUp={() => {
+                            setLevelCompleteStatus('incomplete');
+                            setTab('levelup');
+                        }}
                     />
                 )}
                 {tab === 'transactionSuccess' && (
                     <SuccessContainer
                         onBack={() => {
-                            setTab('home');
+                            setTab('task');
+                        }}
+                    />
+                )}
+                {tab === 'levelup' && (
+                    <LevelUpContainer
+                        onBack={() => {
+                            setTab('task');
                         }}
                     />
                 )}
@@ -261,7 +280,11 @@ function LandingContainer({
                     </div>
                     <div
                         className={classNames('footer-tab', {
-                            active: tab === 'task',
+                            active:
+                                tab === 'task' ||
+                                tab === 'transactionSuccess' ||
+                                tab === 'levelup',
+                            mark: levelCompleteStatus === 'complete',
                         })}
                         role='button'
                         onClick={(e) => {

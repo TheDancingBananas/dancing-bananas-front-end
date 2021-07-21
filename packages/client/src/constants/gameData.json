@@ -1,0 +1,33 @@
+{
+    "game": [
+        {
+            "level": "1",
+            "description": "CURIOUS MONKEY",
+            "tasks": [
+                {
+                    "taskName": "ADD LIQUIDITY 1 TIME",
+                    "complete": false
+                }
+            ],
+            "rewards": []
+        },
+        {
+            "level": "2",
+            "description": "CURIOUS MONKEY",
+            "tasks": [
+                {
+                    "taskName": "ADD LIQUIDITY 1 TIME",
+                    "complete": false
+                },
+                {
+                    "taskName": "REMOVE LIQUIDITY 1 TIME",
+                    "complete": false
+                }
+            ],
+            "rewards": [
+                "REMOVE LIQUIDITY",
+                "SENTIMENT PRICE RANGES"
+            ]
+        }
+    ]
+}

@@ -129,6 +129,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 15px;
     }
 
     .reward-divider {
@@ -168,6 +169,10 @@
         -webkit-text-stroke-width: 0.5px;
         -webkit-text-stroke-color: #000;
         margin-bottom: 80px;
+
+        &.disabled {
+            opacity: 0.5;
+        }
 
         .level-up-cost {
             display: flex;

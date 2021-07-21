@@ -1,0 +1,114 @@
+.level-up-container {
+    width: 100%;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .caption {
+        margin-top:  15px;
+        margin-bottom: 10px;
+    }
+}
+
+.level-up-container-head {
+    z-index: 500;
+    width: 450px;
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 168.77px;
+
+    .level-up-icon {
+        display: block;
+        width: 303px;
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+    }
+
+    .level-up-text {
+        font-size: 40px;
+        line-height: 48px;
+        text-shadow: 0px 1.73109px 0px rgba(0, 0, 0, 0.25);
+        -webkit-text-stroke: 2px black;
+        paint-order: stroke fill;
+        color: #fff;
+        z-index: 600;
+        margin-bottom: 25px;
+    }
+}
+
+.level-up-container-card {
+    width: 450px;
+    min-width: 225px;
+    min-height: 300px;
+    // background: radial-gradient(var(--bgDefault), var(--bgPrimary));
+    background: #fff;
+
+    border-radius: 16px;
+    padding: 50px 1.5rem 1.25rem;
+    margin-top: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .level-up-title {
+        font-size: 25px;
+        line-height: 30px;
+        color: #fff;
+        text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        -webkit-text-stroke: 2px black;
+        paint-order: fill;
+        margin-top: 40px;
+    }
+
+    .level-up-sub-title {
+        font-size: 18px;
+        line-height: 22px;
+        color: #DD00B3;
+        margin-top: 18px;
+    }
+
+    .level-up-reward-wrapper {
+        margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .level-up-reward-item {
+            font-size: 20px;
+            line-height: 24px;
+            -webkit-text-stroke: 1.5px black;
+            paint-order: fill;
+            color: #fff;
+            margin-bottom: 12px;
+
+            span {
+                padding-right: 5px;
+            }
+        }
+    }
+
+    .level-up-back {
+        background: #FF91D0;
+        border: 2px solid #000000;
+        box-sizing: border-box;
+        box-shadow: 0px 2.91509px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 5.83018px;
+        color: #fff;
+        width: 237px;
+        height: 61px;
+        outline: none;
+        margin-top: 39px;
+        z-index: 8000;
+        margin-bottom: 79px;
+        font-size: 18.861px;
+        line-height: 23px;
+        text-shadow: 0px 1.45754px 0px rgba(0, 0, 0, 0.25);
+        -webkit-text-stroke: 1.6px black;
+        paint-order: fill;
+    }
+}

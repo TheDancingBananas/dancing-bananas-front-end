@@ -66,6 +66,10 @@ p {
     color: #FF90D0;
 }
 
+.yellow {
+    color: #FFDF00;
+}
+
 .heading-main {
     font-family: 'Bunge';
     color: var(--faceAccentAlt);
@@ -311,6 +315,10 @@ p {
         &.active {
             background: #fff;
             border: 1.6px solid #000;
+        }
+
+        &.mark {
+            background: #71FFB9;
         }
 
         .basket-count {
