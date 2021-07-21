@@ -26,5 +26,5 @@ vpc_access_connector:
     name: 'projects/dancingbananas/locations/us-west1/connectors/redis-connector'
 
 network:
-  NETWORK_NAME=internal
+  NETWORK NAME == us-west1-internal
   SUBNETWORK_NAME=us-west1
