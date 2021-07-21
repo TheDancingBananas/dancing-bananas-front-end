@@ -1732,7 +1732,7 @@ export const AddLiquidityV3 = ({
                 </div>
                 <div style={{ padding: '1.25rem 1.5rem' }}>
                     <div className={classNames('pair-text', { nana: isNANA })}>
-                        PICK YOUR TOKEN TO PULL
+                        PICK YOUR TOKENS TO POOL
                     </div>
                     <Box
                         display='flex'
