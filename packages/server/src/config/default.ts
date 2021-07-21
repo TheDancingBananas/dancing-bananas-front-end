@@ -22,9 +22,11 @@ const config = {
         v3: {
             networks: {
                 mainnet:
-                    // 'http://localhost:8000/subgraphs/name/sommelier/uniswap-v3',
-                    // 'https://api.thegraph.com/subgraphs/name/benesjan/uniswap-v3-subgraph',
-                    'http://10.32.0.2:8080/subgraphs/name/sommelier/uniswap-v3',
+                    'http://graph-node-mainnet.us-west1.gcp.somm.network:8080/subgraphs/name/sommelier/uniswap-v3',
+                // 'http://localhost:8000/subgraphs/name/sommelier/uniswap-v3',
+                // 'https://api.thegraph.com/subgraphs/name/benesjan/uniswap-v3-subgraph',
+                // 'http://10.32.0.2:8080/subgraphs/name/sommelier/uniswap-v3',
+
                 rinkeby:
                     'http://35.197.14.14:8000/subgraphs/name/sommelier/uniswap-v3-2',
                 goerli:
