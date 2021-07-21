@@ -7,6 +7,7 @@ import { formatAddress, formatUSD } from 'util/formats';
 import pngWallet from 'styles/images/wallet.png';
 import pngEth from 'styles/images/eth.png';
 import pngBanana from 'styles/images/dancing-banana.png';
+import pngTelegram from 'styles/images/telegram-108.png';
 
 function ConnectWalletButton({
     onClick,
@@ -28,12 +29,31 @@ function ConnectWalletButton({
     return (
         <div>
             {!account && (
-                <button
-                    className='connect-wallet-button black'
-                    onClick={onClick}
+                <div
+                    style={{
+                        display: 'flex',
+                        width: 450,
+                        justifyContent: 'space-between',
+                    }}
                 >
-                    <img src={pngWallet} /> Connect Wallet
-                </button>
+                    <button
+                        className='connect-wallet-button black'
+                        onClick={onClick}
+                        style={{
+                            marginLeft: 100,
+                        }}
+                    >
+                        <img src={pngWallet} /> Connect Wallet
+                    </button>
+                    <button
+                        className='connect-wallet-button pink'
+                        onClick={() => {
+                            window.open('https://t.me/getbananas', '_blank');
+                        }}
+                    >
+                        <img src={pngTelegram} />
+                    </button>
+                </div>
             )}
             {account && (
                 <div
@@ -59,6 +79,14 @@ function ConnectWalletButton({
                     <button className='connect-wallet-button yellow'>
                         <img src={pngBanana} />
                         {100}
+                    </button>
+                    <button
+                        className='connect-wallet-button pink'
+                        onClick={() => {
+                            window.open('https://t.me/getbananas', '_blank');
+                        }}
+                    >
+                        <img src={pngTelegram} />
                     </button>
                 </div>
             )}
