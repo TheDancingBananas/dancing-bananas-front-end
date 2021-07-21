@@ -62,7 +62,7 @@ const LevelUpContainer = ({
                         onBack();
                     }}
                 >
-                    {` GO TO LEVEL ${currentLevel} TASKS`}
+                    {` SWING UP TO LEVEL ${currentLevel} PLAYS, MONKEY!`}
                 </button>
             </div>
         </div>
