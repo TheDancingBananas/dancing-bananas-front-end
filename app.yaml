@@ -24,11 +24,7 @@ env_variables:
 
 vpc_access_connector:
     name: 'projects/dancingbananas/locations/us-west1/connectors/redis-connector'
-
+#
 #network:
-#  NETWORK_NAME: internal
-#  SUBNETWORK_NAME: us-west1-internal
-
-network:
-  name: us-west1
-  subnetwork_name: us-west1-internal
+#  name: us-west1
+#  subnetwork_name: us-west1-internal
