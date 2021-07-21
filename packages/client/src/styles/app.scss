@@ -66,10 +66,6 @@ p {
     color: #FF90D0;
 }
 
-.yellow {
-    color: #FFDF00;
-}
-
 .heading-main {
     font-family: 'Bunge';
     color: var(--faceAccentAlt);
@@ -315,10 +311,6 @@ p {
         &.active {
             background: #fff;
             border: 1.6px solid #000;
-        }
-
-        &.mark {
-            background: #71FFB9;
         }
 
         .basket-count {
@@ -946,6 +938,18 @@ p {
         text-shadow: 0px 1.19968px 0px rgba(0, 0, 0, 0.75);
         -webkit-text-stroke-width: 0.5px;
         -webkit-text-stroke-color: black;
+    }
+
+    &.pink {
+        background: #FF90D0;
+        border: 1.16431px solid #000000;
+        box-sizing: border-box;
+        border-radius: 4.79872px;
+        min-width: inherit;
+    }
+
+    &.pink img{
+        margin: 0px 7.7621px;
     }
 }
 
