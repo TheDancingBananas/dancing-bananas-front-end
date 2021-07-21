@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LandingContainer from 'containers/landing-container';
 import ConnectWalletModal from 'components/connect-wallet-modal';
+
 import { PageError, ModalError } from 'components/page-error';
 
 import { WalletProvider } from 'hooks/use-wallet';
