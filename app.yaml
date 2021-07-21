@@ -27,4 +27,4 @@ vpc_access_connector:
 
 network:
   NETWORK_NAME=internal
-  SUBNETWORK_NAME=us-west1-internal
+  SUBNETWORK_NAME=us-west1
