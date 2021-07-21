@@ -138,19 +138,19 @@
             align-items: center;
 
             img {
-                width: 70px !important;
+                width: 81px !important;
                 border-radius: 22px;
             }
             .no-image {
                 display: inline-block;
-                width: 70px !important;
-                height: 70px !important;
+                width: 81px !important;
+                height: 81px !important;
             }
             .no-image:after {
                 content: '🍇';
-                font-size: 50px;
-                width: 70px !important;
-                height: 70px !important;
+                font-size: 69px;
+                width: 81px !important;
+                height: 81px !important;
             }
         }
 
@@ -198,7 +198,7 @@
             display: flex;
             align-items: center;
 
-            font-size: 31px;
+            font-size: 38px;
             line-height: 25px;
 
             text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px rgba(0, 0, 0, 0.75);
@@ -218,15 +218,15 @@
 
     .pair-text {
         color: #fff;
-        font-size: 12px;
-        line-height: 15px;
+        font-size: 16px;
+        line-height: 19px;
         padding-top: 19.92px;
-        padding-bottom: 12px;
+        //padding-bottom: 18px;
         font-weight: bold;
-        // text-shadow: 1.09325px 1.09325px 0px rgba(0, 0, 0, 0.75);
-        // -webkit-text-stroke-width: 0.4px;
-        // -webkit-text-stroke-color: black;
-        text-align: left;
+         text-shadow: 1.09325px 1.09325px 0px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke-width: 0.4px;
+        -webkit-text-stroke-color: black;
+        text-align: center;
 
         &.nana {
             color: #000;
@@ -466,7 +466,9 @@
 
     .token-control-container {
         border-radius: 4.37299px;
+        margin-top: 0.75rem;
         > div {
+            //margin-top: 0.75rem;
             margin-bottom: 0.75rem;
         }
         button.btn-default {

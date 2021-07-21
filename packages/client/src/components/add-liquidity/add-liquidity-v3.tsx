@@ -1686,7 +1686,7 @@ export const AddLiquidityV3 = ({
                             <div className='pool-pairs-item'>
                                 {resolveLogo(
                                     tokenInputState[token0Symbol].id,
-                                    '70px',
+                                    '81px',
                                 )}
                                 <span className='pool-pairs-name'>{`${token0Symbol}`}</span>
                             </div>
@@ -1703,7 +1703,7 @@ export const AddLiquidityV3 = ({
                             <div className='pool-pairs-item'>
                                 {resolveLogo(
                                     tokenInputState[token1Symbol].id,
-                                    '70px',
+                                    '81px',
                                 )}
                                 <span className='pool-pairs-name'>{`${token1Symbol}`}</span>
                             </div>
@@ -1732,7 +1732,7 @@ export const AddLiquidityV3 = ({
                 </div>
                 <div style={{ padding: '1.25rem 1.5rem' }}>
                     <div className={classNames('pair-text', { nana: isNANA })}>
-                        CHOOSE YOUR TOKENS TO DEPOSIT
+                        PICK YOUR TOKEN TO PULL
                     </div>
                     <Box
                         display='flex'
@@ -1983,7 +1983,7 @@ export const AddLiquidityV3 = ({
                     </Box>
                     <br />
                     <div className={classNames('pair-text', { nana: isNANA })}>
-                        CHOOSE A SENTIMENT
+                        PICK YOUR EMOTION
                     </div>
                     <Box
                         display='flex'
