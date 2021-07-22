@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
+import { Tabs } from 'types/game';
 import { useWallet } from 'hooks/use-wallet';
 import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
@@ -40,8 +41,9 @@ function LandingContainer({
     gasPrices: EthGasPrices | null;
 }): JSX.Element {
     const { wallet } = useWallet();
+    const currentLevel = storage.getLevel();
 
-    const [tab, setTab] = useState<string>('home');
+    const [tab, setTab] = useState<Tabs>('home');
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
@@ -159,6 +161,15 @@ function LandingContainer({
         setPendingTransaction(status);
     };
 
+    const handleChangeTab = (t: Tabs) => {
+        if (currentLevel === '1' && basketData.length > 0) {
+            if (t === 'home') {
+                setTab('cart');
+                return;
+            }
+        }
+        setTab(t);
+    };
     // useEffect(() => {
     //     console.log(basketData);
     // }, [basketData]);
@@ -192,6 +203,7 @@ function LandingContainer({
                     <LiquidityContainer
                         gasPrices={gasPrices}
                         poolId={currentPoolId}
+                        basket={basketData}
                         onRefreshPool={() => handleRefreshPool()}
                         handleWalletConnect={() => showWalletModal()}
                         onAddBasket={(
@@ -202,30 +214,31 @@ function LandingContainer({
                         onStatus={(status: boolean) =>
                             handleChangePendingStatus(status)
                         }
+                        handleChangeTab={(t: Tabs) => handleChangeTab(t)}
                     />
                 )}
                 {tab === 'task' && (
                     <TaskContainer
                         onBack={() => {
-                            setTab('home');
+                            handleChangeTab('home');
                         }}
                         onLevelUp={() => {
                             setLevelCompleteStatus('incomplete');
-                            setTab('levelup');
+                            handleChangeTab('levelup');
                         }}
                     />
                 )}
                 {tab === 'transactionSuccess' && (
                     <SuccessContainer
                         onBack={() => {
-                            setTab('task');
+                            handleChangeTab('task');
                         }}
                     />
                 )}
                 {tab === 'levelup' && (
                     <LevelUpContainer
                         onBack={() => {
-                            setTab('task');
+                            handleChangeTab('task');
                         }}
                     />
                 )}
@@ -235,7 +248,7 @@ function LandingContainer({
                         gasPrices={gasPrices}
                         cartData={basketData}
                         onBack={() => {
-                            setTab('home');
+                            handleChangeTab('home');
                         }}
                         onAddSuccess={() => handleTransactionSuccess()}
                         onStatus={(status: boolean) =>
@@ -246,17 +259,17 @@ function LandingContainer({
                 {tab === 'positionManager' && (
                     <PositionManagerContainer
                         onBack={() => {
-                            setTab('home');
+                            handleChangeTab('home');
                         }}
                         onSelectPosition={() => {
-                            setTab('positionDetail');
+                            handleChangeTab('positionDetail');
                         }}
                     />
                 )}
                 {tab === 'positionDetail' && (
                     <PositionDetailContainer
                         onBack={() => {
-                            setTab('positionManager');
+                            handleChangeTab('positionManager');
                         }}
                     />
                 )}
@@ -273,7 +286,7 @@ function LandingContainer({
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('home');
+                            handleChangeTab('home');
                         }}
                     >
                         <IconHome fill={tab === 'home' ? '#000' : '#808080'} />
@@ -288,7 +301,7 @@ function LandingContainer({
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('task');
+                            handleChangeTab('task');
                         }}
                     >
                         <IconSearch
@@ -303,7 +316,7 @@ function LandingContainer({
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('positionManager');
+                            handleChangeTab('positionManager');
                         }}
                     >
                         <IconDollar
@@ -321,7 +334,7 @@ function LandingContainer({
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('shop');
+                            handleChangeTab('shop');
                         }}
                     >
                         <IconShop fill={tab === 'shop' ? '#000' : '#808080'} />
@@ -332,7 +345,7 @@ function LandingContainer({
                         })}
                         role='button'
                         onClick={(e) => {
-                            setTab('cart');
+                            handleChangeTab('cart');
                         }}
                     >
                         <IconCart fill={tab === 'cart' ? '#000' : '#808080'} />

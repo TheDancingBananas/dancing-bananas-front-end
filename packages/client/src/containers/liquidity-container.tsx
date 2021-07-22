@@ -22,6 +22,7 @@ import { debug } from 'util/debug';
 import { PoolOverview } from 'hooks/data-fetchers';
 import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
+import { Tabs } from 'types/game';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import './liquidity-container.scss';
@@ -151,21 +152,26 @@ const LoadingPoolBox = ({ msg }: { msg: string }) => (
 export const LiquidityContainer = ({
     gasPrices,
     poolId,
+    basket,
     onRefreshPool,
     handleWalletConnect,
     onAddBasket,
     onAddSuccess,
     onStatus,
+    handleChangeTab,
 }: {
     gasPrices: EthGasPrices | null;
     poolId: string;
+    basket: LiquidityBasketData[];
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
     onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
+    handleChangeTab: (t: Tabs) => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
+    const currentLevel = storage.getLevel();
 
     const [currentItem, setCurrentItem] = useState<number>(0);
 
@@ -181,6 +187,11 @@ export const LiquidityContainer = ({
     const [view, setView] = useState('pairs');
 
     const handleSkip = (status: number) => {
+        if (currentLevel === '1' && basket.length > 0) {
+            handleChangeTab('cart');
+            return;
+        }
+
         if (!wallet.account) {
             handleWalletConnect();
             return;
@@ -210,6 +221,11 @@ export const LiquidityContainer = ({
         }
 
         onAddBasket(data, navigateToBasket);
+
+        if (currentLevel === '1') {
+            handleChangeTab('cart');
+            return;
+        }
 
         if (!navigateToBasket) {
             handleSkip(1);
