@@ -32,9 +32,9 @@ const SuccessContainer = ({
                 <img src={pngTick} className='success-image' />
                 <h2 className='success-title'>CONGRATULATIONS!</h2>
                 <p className='success-text'>
-                    YOUR TRANSACTION WAS
+                    YOU COMPLETED YOUR FIRST
                     <br />
-                    SUCCESSFULLY CONFIRMED
+                    DANCING BANANA TRANSACTION
                 </p>
                 <button
                     className='success-back'
@@ -42,7 +42,7 @@ const SuccessContainer = ({
                         onBack();
                     }}
                 >
-                    BACK TO HOME
+                    LEVEL UP!
                 </button>
             </div>
         </div>
