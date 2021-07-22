@@ -9,3 +9,13 @@ export interface Level {
     tasks: LevelTask[];
     rewards: string[];
 }
+
+export type Tabs =
+    | 'home'
+    | 'task'
+    | 'transactionSuccess'
+    | 'cart'
+    | 'shop'
+    | 'levelup'
+    | 'positionManager'
+    | 'positionDetail';

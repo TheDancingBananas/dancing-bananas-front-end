@@ -57,7 +57,7 @@ const CartContainer = ({
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
 }): JSX.Element | null => {
-    console.log('cart', cartData);
+    // console.log('cart', cartData);
     const [viewId, setViewId] = useState<string>('');
 
     const { wallet } = useWallet();
