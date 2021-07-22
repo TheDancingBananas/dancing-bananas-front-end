@@ -1,0 +1,33 @@
+.banana-help-title {
+  color: #fff;
+  text-shadow: -1.4px 0 rgba(0, 0, 0, 0.75), 0 1.4px rgba(0, 0, 0, 0.75), 1.4px 0 rgba(0, 0, 0, 0.75), 0 -1.4px rgba(0, 0, 0, 0.75);
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: black;
+  font-size: 18px;
+  line-height: 21.6px;
+  width: 75%;
+  margin-top: 7px;
+}
+
+.banana-help-container {
+  width: 450px !important;
+  background: #FFDF00;
+  border: 3px solid #000;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.banana-help-close {
+  width: 24%;
+  text-align: right;
+}
+
+.banana-help-instructions {
+  margin-left: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 9px;
+  line-height: 11px;
+
+  color: #000000;
+}

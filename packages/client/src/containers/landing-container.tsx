@@ -6,7 +6,7 @@ import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
-import BananaHelp from 'components/banana-help';
+import BananaHelp from 'components/banana-help/banana-help';
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
