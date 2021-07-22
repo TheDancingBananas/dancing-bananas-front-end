@@ -38,12 +38,13 @@ export const BananaHelp = (): JSX.Element => {
                             How Do You Get Bananas?
                         </div>
                         <div className='banana-help-close'>
-                            <img
-                                src={pngClose}
-                                height={'29px'}
-                                width={'29px'}
-                                onClick={() => closeClick()}
-                            />
+                            <a href='#' onClick={() => closeClick()}>
+                                <img
+                                    src={pngClose}
+                                    height={'29px'}
+                                    width={'29px'}
+                                />
+                            </a>
                         </div>
                     </Box>
 
