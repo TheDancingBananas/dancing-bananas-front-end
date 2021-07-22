@@ -43,7 +43,7 @@ function LandingContainer({
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
 
-    const [tab, setTab] = useState<Tabs>('levelup');
+    const [tab, setTab] = useState<Tabs>('home');
     const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
