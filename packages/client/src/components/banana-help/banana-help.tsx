@@ -9,10 +9,12 @@ export const BananaHelp = (): JSX.Element => {
     const closeClick = () => {
         console.log('Click');
         const x = document.getElementById('bananaDiv');
-        if (x.style.display === 'none') {
-            x.style.display = 'block';
-        } else {
-            x.style.display = 'none';
+        if (!(x == null)) {
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
         }
     };
 
