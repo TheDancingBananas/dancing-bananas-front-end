@@ -186,24 +186,24 @@
         }
 
         &-desc {
-            text-shadow: 1.09325px 1.09325px 0px rgba(0, 0, 0, 0.75);
-            -webkit-text-stroke-width: 0.2px;
-            -webkit-text-stroke-color: black;
-            margin-top: 5px;
+            -webkit-text-stroke: 1.24459px black;
+            paint-order: fill;
+            margin-top: 8px;
 
-            font-size: 11.6895px;
-            line-height: 14px;        }
+            font-size: 15px;
+            line-height: 16px;
+        }
 
         &-value {
             display: flex;
             align-items: center;
 
             font-size: 38px;
-            line-height: 25px;
+            line-height: 46px;
 
-            text-shadow: -1.2px 0 black, 0 1.2px black, 1.2px 0 black, 0 -1.2px rgba(0, 0, 0, 0.75);
-            -webkit-text-stroke-width: 0.5px;
-            -webkit-text-stroke-color: black;
+            text-shadow: 0px 1.99913px 0px rgba(0, 0, 0, 0.25);
+            -webkit-text-stroke: 1.99913px black;
+            paint-order: fill;
 
             &.green {
                 color: #00FE81;
@@ -223,16 +223,15 @@
         padding-top: 19.92px;
         //padding-bottom: 18px;
         font-weight: bold;
-         text-shadow: 1.09325px 1.09325px 0px rgba(0, 0, 0, 0.75);
-        -webkit-text-stroke-width: 0.4px;
-        -webkit-text-stroke-color: black;
+        //  text-shadow: 1.09325px 1.09325px 0px rgba(0, 0, 0, 0.75);
+        -webkit-text-stroke: 1px black;
         text-align: center;
 
-        &.nana {
-            color: #000;
-            // text-shadow: none;
-            // -webkit-text-stroke-width: 0px;
-        }
+        // &.nana {
+        //     color: #000;
+        //     text-shadow: none;
+        //     -webkit-text-stroke-width: 0px;
+        // }
     }
 
     .pair-action {
@@ -409,12 +408,12 @@
     }
 
     .sentiment {
-        padding: 0.75rem;
         border-radius: 4px;
         padding: 0.75rem;
         border-radius: 4px;
         display: flex;
         justify-content: space-between;
+        margin-top: 8px;
 
         &-item {
             width: 32%;
@@ -466,7 +465,7 @@
 
     .token-control-container {
         border-radius: 4.37299px;
-        margin-top: 0.75rem;
+        margin-top: 20px;
         > div {
             //margin-top: 0.75rem;
             margin-bottom: 0.75rem;
