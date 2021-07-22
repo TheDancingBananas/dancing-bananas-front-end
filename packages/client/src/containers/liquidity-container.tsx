@@ -176,13 +176,15 @@ export const LiquidityContainer = ({
     const [currentItem, setCurrentItem] = useState<number>(0);
 
     const { data: randomPool } = usePoolOverview(wallet.network, poolId);
-    // const { data: nanaPool } = usePoolOverview(
-    //     wallet.network,
-    //     `0xea7ef4f39eb2320a0e23c8ce1131d2c3f67097fd`,
-    // );
+
+    // NANA: WETH-TRU for test
+    const { data: nanaPool } = usePoolOverview(
+        wallet.network,
+        `0x86e69d1ae728c9cd229f07bbf34e01bf27258354`,
+    );
 
     const randomPoolBalances = useBalance({ pool: randomPool });
-    // const nanaPoolBalances = useBalance({ pool: nanaPool });
+    const nanaPoolBalances = useBalance({ pool: nanaPool });
 
     const [view, setView] = useState('pairs');
 
@@ -252,7 +254,7 @@ export const LiquidityContainer = ({
 
     return (
         <>
-            {randomPool && view === 'pairs' && (
+            {randomPool && nanaPool && view === 'pairs' && (
                 <div className='carousel-container'>
                     <Carousel
                         showArrows={false}
@@ -288,8 +290,8 @@ export const LiquidityContainer = ({
                         <div className='liquidity-carousel-item'>
                             <Box className='liquidity-container yellow'>
                                 <AddLiquidityV3
-                                    pool={randomPool}
-                                    balances={randomPoolBalances}
+                                    pool={nanaPool}
+                                    balances={nanaPoolBalances}
                                     gasPrices={gasPrices}
                                     level={level}
                                     isNANA={true}
