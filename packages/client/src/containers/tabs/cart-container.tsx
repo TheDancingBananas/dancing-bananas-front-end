@@ -612,125 +612,136 @@ const CartContainer = ({
                             POOL FEES
                         </div>
                     </div>
-                    {cartData.map((item: LiquidityBasketData) => {
-                        return (
-                            <>
-                                <div
-                                    className='cart-table-row'
-                                    key={`cart-item-${item.poolId}`}
-                                >
-                                    <div className='cart-table-col left'>
-                                        {!item.isNANA && (
-                                            <div className='cart-token-image'>
-                                                {resolveLogo(
-                                                    item.token0Address,
-                                                )}
-                                            </div>
-                                        )}
-                                        {item.isNANA && (
-                                            <div className='cart-token-image'>
-                                                <div>
-                                                    <img src={pngNANA} />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {!item.isNANA && (
-                                            <div className='cart-token-image'>
-                                                {resolveLogo(
-                                                    item.token1Address,
-                                                )}
-                                            </div>
-                                        )}
-                                        {item.isNANA && (
-                                            <div className='cart-token-image'>
-                                                <img src={pngETH} />
-                                            </div>
-                                        )}
-                                        <span className='cart-token-name'>{`${item.token0Name}/${item.token1Name}`}</span>
-                                    </div>
-                                    <div className='cart-table-col center'>
-                                        <span className='cart-table-text2'>
-                                            ADD
-                                        </span>
-                                    </div>
-                                    <div className='cart-table-col right'>
-                                        <span className='cart-table-text2'>
-                                            {formatNumber(
-                                                (Number(item.volumeUSD) / 100) *
-                                                    0.1,
-                                            )}
-                                        </span>
-                                        <img
-                                            src={pngChevronDown}
-                                            className='show-cart-item-detail'
-                                            onClick={(e) =>
-                                                handleClickMoreDetails(
-                                                    item.poolId,
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                                <div
-                                    className={classNames(
-                                        'cart-table-row-details',
-                                        { hide: item.poolId !== viewId },
-                                    )}
-                                >
-                                    <div className='row-detail-head white'>
-                                        TRANSACTION DETAILS
-                                    </div>
-                                    <div className='row-detail-body'>
-                                        <div className='row-detail-left'>
-                                            <span className='dark'>
-                                                TOKEN USED / AMOUHNT
-                                            </span>
-                                            <div className='row-detail-token'>
-                                                {item.lToken0Name === 'ETH' && (
-                                                    <img src={pngETH} />
-                                                )}
-                                                {item.lToken0Name !== 'ETH' &&
-                                                    resolveLogo(
-                                                        item.lToken0Address,
+                    {cartData.map(
+                        (item: LiquidityBasketData, index: number) => {
+                            return (
+                                <div key={`cart-item-${index}`}>
+                                    <div
+                                        className='cart-table-row'
+                                        key={`cart-item-${item.poolId}`}
+                                    >
+                                        <div className='cart-table-col left'>
+                                            {!item.isNANA && (
+                                                <div className='cart-token-image'>
+                                                    {resolveLogo(
+                                                        item.token0Address,
                                                     )}
-                                                <span className='white'>{`${item.lToken0Name} / `}</span>
-                                                <span className='green'>
-                                                    {item.lToken0Amount}
+                                                </div>
+                                            )}
+                                            {item.isNANA && (
+                                                <div className='cart-token-image'>
+                                                    <div>
+                                                        <img src={pngNANA} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {!item.isNANA && (
+                                                <div className='cart-token-image'>
+                                                    {resolveLogo(
+                                                        item.token1Address,
+                                                    )}
+                                                </div>
+                                            )}
+                                            {item.isNANA && (
+                                                <div className='cart-token-image'>
+                                                    <img src={pngETH} />
+                                                </div>
+                                            )}
+                                            <span className='cart-token-name'>{`${item.token0Name}/${item.token1Name}`}</span>
+                                        </div>
+                                        <div className='cart-table-col center'>
+                                            <span className='cart-table-text2'>
+                                                ADD
+                                            </span>
+                                        </div>
+                                        <div className='cart-table-col right'>
+                                            <span className='cart-table-text2'>
+                                                {formatNumber(
+                                                    (Number(item.volumeUSD) /
+                                                        100) *
+                                                        0.1,
+                                                )}
+                                            </span>
+                                            <img
+                                                src={pngChevronDown}
+                                                className='show-cart-item-detail'
+                                                onClick={(e) =>
+                                                    handleClickMoreDetails(
+                                                        item.poolId,
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={classNames(
+                                            'cart-table-row-details',
+                                            { hide: item.poolId !== viewId },
+                                        )}
+                                    >
+                                        <div className='row-detail-head white'>
+                                            TRANSACTION DETAILS
+                                        </div>
+                                        <div className='row-detail-body'>
+                                            <div className='row-detail-left'>
+                                                <span className='dark'>
+                                                    TOKEN USED / AMOUHNT
                                                 </span>
-                                            </div>
-                                            {item.lToken1Name && (
                                                 <div className='row-detail-token'>
-                                                    {item.lToken1Name ===
+                                                    {item.lToken0Name ===
                                                         'ETH' && (
                                                         <img src={pngETH} />
                                                     )}
-                                                    {item.lToken1Name !==
+                                                    {item.lToken0Name !==
                                                         'ETH' &&
                                                         resolveLogo(
-                                                            item.lToken1Address,
+                                                            item.lToken0Address,
                                                         )}
-                                                    <span className='white'>{`${item.lToken1Name} / `}</span>
+                                                    <span className='white'>{`${item.lToken0Name} / `}</span>
                                                     <span className='green'>
-                                                        {item.lToken1Amount}
+                                                        {item.lToken0Amount}
                                                     </span>
                                                 </div>
-                                            )}
+                                                {item.lToken1Name && (
+                                                    <div className='row-detail-token'>
+                                                        {item.lToken1Name ===
+                                                            'ETH' && (
+                                                            <img src={pngETH} />
+                                                        )}
+                                                        {item.lToken1Name !==
+                                                            'ETH' &&
+                                                            resolveLogo(
+                                                                item.lToken1Address,
+                                                            )}
+                                                        <span className='white'>{`${item.lToken1Name} / `}</span>
+                                                        <span className='green'>
+                                                            {item.lToken1Amount}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className='row-detail-right'>
+                                                <button
+                                                    onClick={(e) => onBack()}
+                                                >
+                                                    EDIT
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className='row-detail-right'>
-                                            <button onClick={(e) => onBack()}>
-                                                EDIT
-                                            </button>
+                                        <div className='row-detail-foot'>
+                                            <span className='dark'>
+                                                SENTIMENT:
+                                            </span>
+                                            {` `}
+                                            <span className='white'>
+                                                NEUTRAL
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className='row-detail-foot'>
-                                        <span className='dark'>SENTIMENT:</span>
-                                        {` `}
-                                        <span className='white'>NEUTRAL</span>
                                     </div>
                                 </div>
-                            </>
-                        );
-                    })}
+                            );
+                        },
+                    )}
                 </div>
                 <div className='caption white'>REWARDS</div>
                 <div className='cart-reward-wrapper'>
