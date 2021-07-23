@@ -329,3 +329,20 @@ export class UniswapApiFetcher extends OfflineFetcher {
         return { data, error };
     }
 }
+
+export const getRandomPoolID = async (currentPoolId: string) => {
+    const networkName = 'mainnet';
+
+    console.log('old pool id', currentPoolId);
+    const response = await fetch(
+        `/api/v1/${networkName}/randomPool?count=${50}&old=${currentPoolId}`,
+    );
+    if (!response.ok) throw new Error(`Failed to fetch top pools`);
+
+    const data = await (response.json() as Promise<string>);
+    // const data = '0x6c6bc977e13df9b0de53b251522280bb72383700';
+    // 0x7858e59e0c01ea06df3af3d20ac7b0003275d4bf usdc usdt
+    // 0x69d91b94f0aaf8e8a2586909fa77a5c2c89818d5 hex usdc
+    console.log('new Id', data);
+    return data;
+};

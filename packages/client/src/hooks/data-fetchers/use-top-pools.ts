@@ -63,13 +63,13 @@ export const useRandomPool = (): UseRandomPool => {
     const {
         wallet: { network },
     } = useWallet();
-
-    const oldPoolId = storage.getCurrentPoolId();
-
     const networkName = network ? config.networks[network].name : 'mainnet';
     // const networkName = 'rinkeby';
 
     const getRandomPool = async () => {
+        const oldPoolId = storage.getCurrentPoolId();
+        console.log('oldpool - hooker', oldPoolId);
+
         const response = await fetch(
             `/api/v1/${networkName}/randomPool?count=${50}&old=${
                 oldPoolId ? oldPoolId : '222'

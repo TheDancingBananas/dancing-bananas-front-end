@@ -201,6 +201,12 @@ export const LiquidityContainer = ({
             setCurrentItem(1);
             return;
         }
+
+        // const lastPoolFetchTime = storage.getLastSkipTime();
+        // if (lastPoolFetchTime === 0) {
+        //     storage.setLastSkipTime(Math.floor(Date.now() / 1000));
+        // }
+
         const skipStatus = storage.getSkip();
 
         if (skipStatus === 'off') {
@@ -239,6 +245,7 @@ export const LiquidityContainer = ({
             storage.setCurrentPoolId('');
             onRefreshPool();
             setView('pairs');
+            setCurrentItem(0);
         }
     };
 
