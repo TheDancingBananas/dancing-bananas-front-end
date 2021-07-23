@@ -61,8 +61,6 @@ import pngBanana2 from 'styles/images/banana-2.png';
 
 import AlertModal from './alert-modal';
 
-import { getEstimateTime } from 'services/api-etherscan';
-
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
@@ -78,7 +76,7 @@ type Props = {
     onLeft: () => void;
     onRight: () => void;
     onAddSuccess: () => void;
-    onStatus: (status: boolean, time?: number) => void;
+    onStatus: (status: boolean) => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -830,6 +828,7 @@ export const AddLiquidityV3 = ({
                 getTokensWithAmounts() as Record<string, TokenInputAmount>,
             );
 
+            onStatus(true);
 
             toastWarn(`Confirming tx ${compactHash(hash)}`);
             setPendingTx &&
@@ -841,12 +840,6 @@ export const AddLiquidityV3 = ({
                         } as PendingTx),
                 );
             if (provider) {
-                const baseGasPrice = ethers.utils
-                    .parseUnits(currentGasPrice.toString(), 9)
-                    .toString();
-                const estimateTime = await getEstimateTime(provider, hash, baseGasPrice);
-                onStatus(true, estimateTime);
-
                 const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(
                     hash,
                 );
@@ -1077,6 +1070,7 @@ export const AddLiquidityV3 = ({
             // setApprovalState('pending');
             if (approveHash) {
                 // toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1085,10 +1079,6 @@ export const AddLiquidityV3 = ({
                                 confirm: [...state.confirm],
                             } as PendingTx),
                     );
-
-                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
-                onStatus(true, estimateTime);
-
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
                 onStatus(false);
@@ -1347,6 +1337,7 @@ export const AddLiquidityV3 = ({
             // setApprovalState('pending');
             if (approveHash) {
                 // toastWarn(`Approving tx ${compactHash(approveHash)}`);
+                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1355,10 +1346,6 @@ export const AddLiquidityV3 = ({
                                 confirm: [...state.confirm],
                             } as PendingTx),
                     );
-
-                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
-                onStatus(true, estimateTime);
-
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
                 onStatus(false);
@@ -1733,9 +1720,11 @@ export const AddLiquidityV3 = ({
                     <div className='pool-details'>
                         <div className='pool-details-row'>
                             <div className='pool-details-value green'>
-                                {formatNumber(
-                                    (Number(pool.volumeUSD) / 100) * 0.1,
-                                )}
+                                {isNANA && <span>COMING SOON</span>}
+                                {!isNANA &&
+                                    formatNumber(
+                                        (Number(pool.volumeUSD) / 100) * 0.1,
+                                    )}
                             </div>
                             <div className='pool-details-desc'>
                                 24 HRS POOL FEES
@@ -1828,171 +1817,189 @@ export const AddLiquidityV3 = ({
                             />
                         </Box>
                         {/* )} */}
-                        <Box
-                            display='flex'
-                            justifyContent='space-between'
-                            className={classNames('token-input-control', {
-                                nana: isNANA,
-                                active: isToken0Active,
-                                inactive: !isToken0Active,
-                            })}
-                        >
-                            <Box
-                                display='flex'
-                                justifyContent='flex-start'
-                                onClick={() => {
-                                    if (
-                                        !isToken0Active &&
-                                        selectedSymbolCount === 2
-                                    )
-                                        return;
-                                    if (
-                                        isToken0Disabled ||
-                                        (token0Symbol === 'WETH' && disableWETH)
-                                    )
-                                        return;
-                                    dispatch({
-                                        type: 'toggle',
-                                        payload: { sym: token0Symbol },
-                                    });
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        flexGrow: 1,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                    className={classNames(
-                                        'token-balance-wrapper',
-                                        {
-                                            active: isToken0Active,
-                                        },
-                                    )}
-                                >
-                                    <TokenWithBalance
-                                        id={tokenInputState[token0Symbol].id}
-                                        name={token0Symbol}
-                                        balance={
-                                            balances?.[token0Symbol]?.balance
-                                        }
-                                        decimals={
-                                            balances?.[token0Symbol]?.decimals
-                                        }
-                                        disabled={isToken0Disabled}
-                                        isNANA={isNANA}
-                                    />
-                                </div>
-                            </Box>
 
-                            <TokenInput
-                                token={token0Symbol}
-                                amount={
-                                    isToken0Active
-                                        ? tokenInputState[token0Symbol].amount
-                                        : ''
-                                }
-                                updateAmount={(amt: string) => {
-                                    dispatch({
-                                        type: 'update-amount',
-                                        payload: {
-                                            sym: token0Symbol,
-                                            amount: amt,
-                                        },
-                                    });
-                                }}
-                                handleTokenRatio={handleTokenRatio}
-                                balances={balances}
-                                disabled={
-                                    disabledInput?.includes(token0Symbol) ||
-                                    !isToken0Active
-                                }
-                                twoSide={true}
-                                isNANA={isNANA}
-                            />
-                        </Box>
-                        <Box
-                            display='flex'
-                            justifyContent='space-between'
-                            className={classNames('token-input-control', {
-                                nana: isNANA,
-                                active: isToken1Active,
-                                inactive: !isToken1Active,
-                            })}
-                        >
+                        {(!isNANA || (isNANA && token0Symbol === 'WETH')) && (
                             <Box
                                 display='flex'
-                                justifyContent='flex-start'
-                                onClick={() => {
-                                    if (
-                                        !isToken1Active &&
-                                        selectedSymbolCount === 2
-                                    )
-                                        return;
-                                    if (
-                                        isToken1Disabled ||
-                                        (token1Symbol === 'WETH' && disableWETH)
-                                    )
-                                        return;
-                                    dispatch({
-                                        type: 'toggle',
-                                        payload: { sym: token1Symbol },
-                                    });
-                                }}
+                                justifyContent='space-between'
+                                className={classNames('token-input-control', {
+                                    nana: isNANA,
+                                    active: isToken0Active,
+                                    inactive: !isToken0Active,
+                                })}
                             >
-                                <div
-                                    style={{
-                                        flexGrow: 1,
-                                        display: 'flex',
-                                        alignItems: 'center',
+                                <Box
+                                    display='flex'
+                                    justifyContent='flex-start'
+                                    onClick={() => {
+                                        if (
+                                            !isToken0Active &&
+                                            selectedSymbolCount === 2
+                                        )
+                                            return;
+                                        if (
+                                            isToken0Disabled ||
+                                            (token0Symbol === 'WETH' &&
+                                                disableWETH)
+                                        )
+                                            return;
+                                        dispatch({
+                                            type: 'toggle',
+                                            payload: { sym: token0Symbol },
+                                        });
                                     }}
-                                    className={classNames(
-                                        'token-balance-wrapper',
-                                        {
-                                            active: isToken1Active,
-                                        },
-                                    )}
                                 >
-                                    <TokenWithBalance
-                                        id={tokenInputState[token1Symbol].id}
-                                        name={token1Symbol}
-                                        balance={
-                                            balances?.[token1Symbol]?.balance
-                                        }
-                                        decimals={
-                                            balances?.[token1Symbol]?.decimals
-                                        }
-                                        disabled={isToken1Disabled}
-                                        isNANA={isNANA}
-                                    />
-                                </div>
+                                    <div
+                                        style={{
+                                            flexGrow: 1,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                        className={classNames(
+                                            'token-balance-wrapper',
+                                            {
+                                                active: isToken0Active,
+                                            },
+                                        )}
+                                    >
+                                        <TokenWithBalance
+                                            id={
+                                                tokenInputState[token0Symbol].id
+                                            }
+                                            name={token0Symbol}
+                                            balance={
+                                                balances?.[token0Symbol]
+                                                    ?.balance
+                                            }
+                                            decimals={
+                                                balances?.[token0Symbol]
+                                                    ?.decimals
+                                            }
+                                            disabled={isToken0Disabled}
+                                            isNANA={isNANA}
+                                        />
+                                    </div>
+                                </Box>
+
+                                <TokenInput
+                                    token={token0Symbol}
+                                    amount={
+                                        isToken0Active
+                                            ? tokenInputState[token0Symbol]
+                                                  .amount
+                                            : ''
+                                    }
+                                    updateAmount={(amt: string) => {
+                                        dispatch({
+                                            type: 'update-amount',
+                                            payload: {
+                                                sym: token0Symbol,
+                                                amount: amt,
+                                            },
+                                        });
+                                    }}
+                                    handleTokenRatio={handleTokenRatio}
+                                    balances={balances}
+                                    disabled={
+                                        disabledInput?.includes(token0Symbol) ||
+                                        !isToken0Active
+                                    }
+                                    twoSide={true}
+                                    isNANA={isNANA}
+                                />
                             </Box>
-                            <TokenInput
-                                token={token1Symbol}
-                                amount={
-                                    isToken1Active
-                                        ? tokenInputState[token1Symbol].amount
-                                        : ''
-                                }
-                                updateAmount={(amt: string) => {
-                                    dispatch({
-                                        type: 'update-amount',
-                                        payload: {
-                                            sym: token1Symbol,
-                                            amount: amt,
-                                        },
-                                    });
-                                }}
-                                handleTokenRatio={handleTokenRatio}
-                                balances={balances}
-                                disabled={
-                                    disabledInput?.includes(token1Symbol) ||
-                                    !isToken1Active
-                                }
-                                twoSide={true}
-                                isNANA={isNANA}
-                            />
-                        </Box>
+                        )}
+
+                        {(!isNANA || (isNANA && token1Symbol === 'WETH')) && (
+                            <Box
+                                display='flex'
+                                justifyContent='space-between'
+                                className={classNames('token-input-control', {
+                                    nana: isNANA,
+                                    active: isToken1Active,
+                                    inactive: !isToken1Active,
+                                })}
+                            >
+                                <Box
+                                    display='flex'
+                                    justifyContent='flex-start'
+                                    onClick={() => {
+                                        if (
+                                            !isToken1Active &&
+                                            selectedSymbolCount === 2
+                                        )
+                                            return;
+                                        if (
+                                            isToken1Disabled ||
+                                            (token1Symbol === 'WETH' &&
+                                                disableWETH)
+                                        )
+                                            return;
+                                        dispatch({
+                                            type: 'toggle',
+                                            payload: { sym: token1Symbol },
+                                        });
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            flexGrow: 1,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                        className={classNames(
+                                            'token-balance-wrapper',
+                                            {
+                                                active: isToken1Active,
+                                            },
+                                        )}
+                                    >
+                                        <TokenWithBalance
+                                            id={
+                                                tokenInputState[token1Symbol].id
+                                            }
+                                            name={token1Symbol}
+                                            balance={
+                                                balances?.[token1Symbol]
+                                                    ?.balance
+                                            }
+                                            decimals={
+                                                balances?.[token1Symbol]
+                                                    ?.decimals
+                                            }
+                                            disabled={isToken1Disabled}
+                                            isNANA={isNANA}
+                                        />
+                                    </div>
+                                </Box>
+                                <TokenInput
+                                    token={token1Symbol}
+                                    amount={
+                                        isToken1Active
+                                            ? tokenInputState[token1Symbol]
+                                                  .amount
+                                            : ''
+                                    }
+                                    updateAmount={(amt: string) => {
+                                        dispatch({
+                                            type: 'update-amount',
+                                            payload: {
+                                                sym: token1Symbol,
+                                                amount: amt,
+                                            },
+                                        });
+                                    }}
+                                    handleTokenRatio={handleTokenRatio}
+                                    balances={balances}
+                                    disabled={
+                                        disabledInput?.includes(token1Symbol) ||
+                                        !isToken1Active
+                                    }
+                                    twoSide={true}
+                                    isNANA={isNANA}
+                                />
+                            </Box>
+                        )}
                     </Box>
                     <br />
                     <div className={classNames('pair-text', { nana: isNANA })}>
@@ -2077,12 +2084,14 @@ export const AddLiquidityV3 = ({
                             pendingBounds={pendingBounds}
                             currentGasPrice={currentGasPrice}
                         /> */}
-                        <button
-                            className='pair-action-button green'
-                            onClick={(e) => handleAddBasket()}
-                        >
-                            ADD
-                        </button>
+                        {!isNANA && (
+                            <button
+                                className='pair-action-button green'
+                                onClick={(e) => handleAddBasket()}
+                            >
+                                ADD
+                            </button>
+                        )}
                     </div>
                     <br />
                     <div></div>

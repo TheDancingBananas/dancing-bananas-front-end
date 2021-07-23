@@ -50,8 +50,6 @@ function LandingContainer({
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState('');
-    const [transactionEstimatedTimeUnit, setTransactionEstimatedTimeUnit] = useState('');
 
     const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
         storage.getTask(),
@@ -166,30 +164,8 @@ function LandingContainer({
         setBasketData([]);
     };
 
-    const handleChangePendingStatus = (status: boolean, time?: number) => {
+    const handleChangePendingStatus = (status: boolean) => {
         setPendingTransaction(status);
-
-        let value = '', unit = '';
-        if (time) {
-            if (time > 0 && time < 60) {
-                value = Math.floor(time).toString();
-                unit = 'SECS';
-            }
-            else if (time < 3600) {
-                value = Math.floor(time / 60).toString();
-                unit = 'MINS';
-            }
-            else if (time < 24 * 3600) {
-                value = Math.floor(time / 3600).toString();
-                unit = 'HOURS';
-            }
-            else {
-                value = '';
-                unit = '';
-            }
-        }
-        setTransactionEstimatedTime(value);
-        setTransactionEstimatedTimeUnit(unit);
     };
 
     const handleChangeTab = (t: Tabs) => {
@@ -231,12 +207,12 @@ function LandingContainer({
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
-                    <img src={gifLoading} className='pending-transaction-image' />
+                    <img src={pngWait} className='pending-transaction-image' />
                     <p className='pending-transaction-text'>
                         YOUR TRANSACTION IS BEING CONFIRMED
                         <br />
-                        ESTIMATED DURATION: 
-                        <span style={{ color: '#FFDF00' }}> {transactionEstimatedTime} {transactionEstimatedTimeUnit}</span>
+                        ESTIMATED DURATION:{' '}
+                        <span style={{ color: '#FFDF00' }}>2 MINS</span>
                     </p>
                 </div>
             )}
@@ -259,8 +235,8 @@ function LandingContainer({
                             navigateToBasket: boolean,
                         ) => handleAddBasket(data, navigateToBasket)}
                         onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean, time?: number) =>
-                            handleChangePendingStatus(status, time)
+                        onStatus={(status: boolean) =>
+                            handleChangePendingStatus(status)
                         }
                         handleChangeTab={(t: Tabs) => handleChangeTab(t)}
                     />
@@ -299,8 +275,8 @@ function LandingContainer({
                             handleChangeTab('home');
                         }}
                         onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean, time?: number) =>
-                            handleChangePendingStatus(status, time)
+                        onStatus={(status: boolean) =>
+                            handleChangePendingStatus(status)
                         }
                     />
                 )}
