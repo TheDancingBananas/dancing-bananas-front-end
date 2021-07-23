@@ -8,7 +8,7 @@ import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
 import BananaHelp from 'components/banana-help/banana-help';
-
+import { getRandomPoolID } from 'services/api';
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
@@ -31,7 +31,7 @@ import LevelUpContainer from './tabs/level-up-container';
 
 import pngWait from 'styles/images/wait.png';
 import gifLoading from 'styles/images/loading-animation.gif';
-import { storage } from 'util/localStorage';
+import { SKIP_DURATION, storage } from 'util/localStorage';
 
 import { V3PositionData } from '@sommelier/shared-types/src/api';
 
@@ -46,7 +46,7 @@ function LandingContainer({
     const currentLevel = storage.getLevel();
 
     const [tab, setTab] = useState<Tabs>('home');
-    const [currentPoolId, setCurrentPoolId] = useState<string>('');
+
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
@@ -60,49 +60,53 @@ function LandingContainer({
     let is_visible = true;
     // const positionList = usePositionManagers();
 
-    const getRandomPool = async (oldPool: string | null) => {
-        const shouldRefresh = storage.shouldRefreshPool();
+    const savedPoolId = storage.getCurrentPoolId();
 
-        const networkName = 'mainnet';
-        // const networkName = 'rinkeby';
-
-        if (currentPoolId === '' || shouldRefresh) {
-            console.log('old pool id', oldPool);
-            const response = await fetch(
-                `/api/v1/${networkName}/randomPool?count=${50}&old=${
-                    oldPool ? oldPool : '000'
-                }`,
-            );
-            if (!response.ok) throw new Error(`Failed to fetch top pools`);
-
-            const data = await (response.json() as Promise<string>);
-            // const data = '0x6c6bc977e13df9b0de53b251522280bb72383700';
-            // 0x7858e59e0c01ea06df3af3d20ac7b0003275d4bf usdc usdt
-            // 0x69d91b94f0aaf8e8a2586909fa77a5c2c89818d5 hex usdc
-            console.log('new Id', data);
-            setCurrentPoolId(data);
-            storage.setCurrentPoolId(data);
-        }
-    };
+    const [currentPoolId, setCurrentPoolId] = useState<string>(
+        savedPoolId ? savedPoolId : '0x',
+    );
+    const [lastPoolFetchTime, setLastPoolFetchTime] = useState<number>(
+        storage.getLastSkipTime(),
+    );
+    const [shouldRefreshPool, setShouldRefreshPool] = useState<boolean>(false);
 
     useEffect(() => {
-        const oldPooldId = storage.getCurrentPoolId();
-        console.log('oldPoolId', oldPooldId);
+        let refresh = false;
+        if (currentPoolId === '0x') {
+            refresh = true;
+        }
 
-        getRandomPool(oldPooldId);
-    }, [currentPoolId]);
+        if (lastPoolFetchTime !== 0) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            if (currentTime - lastPoolFetchTime > SKIP_DURATION) {
+                setLastPoolFetchTime(0);
+                storage.setLastSkipTime(0);
+                refresh = true;
+            }
+        }
+
+        setShouldRefreshPool(refresh);
+    }, [currentPoolId, lastPoolFetchTime]);
+
+    useEffect(() => {
+        const getPoolAsync = async (oldPool: string) => {
+            const poolId = await getRandomPoolID(oldPool);
+            storage.setCurrentPoolId(poolId);
+            setCurrentPoolId(poolId);
+        };
+        if (shouldRefreshPool) {
+            setShouldRefreshPool(false);
+            getPoolAsync(currentPoolId);
+        }
+    }, [shouldRefreshPool, currentPoolId]);
+    // const positionList = usePositionManagers();
 
     const handleRefreshPool = () => {
         console.log('handle refresh');
-        setCurrentPoolId('');
+        storage.setLastSkipTime(0);
+        // setCurrentPoolId('');
+        setShouldRefreshPool(true);
     };
-
-    useEffect(() => {
-        const oldPooldId = storage.getCurrentPoolId();
-        console.log('oldPoolId', oldPooldId);
-
-        getRandomPool(oldPooldId);
-    }, [currentPoolId]);
 
     const showWalletModal = () => setShowConnectWallet(true);
 
