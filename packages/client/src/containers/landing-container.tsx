@@ -8,6 +8,7 @@ import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
 import BananaHelp from 'components/banana-help/banana-help';
+
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
@@ -29,6 +30,7 @@ import PositionDetailContainer from './tabs/position-detail-container';
 import LevelUpContainer from './tabs/level-up-container';
 
 import pngWait from 'styles/images/wait.png';
+import gifLoading from 'styles/images/loading-animation.gif';
 import { storage } from 'util/localStorage';
 
 import { V3PositionData } from '@sommelier/shared-types/src/api';
@@ -48,6 +50,8 @@ function LandingContainer({
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
+    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState('');
+    const [transactionEstimatedTimeUnit, setTransactionEstimatedTimeUnit] = useState('');
 
     const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
         storage.getTask(),
@@ -158,8 +162,30 @@ function LandingContainer({
         setBasketData([]);
     };
 
-    const handleChangePendingStatus = (status: boolean) => {
+    const handleChangePendingStatus = (status: boolean, time?: number) => {
         setPendingTransaction(status);
+
+        let value = '', unit = '';
+        if (time) {
+            if (time > 0 && time < 60) {
+                value = Math.floor(time).toString();
+                unit = 'SECS';
+            }
+            else if (time < 3600) {
+                value = Math.floor(time / 60).toString();
+                unit = 'MINS';
+            }
+            else if (time < 24 * 3600) {
+                value = Math.floor(time / 3600).toString();
+                unit = 'HOURS';
+            }
+            else {
+                value = '';
+                unit = '';
+            }
+        }
+        setTransactionEstimatedTime(value);
+        setTransactionEstimatedTimeUnit(unit);
     };
 
     const handleChangeTab = (t: Tabs) => {
@@ -201,12 +227,12 @@ function LandingContainer({
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
-                    <img src={pngWait} className='pending-transaction-image' />
+                    <img src={gifLoading} className='pending-transaction-image' />
                     <p className='pending-transaction-text'>
                         YOUR TRANSACTION IS BEING CONFIRMED
                         <br />
-                        ESTIMATED DURATION:{' '}
-                        <span style={{ color: '#FFDF00' }}>2 MINS</span>
+                        ESTIMATED DURATION: 
+                        <span style={{ color: '#FFDF00' }}> {transactionEstimatedTime} {transactionEstimatedTimeUnit}</span>
                     </p>
                 </div>
             )}
@@ -229,8 +255,8 @@ function LandingContainer({
                             navigateToBasket: boolean,
                         ) => handleAddBasket(data, navigateToBasket)}
                         onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean) =>
-                            handleChangePendingStatus(status)
+                        onStatus={(status: boolean, time?: number) =>
+                            handleChangePendingStatus(status, time)
                         }
                         handleChangeTab={(t: Tabs) => handleChangeTab(t)}
                     />
@@ -269,8 +295,8 @@ function LandingContainer({
                             handleChangeTab('home');
                         }}
                         onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean) =>
-                            handleChangePendingStatus(status)
+                        onStatus={(status: boolean, time?: number) =>
+                            handleChangePendingStatus(status, time)
                         }
                     />
                 )}
