@@ -37,7 +37,6 @@ const config: AppConfig = {
         },
     },
     ethAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-    etherscanApiKey: process.env.REACT_APP_ETHERSCAN_APIKEY || '',
 };
 
 export default config;
