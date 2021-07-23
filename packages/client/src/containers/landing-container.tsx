@@ -53,6 +53,7 @@ function LandingContainer({
         storage.getTask(),
     );
 
+    let is_visible = true;
     // const positionList = usePositionManagers();
 
     const getRandomPool = async (oldPool: string | null) => {
@@ -162,6 +163,20 @@ function LandingContainer({
     };
 
     const handleChangeTab = (t: Tabs) => {
+        if (t !== 'home') {
+            const x = document.getElementById('bananaDiv');
+            if (!(x == null)) {
+                is_visible = x.style.display === 'block';
+
+                x.style.display = 'none';
+            }
+        } else {
+            const x = document.getElementById('bananaDiv');
+            if (!(x == null)) {
+                x.style.display = 'block';
+            }
+        }
+
         if (currentLevel === '1' && basketData.length > 0) {
             if (t === 'home') {
                 setTab('cart');
