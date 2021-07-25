@@ -35,6 +35,9 @@ import { SKIP_DURATION, storage } from 'util/localStorage';
 
 import { V3PositionData } from '@sommelier/shared-types/src/api';
 
+import gameData from 'constants/gameData.json';
+import { Level, LevelTask } from 'types/game';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -44,6 +47,8 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
+    const gameLevels: Level[] = gameData.game;
+    const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];
 
     const [tab, setTab] = useState<Tabs>('home');
 
@@ -67,6 +72,15 @@ function LandingContainer({
         storage.getLastSkipTime(),
     );
     const [shouldRefreshPool, setShouldRefreshPool] = useState<boolean>(false);
+
+    const [poolIndex, setPoolIndex] = useState<number>(0);
+    const [poolCount, setPoolCount] = useState<number>(
+        Number(currentLevelData.poolCount),
+    );
+
+    const handleChangePoolIndex = (index: number) => {
+        setPoolIndex(index % poolCount);
+    };
 
     useEffect(() => {
         let refresh = false;
@@ -185,12 +199,21 @@ function LandingContainer({
 
         if (currentLevel === '1' && basketData.length > 0) {
             if (t === 'home') {
-                setTab('cart');
+                setPoolIndex(poolCount - 1);
+                setTab(t);
                 return;
             }
         }
+
+        setPoolIndex(0);
         setTab(t);
     };
+
+    const handleEditCart = (poolIndex: number) => {
+        setPoolIndex(poolIndex % poolCount);
+        setTab('home');
+    };
+
     // useEffect(() => {
     //     console.log(basketData);
     // }, [basketData]);
@@ -228,6 +251,8 @@ function LandingContainer({
                         gasPrices={gasPrices}
                         poolId={currentPoolId}
                         basket={basketData}
+                        poolIndex={poolIndex}
+                        poolCount={poolCount}
                         onRefreshPool={() => handleRefreshPool()}
                         handleWalletConnect={() => showWalletModal()}
                         onAddBasket={(
@@ -239,6 +264,9 @@ function LandingContainer({
                             handleChangePendingStatus(status)
                         }
                         handleChangeTab={(t: Tabs) => handleChangeTab(t)}
+                        handleChangePoolIndex={(i: number) =>
+                            handleChangePoolIndex(i)
+                        }
                     />
                 )}
                 {tab === 'task' && (
@@ -278,6 +306,7 @@ function LandingContainer({
                         onStatus={(status: boolean) =>
                             handleChangePendingStatus(status)
                         }
+                        onEdit={(i: number) => handleEditCart(i)}
                     />
                 )}
                 {tab === 'positionManager' && (
