@@ -61,6 +61,8 @@ import pngBanana2 from 'styles/images/banana-2.png';
 
 import AlertModal from './alert-modal';
 
+import { getEstimateTime } from 'services/api-etherscan';
+
 type Props = {
     balances: WalletBalances;
     pool: PoolOverview | null;
@@ -76,7 +78,7 @@ type Props = {
     onLeft: () => void;
     onRight: () => void;
     onAddSuccess: () => void;
-    onStatus: (status: boolean) => void;
+    onStatus: (status: boolean, time?: number) => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -828,7 +830,6 @@ export const AddLiquidityV3 = ({
                 getTokensWithAmounts() as Record<string, TokenInputAmount>,
             );
 
-            onStatus(true);
 
             toastWarn(`Confirming tx ${compactHash(hash)}`);
             setPendingTx &&
@@ -840,6 +841,12 @@ export const AddLiquidityV3 = ({
                         } as PendingTx),
                 );
             if (provider) {
+                const baseGasPrice = ethers.utils
+                    .parseUnits(currentGasPrice.toString(), 9)
+                    .toString();
+                const estimateTime = await getEstimateTime(provider, hash, baseGasPrice);
+                onStatus(true, estimateTime);
+
                 const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(
                     hash,
                 );
@@ -1070,7 +1077,6 @@ export const AddLiquidityV3 = ({
             // setApprovalState('pending');
             if (approveHash) {
                 // toastWarn(`Approving tx ${compactHash(approveHash)}`);
-                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1079,6 +1085,10 @@ export const AddLiquidityV3 = ({
                                 confirm: [...state.confirm],
                             } as PendingTx),
                     );
+
+                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                onStatus(true, estimateTime);
+
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
                 onStatus(false);
@@ -1337,7 +1347,6 @@ export const AddLiquidityV3 = ({
             // setApprovalState('pending');
             if (approveHash) {
                 // toastWarn(`Approving tx ${compactHash(approveHash)}`);
-                onStatus(true);
                 setPendingTx &&
                     setPendingTx(
                         (state: PendingTx): PendingTx =>
@@ -1346,6 +1355,10 @@ export const AddLiquidityV3 = ({
                                 confirm: [...state.confirm],
                             } as PendingTx),
                     );
+
+                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                onStatus(true, estimateTime);
+
                 await provider.waitForTransaction(approveHash);
                 setPendingApproval(false);
                 onStatus(false);
