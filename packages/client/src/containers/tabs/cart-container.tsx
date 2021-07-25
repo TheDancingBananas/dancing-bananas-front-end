@@ -50,12 +50,14 @@ const CartContainer = ({
     onBack,
     onAddSuccess,
     onStatus,
+    onEdit,
 }: {
     gasPrices: EthGasPrices | null;
     cartData: LiquidityBasketData[];
     onBack: () => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
+    onEdit: (i: number) => void;
 }): JSX.Element | null => {
     // console.log('cart', cartData);
     const [viewId, setViewId] = useState<string>('');
@@ -722,7 +724,7 @@ const CartContainer = ({
                                             </div>
                                             <div className='row-detail-right'>
                                                 <button
-                                                    onClick={(e) => onBack()}
+                                                    onClick={(e) => onEdit(0)}
                                                 >
                                                     EDIT
                                                 </button>

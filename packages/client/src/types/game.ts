@@ -5,6 +5,7 @@ export interface LevelTask {
 
 export interface Level {
     level: string;
+    poolCount: string;
     description: string;
     tasks: LevelTask[];
     rewards: string[];

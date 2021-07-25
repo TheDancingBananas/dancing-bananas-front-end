@@ -153,27 +153,31 @@ export const LiquidityContainer = ({
     gasPrices,
     poolId,
     basket,
+    poolIndex,
+    poolCount,
     onRefreshPool,
     handleWalletConnect,
     onAddBasket,
     onAddSuccess,
     onStatus,
     handleChangeTab,
+    handleChangePoolIndex,
 }: {
     gasPrices: EthGasPrices | null;
     poolId: string;
     basket: LiquidityBasketData[];
+    poolIndex: number;
+    poolCount: number;
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
     onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean) => void;
     handleChangeTab: (t: Tabs) => void;
+    handleChangePoolIndex: (i: number) => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
-
-    const [currentItem, setCurrentItem] = useState<number>(0);
 
     const { data: randomPool } = usePoolOverview(wallet.network, poolId);
 
@@ -189,34 +193,35 @@ export const LiquidityContainer = ({
     const [view, setView] = useState('pairs');
 
     const handleSkip = (status: number) => {
-        if (currentLevel === '1' && basket.length > 0) {
-            handleChangeTab('cart');
-            return;
-        }
-
         if (!wallet.account) {
             handleWalletConnect();
             return;
         }
 
-        if (status === 1) {
-            setCurrentItem(1);
+        if (status === poolCount) {
+            if (currentLevel === '1' && basket.length > 0) {
+                handleChangeTab('cart');
+                return;
+            } else {
+                // const lastPoolFetchTime = storage.getLastSkipTime();
+                // if (lastPoolFetchTime === 0) {
+                //     storage.setLastSkipTime(Math.floor(Date.now() / 1000));
+                // }
+
+                const skipStatus = storage.getSkip();
+
+                if (skipStatus === 'off') {
+                    storage.setSkipStatus('on');
+                    storage.setLastSkipTime(Math.floor(Date.now() / 1000));
+                }
+
+                setView('wait');
+            }
+
             return;
         }
 
-        // const lastPoolFetchTime = storage.getLastSkipTime();
-        // if (lastPoolFetchTime === 0) {
-        //     storage.setLastSkipTime(Math.floor(Date.now() / 1000));
-        // }
-
-        const skipStatus = storage.getSkip();
-
-        if (skipStatus === 'off') {
-            storage.setSkipStatus('on');
-            storage.setLastSkipTime(Math.floor(Date.now() / 1000));
-        }
-
-        setView('wait');
+        handleChangePoolIndex(status);
     };
 
     const handleAddBasket = (
@@ -247,16 +252,16 @@ export const LiquidityContainer = ({
             storage.setCurrentPoolId('');
             onRefreshPool();
             setView('pairs');
-            setCurrentItem(0);
+            handleChangePoolIndex(0);
         }
     };
 
     const handleClickLeft = () => {
-        setCurrentItem(0);
+        handleChangePoolIndex(poolIndex - 1);
     };
 
     const handleClickRight = () => {
-        setCurrentItem(1);
+        handleChangePoolIndex(poolIndex - 1);
     };
 
     return (
@@ -267,7 +272,7 @@ export const LiquidityContainer = ({
                         showArrows={false}
                         showIndicators={false}
                         showStatus={false}
-                        selectedItem={currentItem}
+                        selectedItem={poolIndex}
                         swipeable={false}
                     >
                         <div className='liquidity-carousel-item'>
