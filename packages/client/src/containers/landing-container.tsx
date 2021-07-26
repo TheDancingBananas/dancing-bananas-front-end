@@ -47,12 +47,16 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
+    const currentBasketData = storage.getBasketData();
+
     const gameLevels: Level[] = gameData.game;
     const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];
 
     const [tab, setTab] = useState<Tabs>('home');
 
-    const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
+    const [basketData, setBasketData] = useState<LiquidityBasketData[]>(
+        currentBasketData,
+    );
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
 
@@ -164,6 +168,8 @@ function LandingContainer({
                 ...data,
             };
         }
+
+        storage.setBasketData([...basketData]);
 
         setBasketData([...basketData]);
         if (navigateToBasket) {
