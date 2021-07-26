@@ -2,6 +2,7 @@
     "game": [
         {
             "level": "1",
+            "poolCount": "2",
             "description": "CURIOUS MONKEY",
             "tasks": [
                 {
@@ -13,6 +14,7 @@
         },
         {
             "level": "2",
+            "poolCount": "2",
             "description": "CURIOUS MONKEY",
             "tasks": [
                 {

@@ -35,6 +35,9 @@ import { SKIP_DURATION, storage } from 'util/localStorage';
 
 import { V3PositionData } from '@sommelier/shared-types/src/api';
 
+import gameData from 'constants/gameData.json';
+import { Level, LevelTask } from 'types/game';
+
 function LandingContainer({
     setShowConnectWallet,
     gasPrices,
@@ -44,10 +47,16 @@ function LandingContainer({
 }): JSX.Element {
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
+    const currentBasketData = storage.getBasketData();
+
+    const gameLevels: Level[] = gameData.game;
+    const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];
 
     const [tab, setTab] = useState<Tabs>('home');
 
-    const [basketData, setBasketData] = useState<LiquidityBasketData[]>([]);
+    const [basketData, setBasketData] = useState<LiquidityBasketData[]>(
+        currentBasketData,
+    );
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
     const [transactionEstimatedTime, setTransactionEstimatedTime] = useState('');
@@ -69,6 +78,15 @@ function LandingContainer({
         storage.getLastSkipTime(),
     );
     const [shouldRefreshPool, setShouldRefreshPool] = useState<boolean>(false);
+
+    const [poolIndex, setPoolIndex] = useState<number>(0);
+    const [poolCount, setPoolCount] = useState<number>(
+        Number(currentLevelData.poolCount),
+    );
+
+    const handleChangePoolIndex = (index: number) => {
+        setPoolIndex(index % poolCount);
+    };
 
     useEffect(() => {
         let refresh = false;
@@ -153,6 +171,8 @@ function LandingContainer({
             };
         }
 
+        storage.setBasketData([...basketData]);
+
         setBasketData([...basketData]);
         if (navigateToBasket) {
             setTab('cart');
@@ -209,12 +229,21 @@ function LandingContainer({
 
         if (currentLevel === '1' && basketData.length > 0) {
             if (t === 'home') {
-                setTab('cart');
+                setPoolIndex(poolCount - 1);
+                setTab(t);
                 return;
             }
         }
+
+        setPoolIndex(0);
         setTab(t);
     };
+
+    const handleEditCart = (poolIndex: number) => {
+        setPoolIndex(poolIndex % poolCount);
+        setTab('home');
+    };
+
     // useEffect(() => {
     //     console.log(basketData);
     // }, [basketData]);
@@ -252,6 +281,8 @@ function LandingContainer({
                         gasPrices={gasPrices}
                         poolId={currentPoolId}
                         basket={basketData}
+                        poolIndex={poolIndex}
+                        poolCount={poolCount}
                         onRefreshPool={() => handleRefreshPool()}
                         handleWalletConnect={() => showWalletModal()}
                         onAddBasket={(
@@ -263,6 +294,9 @@ function LandingContainer({
                             handleChangePendingStatus(status, time)
                         }
                         handleChangeTab={(t: Tabs) => handleChangeTab(t)}
+                        handleChangePoolIndex={(i: number) =>
+                            handleChangePoolIndex(i)
+                        }
                     />
                 )}
                 {tab === 'task' && (
@@ -302,6 +336,7 @@ function LandingContainer({
                         onStatus={(status: boolean, time?: number) =>
                             handleChangePendingStatus(status, time)
                         }
+                        onEdit={(i: number) => handleEditCart(i)}
                     />
                 )}
                 {tab === 'positionManager' && (
