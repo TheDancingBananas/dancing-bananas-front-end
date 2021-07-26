@@ -59,8 +59,13 @@ function LandingContainer({
     );
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState('');
-    const [transactionEstimatedTimeUnit, setTransactionEstimatedTimeUnit] = useState('');
+    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState(
+        '',
+    );
+    const [
+        transactionEstimatedTimeUnit,
+        setTransactionEstimatedTimeUnit,
+    ] = useState('');
 
     const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
         storage.getTask(),
@@ -189,21 +194,19 @@ function LandingContainer({
     const handleChangePendingStatus = (status: boolean, time?: number) => {
         setPendingTransaction(status);
 
-        let value = '', unit = '';
+        let value = '',
+            unit = '';
         if (time) {
             if (time > 0 && time < 60) {
                 value = Math.floor(time).toString();
                 unit = 'SECS';
-            }
-            else if (time < 3600) {
+            } else if (time < 3600) {
                 value = Math.floor(time / 60).toString();
                 unit = 'MINS';
-            }
-            else if (time < 24 * 3600) {
+            } else if (time < 24 * 3600) {
                 value = Math.floor(time / 3600).toString();
                 unit = 'HOURS';
-            }
-            else {
+            } else {
                 value = '';
                 unit = '';
             }
@@ -260,12 +263,19 @@ function LandingContainer({
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
-                    <img src={gifLoading} className='pending-transaction-image' />
+                    <img
+                        src={gifLoading}
+                        className='pending-transaction-image'
+                    />
                     <p className='pending-transaction-text'>
                         YOUR TRANSACTION IS BEING CONFIRMED
                         <br />
-                        ESTIMATED DURATION: 
-                        <span style={{ color: '#FFDF00' }}> {transactionEstimatedTime} {transactionEstimatedTimeUnit}</span>
+                        ESTIMATED DURATION:
+                        <span style={{ color: '#FFDF00' }}>
+                            {' '}
+                            {transactionEstimatedTime}{' '}
+                            {transactionEstimatedTimeUnit}
+                        </span>
                     </p>
                 </div>
             )}
@@ -276,29 +286,32 @@ function LandingContainer({
                 justifyContent='space-around'
                 className='main-content-container'
             >
-                {tab === 'home' && currentPoolId !== '' && (
-                    <LiquidityContainer
-                        gasPrices={gasPrices}
-                        poolId={currentPoolId}
-                        basket={basketData}
-                        poolIndex={poolIndex}
-                        poolCount={poolCount}
-                        onRefreshPool={() => handleRefreshPool()}
-                        handleWalletConnect={() => showWalletModal()}
-                        onAddBasket={(
-                            data: LiquidityBasketData,
-                            navigateToBasket: boolean,
-                        ) => handleAddBasket(data, navigateToBasket)}
-                        onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean, time?: number) =>
-                            handleChangePendingStatus(status, time)
-                        }
-                        handleChangeTab={(t: Tabs) => handleChangeTab(t)}
-                        handleChangePoolIndex={(i: number) =>
-                            handleChangePoolIndex(i)
-                        }
-                    />
-                )}
+                {tab === 'home' &&
+                    currentPoolId !== '' &&
+                    gasPrices &&
+                    'fast' in gasPrices && (
+                        <LiquidityContainer
+                            gasPrices={gasPrices}
+                            poolId={currentPoolId}
+                            basket={basketData}
+                            poolIndex={poolIndex}
+                            poolCount={poolCount}
+                            onRefreshPool={() => handleRefreshPool()}
+                            handleWalletConnect={() => showWalletModal()}
+                            onAddBasket={(
+                                data: LiquidityBasketData,
+                                navigateToBasket: boolean,
+                            ) => handleAddBasket(data, navigateToBasket)}
+                            onAddSuccess={() => handleTransactionSuccess()}
+                            onStatus={(status: boolean, time?: number) =>
+                                handleChangePendingStatus(status, time)
+                            }
+                            handleChangeTab={(t: Tabs) => handleChangeTab(t)}
+                            handleChangePoolIndex={(i: number) =>
+                                handleChangePoolIndex(i)
+                            }
+                        />
+                    )}
                 {tab === 'task' && (
                     <TaskContainer
                         onBack={() => {
