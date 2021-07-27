@@ -23,7 +23,7 @@ bot.on('message', (msg) => {
     let user = get_user(msg.chat.id);
 
     if(user == -1) {
-        bot.sendMessage(msg.chat.id,"Hi I will let you know when you have bananas ready. Could you send me your hash so I can let you know when you have ");
+        bot.sendMessage(msg.chat.id,"Hi I will let you know when you have bananas ready. Could you send me your hash so I can let you know when you have bananas ready! 🍌 🍌 🍌");
         //
         let new_user = {
             id: msg.chat.id,
