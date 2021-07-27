@@ -54,7 +54,7 @@ type LiquidityContext = {
 const initialContext = {
     poolId: null,
     selectedGasPrice: GasPriceSelection.Standard,
-    slippageTolerance: 3.0,
+    slippageTolerance: 2.0,
 };
 export const LiquidityContext = createContext<Partial<LiquidityContext>>(
     initialContext,

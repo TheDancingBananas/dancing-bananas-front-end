@@ -195,7 +195,13 @@ const CartContainer = ({
                 const mintAmount0 = data.token0Amount;
                 const mintAmount1 = data.token1Amount;
 
-                const minLiquidity = '1';
+                const liquidity = new BigNumber(
+                    data.bounds.position.liquidity.toString(),
+                )
+                    .exponentiatedBy(2)
+                    .div(2)
+                    .sqrt();
+                const minLiquidity = liquidity.times(0.98).toFixed(0);
 
                 const sqrtPriceAX96 = TickMath.getSqrtRatioAtTick(
                     data.bounds.position.tickLower,
@@ -375,14 +381,21 @@ const CartContainer = ({
                     )
                     .toString();
 
+                const baseAmount0Min = new BigNumber(mintAmount0)
+                    .times(0.98)
+                    .toFixed(0);
+                const baseAmount1Min = new BigNumber(mintAmount1)
+                    .times(0.98)
+                    .toFixed(0);
+
                 const mintParams = [
                     data.token0Address, // token0
                     data.token1Address, // token1
                     data.feeTier, // feeTier
                     data.bounds.position.tickLower, // tickLower
                     data.bounds.position.tickUpper, // tickUpper
-                    mintAmount0, // amount0Desired
-                    mintAmount1, // amount1Desired
+                    baseAmount0Min, // amount0Desired
+                    baseAmount1Min, // amount1Desired
                     0,
                     0,
                     wallet.account, // recipient
