@@ -68,7 +68,13 @@ const WaitContainer = ({
                     <button className='wait-speed-up'>
                         <span>SPEED UP!</span> <img src={pngTimer} />
                     </button>
-                    <button className='wait-notify-me'>
+                    <button
+                        className='wait-notify-me'
+                        onClick={(e) => {
+                            const url = 'https://t.me/DancingBananasBot';
+                            window.open(url, '_blank');
+                        }}
+                    >
                         <span>
                             NOTIFY ME WHEN <br /> THE WAIT IS OVER
                         </span>{' '}
