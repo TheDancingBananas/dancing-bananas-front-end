@@ -18,19 +18,19 @@ import {
     GetPoolOverviewResult,
     GetTopPoolsResult,
 } from '@sommelier/shared-types/src/api'; // how do we export at root level?
-import { memoize } from 'util/memoizer-redis';
-import { hourMs, secondMs } from 'util/date';
+// import { memoize } from 'util/memoizer-redis';
+// import { hourMs, secondMs } from 'util/date';
 // import shortLinks from 'services/short-links';
 import catchAsyncRoute from 'api/util/catch-async-route';
 import config from '@config';
-import validateEthAddress from 'api/util/validate-eth-address';
+// import validateEthAddress from 'api/util/validate-eth-address';
 import {
     poolIdParamsSchema,
     poolIdValidator,
     networkSchema,
     networkValidator,
 } from 'api/util/validators';
-import { getRandomArbitrary } from 'util/math';
+import { getUser, getDefaultUser, saveUser } from 'api/util/user-redis';
 
 // poolToPair(pool: Pool): IUniswapPair {
 // const totalSupply = '0'; // TODO
@@ -62,9 +62,8 @@ type GetTopPoolsQuery = {
 };
 
 type GetRandomPoolsQuery = {
-    count: number;
     sort: 'volumeUSD' | 'liquidity';
-    old: string | '';
+    wallet: string | '';
 };
 
 const getTopPoolsValidator = celebrate({
@@ -82,9 +81,8 @@ const getRandomPoolsValidator = celebrate({
     [Segments.QUERY]: Joi.object().keys({
         // If you change the default values for count or sort, you'll ned to update
         // the cache warming work in packages/workers
-        count: Joi.number().min(1).max(1000).default(100),
         sort: Joi.string().valid('volumeUSD', 'liquidity').default('volumeUSD'),
-        old: Joi.string().default(''),
+        wallet: Joi.string().default(''),
     }),
     [Segments.PARAMS]: networkSchema,
 });
@@ -103,6 +101,32 @@ async function getTopPools(
     return fetcher.getTopPools(count, sort);
 }
 
+async function getCurrentPool(
+    req: Request<Path, unknown, unknown, GetRandomPoolsQuery>,
+): Promise<string> {
+    const { wallet }: GetRandomPoolsQuery = <any>req.query;
+
+    let userInfo = await getUser(wallet);
+
+    const defaultPoolId = '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'; // usdc/weth
+
+    if (wallet !== '0x' && userInfo === null) {
+        userInfo = getDefaultUser();
+        userInfo.address = wallet;
+        userInfo.lastPoolIds = [defaultPoolId];
+
+        await saveUser(wallet, userInfo);
+    }
+
+    if (userInfo === null) {
+        return defaultPoolId;
+    }
+
+    return userInfo.lastPoolIds.length > 0
+        ? userInfo.lastPoolIds[0]
+        : defaultPoolId;
+}
+
 async function getRandomPool(
     req: Request<Path, unknown, unknown, GetRandomPoolsQuery>,
 ): Promise<string> {
@@ -113,31 +137,41 @@ async function getRandomPool(
     // Request<any, any, any, ParsedQs> query must be a ParsedQs
     // We should add a union type for all validated queries
     // or find a better TS integration with Celebrate
-    const { count, sort, old }: GetRandomPoolsQuery = <any>req.query;
-    // console.log('old', old);
+    const { sort, wallet }: GetRandomPoolsQuery = <any>req.query;
 
-    const data = await fetcher.getTopPools(count, sort);
+    let userInfo = await getUser(wallet);
+
+    let lastPoolId = '';
+    if (userInfo !== null) {
+        lastPoolId =
+            userInfo.lastPoolIds.length > 0 ? userInfo.lastPoolIds[0] : '';
+    }
+
+    // console.log('lastPoolId', lastPoolId);
+
+    const data = await fetcher.getTopPools(50, sort);
     const findIndex = data.findIndex(
-        (d) => old && d.id.toString() === old.toString(),
+        (d) => lastPoolId !== '' && d.id.toString() === lastPoolId.toString(),
     );
 
     const nextIndex = (findIndex + 1) % data.length;
     const nextPool = data[nextIndex];
 
+    if (userInfo) {
+        userInfo.lastPoolIds = [nextPool.id];
+    } else {
+        if (wallet !== '0x') {
+            userInfo = getDefaultUser();
+            userInfo.address = wallet;
+            userInfo.lastPoolIds = [nextPool.id];
+        }
+    }
+
+    if (wallet && wallet !== '' && wallet !== '0x' && userInfo !== null) {
+        await saveUser(wallet, userInfo);
+    }
+
     return nextPool.id;
-    // if (findIndex >= 0) {
-    //     data.splice(findIndex, 1);
-    // }
-
-    // console.log("############################");
-    // console.log(data);
-
-    // const randomIndex = getRandomArbitrary(0, data.length - 1);
-    // const randomPool = data[randomIndex];
-    // console.log('*************************');
-    // console.log(randomPool.id);
-    // console.log('*************************');
-    // return randomPool.id;
 }
 
 // GET /pools/:id
@@ -234,6 +268,13 @@ route.get(
     getRandomPoolsValidator,
     // sMaxAge != memoizer ttl here because we have the cache warmer, we want the cdn to revalidate more often
     catchAsyncRoute(getRandomPool, poolConfig),
+);
+
+route.get(
+    '/:network/currentPool',
+    getRandomPoolsValidator,
+    // sMaxAge != memoizer ttl here because we have the cache warmer, we want the cdn to revalidate more often
+    catchAsyncRoute(getCurrentPool, poolConfig),
 );
 
 route.get(

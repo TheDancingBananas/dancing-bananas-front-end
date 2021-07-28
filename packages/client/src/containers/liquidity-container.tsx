@@ -12,11 +12,7 @@ import { AddLiquidityV3 } from 'components/add-liquidity/add-liquidity-v3';
 import { Helmet } from 'react-helmet';
 import { useLocation, useParams } from 'react-router-dom';
 import { useBalance } from 'hooks/use-balance';
-import {
-    usePoolOverview,
-    useTopPools,
-    useRandomPool,
-} from 'hooks/data-fetchers';
+import { usePoolOverview, useTopPools } from 'hooks/data-fetchers';
 import { useWallet } from 'hooks/use-wallet';
 import { debug } from 'util/debug';
 import { PoolOverview } from 'hooks/data-fetchers';
@@ -249,7 +245,7 @@ export const LiquidityContainer = ({
         if (storage.getSkip() === 'on') {
             console.log('skip finish');
             storage.setSkipStatus('off');
-            storage.setCurrentPoolId('');
+            // storage.setCurrentPoolId('');
             onRefreshPool();
             setView('pairs');
             handleChangePoolIndex(0);
@@ -293,9 +289,10 @@ export const LiquidityContainer = ({
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                     onAddSuccess={() => onAddSuccess()}
-                                    onStatus={(status: boolean, time?: number) =>
-                                        onStatus(status, time)
-                                    }
+                                    onStatus={(
+                                        status: boolean,
+                                        time?: number,
+                                    ) => onStatus(status, time)}
                                 />
                             </Box>
                         </div>
@@ -317,9 +314,10 @@ export const LiquidityContainer = ({
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                     onAddSuccess={() => onAddSuccess()}
-                                    onStatus={(status: boolean, time?: number) =>
-                                        onStatus(status, time)
-                                    }
+                                    onStatus={(
+                                        status: boolean,
+                                        time?: number,
+                                    ) => onStatus(status, time)}
                                 />
                             </Box>
                         </div>

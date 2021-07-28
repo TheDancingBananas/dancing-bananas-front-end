@@ -8,7 +8,7 @@ import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
 import BananaHelp from 'components/banana-help/banana-help';
-import { getRandomPoolID } from 'services/api';
+import { getRandomPoolID, getCurrentPoolID } from 'services/api';
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
@@ -46,6 +46,7 @@ function LandingContainer({
     gasPrices: EthGasPrices | null;
 }): JSX.Element {
     const { wallet } = useWallet();
+
     const currentLevel = storage.getLevel();
     const currentBasketData = storage.getBasketData();
 
@@ -59,8 +60,13 @@ function LandingContainer({
     );
 
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState('');
-    const [transactionEstimatedTimeUnit, setTransactionEstimatedTimeUnit] = useState('');
+    const [transactionEstimatedTime, setTransactionEstimatedTime] = useState(
+        '',
+    );
+    const [
+        transactionEstimatedTimeUnit,
+        setTransactionEstimatedTimeUnit,
+    ] = useState('');
 
     const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
         storage.getTask(),
@@ -69,11 +75,7 @@ function LandingContainer({
     let is_visible = true;
     // const positionList = usePositionManagers();
 
-    const savedPoolId = storage.getCurrentPoolId();
-
-    const [currentPoolId, setCurrentPoolId] = useState<string>(
-        savedPoolId ? savedPoolId : '0x',
-    );
+    const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [lastPoolFetchTime, setLastPoolFetchTime] = useState<number>(
         storage.getLastSkipTime(),
     );
@@ -90,9 +92,6 @@ function LandingContainer({
 
     useEffect(() => {
         let refresh = false;
-        if (currentPoolId === '0x') {
-            refresh = true;
-        }
 
         if (lastPoolFetchTime !== 0) {
             const currentTime = Math.floor(Date.now() / 1000);
@@ -104,19 +103,27 @@ function LandingContainer({
         }
 
         setShouldRefreshPool(refresh);
-    }, [currentPoolId, lastPoolFetchTime]);
+    }, [lastPoolFetchTime]);
 
     useEffect(() => {
-        const getPoolAsync = async (oldPool: string) => {
-            const poolId = await getRandomPoolID(oldPool);
-            storage.setCurrentPoolId(poolId);
+        const getCurrentPoolAsync = async (address: string) => {
+            const poolId = await getCurrentPoolID(address);
             setCurrentPoolId(poolId);
         };
-        if (shouldRefreshPool) {
+        const address = wallet.account ? wallet.account : '0x';
+        getCurrentPoolAsync(address);
+    }, [wallet.account]);
+
+    useEffect(() => {
+        const getPoolAsync = async (address: string) => {
+            const poolId = await getRandomPoolID(address);
+            setCurrentPoolId(poolId);
+        };
+        if (shouldRefreshPool && wallet.account) {
             setShouldRefreshPool(false);
-            getPoolAsync(currentPoolId);
+            getPoolAsync(wallet.account);
         }
-    }, [shouldRefreshPool, currentPoolId]);
+    }, [shouldRefreshPool, wallet.account]);
     // const positionList = usePositionManagers();
 
     const handleRefreshPool = () => {
@@ -189,21 +196,19 @@ function LandingContainer({
     const handleChangePendingStatus = (status: boolean, time?: number) => {
         setPendingTransaction(status);
 
-        let value = '', unit = '';
+        let value = '',
+            unit = '';
         if (time) {
             if (time > 0 && time < 60) {
                 value = Math.floor(time).toString();
                 unit = 'SECS';
-            }
-            else if (time < 3600) {
+            } else if (time < 3600) {
                 value = Math.floor(time / 60).toString();
                 unit = 'MINS';
-            }
-            else if (time < 24 * 3600) {
+            } else if (time < 24 * 3600) {
                 value = Math.floor(time / 3600).toString();
                 unit = 'HOURS';
-            }
-            else {
+            } else {
                 value = '';
                 unit = '';
             }
@@ -260,12 +265,19 @@ function LandingContainer({
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
-                    <img src={gifLoading} className='pending-transaction-image' />
+                    <img
+                        src={gifLoading}
+                        className='pending-transaction-image'
+                    />
                     <p className='pending-transaction-text'>
                         YOUR TRANSACTION IS BEING CONFIRMED
                         <br />
-                        ESTIMATED DURATION: 
-                        <span style={{ color: '#FFDF00' }}> {transactionEstimatedTime} {transactionEstimatedTimeUnit}</span>
+                        ESTIMATED DURATION:
+                        <span style={{ color: '#FFDF00' }}>
+                            {' '}
+                            {transactionEstimatedTime}{' '}
+                            {transactionEstimatedTimeUnit}
+                        </span>
                     </p>
                 </div>
             )}
@@ -276,29 +288,32 @@ function LandingContainer({
                 justifyContent='space-around'
                 className='main-content-container'
             >
-                {tab === 'home' && currentPoolId !== '' && (
-                    <LiquidityContainer
-                        gasPrices={gasPrices}
-                        poolId={currentPoolId}
-                        basket={basketData}
-                        poolIndex={poolIndex}
-                        poolCount={poolCount}
-                        onRefreshPool={() => handleRefreshPool()}
-                        handleWalletConnect={() => showWalletModal()}
-                        onAddBasket={(
-                            data: LiquidityBasketData,
-                            navigateToBasket: boolean,
-                        ) => handleAddBasket(data, navigateToBasket)}
-                        onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean, time?: number) =>
-                            handleChangePendingStatus(status, time)
-                        }
-                        handleChangeTab={(t: Tabs) => handleChangeTab(t)}
-                        handleChangePoolIndex={(i: number) =>
-                            handleChangePoolIndex(i)
-                        }
-                    />
-                )}
+                {tab === 'home' &&
+                    currentPoolId !== '' &&
+                    gasPrices &&
+                    'fast' in gasPrices && (
+                        <LiquidityContainer
+                            gasPrices={gasPrices}
+                            poolId={currentPoolId}
+                            basket={basketData}
+                            poolIndex={poolIndex}
+                            poolCount={poolCount}
+                            onRefreshPool={() => handleRefreshPool()}
+                            handleWalletConnect={() => showWalletModal()}
+                            onAddBasket={(
+                                data: LiquidityBasketData,
+                                navigateToBasket: boolean,
+                            ) => handleAddBasket(data, navigateToBasket)}
+                            onAddSuccess={() => handleTransactionSuccess()}
+                            onStatus={(status: boolean, time?: number) =>
+                                handleChangePendingStatus(status, time)
+                            }
+                            handleChangeTab={(t: Tabs) => handleChangeTab(t)}
+                            handleChangePoolIndex={(i: number) =>
+                                handleChangePoolIndex(i)
+                            }
+                        />
+                    )}
                 {tab === 'task' && (
                     <TaskContainer
                         onBack={() => {
