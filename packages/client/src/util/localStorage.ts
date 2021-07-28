@@ -2,14 +2,6 @@ import { LiquidityBasketData } from 'types/states';
 
 export const SKIP_DURATION = 5; // 5 sec for test. Should be 240 mins in production
 
-const setCurrentPoolId = (poolId: string): void => {
-    localStorage.setItem('random-pool-id', poolId);
-};
-
-const getCurrentPoolId = (): string | null => {
-    return localStorage.getItem('random-pool-id');
-};
-
 const getLastSkipTime = (): number => {
     const lastSkipTime = localStorage.getItem('last-skip-time');
     return lastSkipTime ? Number(lastSkipTime) : 0;
@@ -94,8 +86,6 @@ const getBasketData = (): LiquidityBasketData[] => {
 };
 
 export const storage = {
-    setCurrentPoolId,
-    getCurrentPoolId,
     setLastSkipTime,
     getLastSkipTime,
     shouldRefreshPool,

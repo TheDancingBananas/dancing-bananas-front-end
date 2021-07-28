@@ -330,12 +330,12 @@ export class UniswapApiFetcher extends OfflineFetcher {
     }
 }
 
-export const getRandomPoolID = async (currentPoolId: string) => {
+export const getRandomPoolID = async (wallet: string) => {
     const networkName = 'mainnet';
 
-    console.log('old pool id', currentPoolId);
+    console.log('my wallet', wallet);
     const response = await fetch(
-        `/api/v1/${networkName}/randomPool?count=${50}&old=${currentPoolId}`,
+        `/api/v1/${networkName}/randomPool?wallet=${wallet}`,
     );
     if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
@@ -344,5 +344,18 @@ export const getRandomPoolID = async (currentPoolId: string) => {
     // 0x7858e59e0c01ea06df3af3d20ac7b0003275d4bf usdc usdt
     // 0x69d91b94f0aaf8e8a2586909fa77a5c2c89818d5 hex usdc
     console.log('new Id', data);
+    return data;
+};
+
+export const getCurrentPoolID = async (wallet: string) => {
+    const networkName = 'mainnet';
+
+    const response = await fetch(
+        `/api/v1/${networkName}/currentPool?wallet=${wallet}`,
+    );
+    if (!response.ok) throw new Error(`Failed to fetch top pools`);
+
+    const data = await (response.json() as Promise<string>);
+
     return data;
 };

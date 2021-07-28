@@ -8,7 +8,7 @@ import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
 import BananaHelp from 'components/banana-help/banana-help';
-import { getRandomPoolID } from 'services/api';
+import { getRandomPoolID, getCurrentPoolID } from 'services/api';
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
 
 import classNames from 'classnames';
@@ -46,6 +46,7 @@ function LandingContainer({
     gasPrices: EthGasPrices | null;
 }): JSX.Element {
     const { wallet } = useWallet();
+
     const currentLevel = storage.getLevel();
     const currentBasketData = storage.getBasketData();
 
@@ -74,11 +75,7 @@ function LandingContainer({
     let is_visible = true;
     // const positionList = usePositionManagers();
 
-    const savedPoolId = storage.getCurrentPoolId();
-
-    const [currentPoolId, setCurrentPoolId] = useState<string>(
-        savedPoolId ? savedPoolId : '0x',
-    );
+    const [currentPoolId, setCurrentPoolId] = useState<string>('');
     const [lastPoolFetchTime, setLastPoolFetchTime] = useState<number>(
         storage.getLastSkipTime(),
     );
@@ -95,9 +92,6 @@ function LandingContainer({
 
     useEffect(() => {
         let refresh = false;
-        if (currentPoolId === '0x') {
-            refresh = true;
-        }
 
         if (lastPoolFetchTime !== 0) {
             const currentTime = Math.floor(Date.now() / 1000);
@@ -109,19 +103,27 @@ function LandingContainer({
         }
 
         setShouldRefreshPool(refresh);
-    }, [currentPoolId, lastPoolFetchTime]);
+    }, [lastPoolFetchTime]);
 
     useEffect(() => {
-        const getPoolAsync = async (oldPool: string) => {
-            const poolId = await getRandomPoolID(oldPool);
-            storage.setCurrentPoolId(poolId);
+        const getCurrentPoolAsync = async (address: string) => {
+            const poolId = await getCurrentPoolID(address);
             setCurrentPoolId(poolId);
         };
-        if (shouldRefreshPool) {
+        const address = wallet.account ? wallet.account : '0x';
+        getCurrentPoolAsync(address);
+    }, [wallet.account]);
+
+    useEffect(() => {
+        const getPoolAsync = async (address: string) => {
+            const poolId = await getRandomPoolID(address);
+            setCurrentPoolId(poolId);
+        };
+        if (shouldRefreshPool && wallet.account) {
             setShouldRefreshPool(false);
-            getPoolAsync(currentPoolId);
+            getPoolAsync(wallet.account);
         }
-    }, [shouldRefreshPool, currentPoolId]);
+    }, [shouldRefreshPool, wallet.account]);
     // const positionList = usePositionManagers();
 
     const handleRefreshPool = () => {
