@@ -1,14 +1,19 @@
+import { useMemo } from 'react';
 import config from 'config/app';
 import { ethers } from 'ethers';
 import { useWallet } from 'hooks/use-wallet';
 import { useETHBalance } from 'hooks/use-balance';
 import { formatAddress, formatUSD } from 'util/formats';
+import { storage } from 'util/localStorage';
 
 import pngWallet from 'styles/images/wallet.png';
 import pngEth from 'styles/images/eth.png';
 import pngBanana from 'styles/images/dancing-banana.png';
 import pngTelegram from 'styles/images/telegram-108.png';
+import pngCuriousMonkey from 'styles/images/curious-109.png';
+import pngMysteriousChimp from 'styles/images/mysterious_chimp-109.png';
 
+const monkeyLevels = [pngCuriousMonkey, pngMysteriousChimp];
 function ConnectWalletButton({
     onClick,
 }: {
@@ -17,6 +22,7 @@ function ConnectWalletButton({
     const { wallet } = useWallet();
     const account = wallet?.account;
     const ethBalance = useETHBalance();
+    const level = storage.getLevel();
     // const network = wallet?.network
     //     ? config.networks[wallet?.network].name
     //     : 'Connected';
@@ -25,6 +31,11 @@ function ConnectWalletButton({
     // const buttonText = account
     //     ? network.toUpperCase() + ' : ' + account.toString()
     //     : 'CONNECT WALLET';
+
+    // This is for showing icon before level
+    // const monkeyLevelIcon: string = useMemo(() => {
+    //     return monkeyLevels[Number(level) - 1];
+    // }, [level]);
 
     return (
         <div>
@@ -64,11 +75,10 @@ function ConnectWalletButton({
                     }}
                 >
                     <button
-                        className='connect-wallet-button black'
+                        className='connect-wallet-button white'
                         onClick={onClick}
                     >
-                        <img src={pngWallet} />
-                        {formatAddress(account.toString())}
+                        <span className='monkey-level'>LEVEL {level}</span>
                     </button>
                     <button className='connect-wallet-button black'>
                         <img src={pngEth} />
