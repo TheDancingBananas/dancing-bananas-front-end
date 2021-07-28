@@ -32,9 +32,10 @@ function ConnectWalletButton({
     //     ? network.toUpperCase() + ' : ' + account.toString()
     //     : 'CONNECT WALLET';
 
-    const monkeyLevelIcon: string = useMemo(() => {
-        return monkeyLevels[Number(level) - 1];
-    }, [level]);
+    // This is for showing icon before level
+    // const monkeyLevelIcon: string = useMemo(() => {
+    //     return monkeyLevels[Number(level) - 1];
+    // }, [level]);
 
     return (
         <div>
@@ -77,8 +78,7 @@ function ConnectWalletButton({
                         className='connect-wallet-button white'
                         onClick={onClick}
                     >
-                        <img src={monkeyLevelIcon} />
-                        <span className='monkey-level'>L{level}</span>
+                        <span className='monkey-level'>LEVEL {level}</span>
                     </button>
                     <button className='connect-wallet-button black'>
                         <img src={pngEth} />
