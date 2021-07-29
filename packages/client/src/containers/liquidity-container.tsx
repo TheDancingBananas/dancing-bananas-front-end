@@ -212,24 +212,24 @@ export const LiquidityContainer = ({
         }
 
         if (status === poolCount) {
-            if (currentLevel === '1' && basket.length > 0) {
-                handleChangeTab('cart');
-                return;
-            } else {
-                // const lastPoolFetchTime = storage.getLastSkipTime();
-                // if (lastPoolFetchTime === 0) {
-                //     storage.setLastSkipTime(Math.floor(Date.now() / 1000));
-                // }
+            // if (currentLevel === '1' && basket.length > 0) {
+            //     handleChangeTab('cart');
+            //     return;
+            // } else {
+            // const lastPoolFetchTime = storage.getLastSkipTime();
+            // if (lastPoolFetchTime === 0) {
+            //     storage.setLastSkipTime(Math.floor(Date.now() / 1000));
+            // }
 
-                const skipStatus = storage.getSkip();
+            const skipStatus = storage.getSkip();
 
-                if (skipStatus === 'off') {
-                    storage.setSkipStatus('on');
-                    storage.setLastSkipTime(Math.floor(Date.now() / 1000));
-                }
-
-                setView('wait');
+            if (skipStatus === 'off') {
+                storage.setSkipStatus('on');
+                storage.setLastSkipTime(Math.floor(Date.now() / 1000));
             }
+
+            setView('wait');
+            // }
 
             return;
         }
@@ -248,10 +248,10 @@ export const LiquidityContainer = ({
 
         onAddBasket(data, navigateToBasket);
 
-        if (currentLevel === '1') {
-            handleChangeTab('cart');
-            return;
-        }
+        // if (currentLevel === '1') {
+        //     handleChangeTab('cart');
+        //     return;
+        // }
 
         if (!navigateToBasket) {
             handleSkip(1);

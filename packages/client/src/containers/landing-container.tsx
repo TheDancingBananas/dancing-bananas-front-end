@@ -235,13 +235,13 @@ function LandingContainer({
             setHomeMode('none');
         }
 
-        if (currentLevel === '1' && basketData.length > 0) {
-            if (t === 'home') {
-                setPoolIndex(poolCount - 1);
-                setTab(t);
-                return;
-            }
-        }
+        // if (currentLevel === '1' && basketData.length > 0) {
+        //     if (t === 'home') {
+        //         setPoolIndex(poolCount - 1);
+        //         setTab(t);
+        //         return;
+        //     }
+        // }
 
         setPoolIndex(0);
         setTab(t);
