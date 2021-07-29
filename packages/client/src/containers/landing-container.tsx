@@ -37,6 +37,7 @@ import { V3PositionData } from '@sommelier/shared-types/src/api';
 
 import gameData from 'constants/gameData.json';
 import { Level, LevelTask } from 'types/game';
+import { calculatePoolEntryData } from 'util/uniswap-pricing';
 
 function LandingContainer({
     setShowConnectWallet,
@@ -54,6 +55,7 @@ function LandingContainer({
     const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];
 
     const [tab, setTab] = useState<Tabs>('home');
+    const [homeMode, setHomeMode] = useState<string>('none');
 
     const [basketData, setBasketData] = useState<LiquidityBasketData[]>(
         currentBasketData,
@@ -230,6 +232,7 @@ function LandingContainer({
             if (!(x == null)) {
                 x.style.display = 'block';
             }
+            setHomeMode('none');
         }
 
         if (currentLevel === '1' && basketData.length > 0) {
@@ -247,6 +250,13 @@ function LandingContainer({
     const handleEditCart = (poolIndex: number) => {
         setPoolIndex(poolIndex % poolCount);
         setTab('home');
+        setHomeMode('edit');
+    };
+
+    const handleRemoveCart = (poolIndex: number) => {
+        basketData.splice(poolIndex, 1);
+        storage.setBasketData(basketData);
+        setBasketData(basketData);
     };
 
     // useEffect(() => {
@@ -298,6 +308,7 @@ function LandingContainer({
                             basket={basketData}
                             poolIndex={poolIndex}
                             poolCount={poolCount}
+                            mode={homeMode}
                             onRefreshPool={() => handleRefreshPool()}
                             handleWalletConnect={() => showWalletModal()}
                             onAddBasket={(
@@ -314,6 +325,7 @@ function LandingContainer({
                             }
                         />
                     )}
+
                 {tab === 'task' && (
                     <TaskContainer
                         onBack={() => {
@@ -352,6 +364,7 @@ function LandingContainer({
                             handleChangePendingStatus(status, time)
                         }
                         onEdit={(i: number) => handleEditCart(i)}
+                        onRemove={(i: number) => handleRemoveCart(i)}
                     />
                 )}
                 {tab === 'positionManager' && (
