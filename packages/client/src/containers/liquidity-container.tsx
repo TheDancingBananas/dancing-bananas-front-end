@@ -248,10 +248,10 @@ export const LiquidityContainer = ({
 
         onAddBasket(data, navigateToBasket);
 
-        if (currentLevel === '1') {
-            handleChangeTab('cart');
-            return;
-        }
+        // if (currentLevel === '1') {
+        //     handleChangeTab('cart');
+        //     return;
+        // }
 
         if (!navigateToBasket) {
             handleSkip(1);
