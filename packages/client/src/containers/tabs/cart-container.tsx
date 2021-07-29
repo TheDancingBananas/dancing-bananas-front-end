@@ -16,6 +16,7 @@ import './cart-container.scss';
 import pngBananaBasket from 'styles/images/banana-basket.png';
 import pngEmptyBasket from 'styles/images/empty-basket.png';
 import pngNANA from 'styles/images/tokens/nana.png';
+import pngExit from 'styles/images/exit.png';
 import pngArrowLeft from 'styles/images/left.png';
 import pngBanana1 from 'styles/images/banana-1.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
@@ -53,6 +54,7 @@ const CartContainer = ({
     onAddSuccess,
     onStatus,
     onEdit,
+    onRemove,
 }: {
     gasPrices: EthGasPrices | null;
     cartData: LiquidityBasketData[];
@@ -60,7 +62,7 @@ const CartContainer = ({
     onAddSuccess: () => void;
     onStatus: (status: boolean, time?: number) => void;
     onEdit: (i: number) => void;
-
+    onRemove: (i: number) => void;
 }): JSX.Element | null => {
     // console.log('cart', cartData);
     const [viewId, setViewId] = useState<string>('');
@@ -321,7 +323,11 @@ const CartContainer = ({
 
                     // setApprovalState('pending');
                     if (approveHash) {
-                        const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                        const estimateTime = await getEstimateTime(
+                            provider,
+                            approveHash,
+                            baseGasPrice,
+                        );
                         onStatus(true, estimateTime);
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
@@ -504,7 +510,11 @@ const CartContainer = ({
 
                     // setApprovalState('pending');
                     if (approveHash) {
-                        const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                        const estimateTime = await getEstimateTime(
+                            provider,
+                            approveHash,
+                            baseGasPrice,
+                        );
                         onStatus(true, estimateTime);
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
@@ -564,7 +574,11 @@ const CartContainer = ({
 
             if (hash) {
                 if (provider) {
-                    const estimateTime = await getEstimateTime(provider, hash, baseGasPrice);
+                    const estimateTime = await getEstimateTime(
+                        provider,
+                        hash,
+                        baseGasPrice,
+                    );
                     onStatus(true, estimateTime);
 
                     const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(
@@ -643,6 +657,17 @@ const CartContainer = ({
                                         key={`cart-item-${item.poolId}`}
                                     >
                                         <div className='cart-table-col left'>
+                                            <div
+                                                className='cart-token-exit-image'
+                                                onClick={(e) => onRemove(index)}
+                                            >
+                                                <div>
+                                                    <img
+                                                        src={pngExit}
+                                                        width='15'
+                                                    />
+                                                </div>
+                                            </div>
                                             {!item.isNANA && (
                                                 <div className='cart-token-image'>
                                                     {resolveLogo(
@@ -744,7 +769,9 @@ const CartContainer = ({
                                             </div>
                                             <div className='row-detail-right'>
                                                 <button
-                                                    onClick={(e) => onEdit(0)}
+                                                    onClick={(e) =>
+                                                        onEdit(index)
+                                                    }
                                                 >
                                                     EDIT
                                                 </button>

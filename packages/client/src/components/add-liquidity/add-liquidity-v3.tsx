@@ -73,6 +73,7 @@ type Props = {
     rewardBananas: number;
     leftArrow: boolean | false;
     rightArrow: boolean | false;
+    defaultValue: any;
     onSkipPairs: () => void;
     onAddBasket: (data: LiquidityBasketData) => void;
     onLeft: () => void;
@@ -95,6 +96,7 @@ export const AddLiquidityV3 = ({
     rewardBananas,
     leftArrow,
     rightArrow,
+    defaultValue,
     onSkipPairs,
     onAddBasket,
     onLeft,
@@ -129,21 +131,21 @@ export const AddLiquidityV3 = ({
                 id: pool?.token0?.id,
                 name: pool?.token0?.name,
                 symbol: pool?.token0?.symbol,
-                amount: '',
+                amount: defaultValue[token0Symbol] ?? '',
                 selected: false,
             },
             [token1Symbol]: {
                 id: pool?.token1?.id,
                 name: pool?.token1?.name,
                 symbol: pool?.token1?.symbol,
-                amount: '',
+                amount: defaultValue[token1Symbol] ?? '',
                 selected: false,
             },
             ETH: {
                 id: ETH_ID,
                 symbol: 'ETH',
                 name: 'Ethereum',
-                amount: '',
+                amount: defaultValue['ETH'] ?? '',
                 selected: true,
             },
             selectedTokens: ['ETH'],
@@ -830,7 +832,6 @@ export const AddLiquidityV3 = ({
                 getTokensWithAmounts() as Record<string, TokenInputAmount>,
             );
 
-
             toastWarn(`Confirming tx ${compactHash(hash)}`);
             setPendingTx &&
                 setPendingTx(
@@ -844,7 +845,11 @@ export const AddLiquidityV3 = ({
                 const baseGasPrice = ethers.utils
                     .parseUnits(currentGasPrice.toString(), 9)
                     .toString();
-                const estimateTime = await getEstimateTime(provider, hash, baseGasPrice);
+                const estimateTime = await getEstimateTime(
+                    provider,
+                    hash,
+                    baseGasPrice,
+                );
                 onStatus(true, estimateTime);
 
                 const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(
@@ -1086,7 +1091,11 @@ export const AddLiquidityV3 = ({
                             } as PendingTx),
                     );
 
-                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                const estimateTime = await getEstimateTime(
+                    provider,
+                    approveHash,
+                    baseGasPrice,
+                );
                 onStatus(true, estimateTime);
 
                 await provider.waitForTransaction(approveHash);
@@ -1356,7 +1365,11 @@ export const AddLiquidityV3 = ({
                             } as PendingTx),
                     );
 
-                const estimateTime = await getEstimateTime(provider, approveHash, baseGasPrice);
+                const estimateTime = await getEstimateTime(
+                    provider,
+                    approveHash,
+                    baseGasPrice,
+                );
                 onStatus(true, estimateTime);
 
                 await provider.waitForTransaction(approveHash);

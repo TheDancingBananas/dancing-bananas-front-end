@@ -2,6 +2,7 @@ import {
     useState,
     useEffect,
     useContext,
+    useMemo,
     createContext,
     Dispatch,
     SetStateAction,
@@ -151,6 +152,7 @@ export const LiquidityContainer = ({
     basket,
     poolIndex,
     poolCount,
+    mode,
     onRefreshPool,
     handleWalletConnect,
     onAddBasket,
@@ -164,6 +166,7 @@ export const LiquidityContainer = ({
     basket: LiquidityBasketData[];
     poolIndex: number;
     poolCount: number;
+    mode: string;
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
     onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
@@ -187,6 +190,20 @@ export const LiquidityContainer = ({
     const nanaPoolBalances = useBalance({ pool: nanaPool });
 
     const [view, setView] = useState('pairs');
+
+    const originalLiquidity: any = useMemo(() => {
+        if (mode !== 'edit') return {};
+
+        const selectedPool: any = basket[poolIndex];
+        const origin = {
+            [selectedPool.lToken0Name]: selectedPool.lToken0Amount,
+        };
+        if (selectedPool.lToken1Name) {
+            origin[selectedPool.lToken1Name] = selectedPool.lToken1Amount;
+        }
+
+        return origin;
+    }, [mode, basket, poolIndex]);
 
     const handleSkip = (status: number) => {
         if (!wallet.account) {
@@ -282,6 +299,7 @@ export const LiquidityContainer = ({
                                     rewardBananas={100}
                                     leftArrow={false}
                                     rightArrow={true}
+                                    defaultValue={originalLiquidity}
                                     onSkipPairs={() => handleSkip(1)}
                                     onAddBasket={(data: LiquidityBasketData) =>
                                         handleAddBasket(data, false)
@@ -307,6 +325,7 @@ export const LiquidityContainer = ({
                                     rewardBananas={100}
                                     leftArrow={true}
                                     rightArrow={false}
+                                    defaultValue={originalLiquidity}
                                     onSkipPairs={() => handleSkip(2)}
                                     onAddBasket={(data: LiquidityBasketData) =>
                                         handleAddBasket(data, true)
