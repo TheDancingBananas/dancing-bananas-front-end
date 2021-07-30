@@ -13,35 +13,35 @@
             "rewards": [],
             "bananarewards": {
                 "daily" : {
-                    "label" : "Daily Transaction Bonus",
+                    "label" : "Daily Bonus",
                     "amount" : 100
                 },
                 "onesided" : {
-                    "label" : "One-Sided Liquidity Add",
+                    "label" : "One-sided Add",
                     "amount" : 200
                 },
                 "twosided" : {
-                    "label" : "Two-Sided Liquidity Add",
+                    "label" : "Two-sided Add",
                     "amount" : 150
                 },
                 "minnow" : {
-                    "label" : "Minnow Transaction (4 ETH)",
+                    "label" : "4 ETH Transaction",
                     "amount" : 50
                 },
                 "shark" : {
-                    "label" : "Shark Transaction (10 ETH)",
+                    "label" : "10 ETH Transaction",
                     "amount" : 100
                 },
                 "whale" : {
-                    "label" : "Whale Transaction (200 ETH)",
+                    "label" : "200 ETH Transaction",
                     "amount" : 300
                 },
                 "remove" : {
-                    "label" : "Remove Liquidity",
+                    "label" : "Remove",
                     "amount" : 0
                 },
                 "levelup" : {
-                    "label" : "LevelUp Bonus Rewards",
+                    "label" : "Level Up Bonus",
                     "amount" : 300
                 }
             }
@@ -66,35 +66,35 @@
             ],
             "bananarewards": {
                 "daily" : {
-                    "label" : "Daily Transaction Bonus",
+                    "label" : "Daily Bonus",
                     "amount" : 100
                 },
                 "onesided" : {
-                    "label" : "One-Sided Liquidity Add",
+                    "label" : "One-sided Add",
                     "amount" : 600
                 },
                 "twosided" : {
-                    "label" : "Two-Sided Liquidity Add",
+                    "label" : "Two-sided Add",
                     "amount" : 300
                 },
                 "minnow" : {
-                    "label" : "Minnow Transaction (4 ETH)",
+                    "label" : "4 ETH Transaction",
                     "amount" : 50
                 },
                 "shark" : {
-                    "label" : "Shark Transaction (10 ETH)",
+                    "label" : "10 ETH Transaction",
                     "amount" : 100
                 },
                 "whale" : {
-                    "label" : "Whale Transaction (200 ETH)",
+                    "label" : "200 ETH Transaction",
                     "amount" : 300
                 },
                 "remove" : {
-                    "label" : "Remove Liquidity",
+                    "label" : "Remove",
                     "amount" : 200
                 },
                 "levelup" : {
-                    "label" : "LevelUp Bonus Rewards",
+                    "label" : "Level Up Bonus",
                     "amount" : 400
                 }
             }

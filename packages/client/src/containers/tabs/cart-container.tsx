@@ -606,16 +606,45 @@ const CartContainer = ({
     const gameLevels: Level[] = gameData.game;
     const bananaRewards: Reward = gameLevels[Number(level) - 1].bananarewards;
     const rewards = [];
-
+    const onesides = [];
+    const twosides = [];
     rewards.push(bananaRewards.daily);
 
     for (let i = 0; i < cartData.length; i++) {
         const data = cartData[i];
         if (data.isOneSide) {
-            rewards.push(bananaRewards.onesided);
+            onesides.push(bananaRewards.onesided);
         } else {
-            rewards.push(bananaRewards.twosided);
+            twosides.push(bananaRewards.twosided);
         }
+    }
+
+    if (onesides.length > 0) {
+        const oneside = bananaRewards.onesided;
+        const amount: number = oneside.amount * onesides.length;
+        let label: string = bananaRewards.onesided.label;
+        if (onesides.length > 1) {
+            label =
+                onesides.length.toString() + ' ' + bananaRewards.onesided.label;
+        }
+        rewards.push({
+            label: label,
+            amount: amount,
+        });
+    }
+
+    if (twosides.length > 0) {
+        const twoside = bananaRewards.twosided;
+        const amount: number = twoside.amount * twosides.length;
+        let label: string = bananaRewards.twosided.label;
+        if (twosides.length > 1) {
+            label =
+                twosides.length.toString() + ' ' + bananaRewards.twosided.label;
+        }
+        rewards.push({
+            label: label,
+            amount: amount,
+        });
     }
 
     const totalEther = cartData.reduce(
