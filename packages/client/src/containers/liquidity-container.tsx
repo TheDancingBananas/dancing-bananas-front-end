@@ -193,8 +193,10 @@ export const LiquidityContainer = ({
 
     const originalLiquidity: any = useMemo(() => {
         if (mode !== 'edit') return {};
+        if (poolIndex === undefined) return;
 
         const selectedPool: any = basket[poolIndex];
+        if (selectedPool === undefined) return;
         const origin = {
             [selectedPool.lToken0Name]: selectedPool.lToken0Amount,
         };

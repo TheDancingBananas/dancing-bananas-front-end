@@ -3,7 +3,11 @@ import { ethers } from 'ethers';
 import { WalletBalances } from 'types/states';
 import BigNumber from 'bignumber.js';
 
-const toBalanceStr = (token: string, balances: WalletBalances): string => {
+const toBalanceStr = (
+    token: string,
+    balances: WalletBalances,
+    basketAmount: number,
+): string => {
     const balance = balances[token]?.balance;
 
     return new BigNumber(
@@ -11,7 +15,9 @@ const toBalanceStr = (token: string, balances: WalletBalances): string => {
             balance || 0,
             parseInt(balances[token]?.decimals || '0', 10),
         ),
-    ).toFixed(2);
+    )
+        .minus(basketAmount)
+        .toFixed(2);
 };
 
 type TokenInputProps = {
@@ -20,6 +26,7 @@ type TokenInputProps = {
     updateAmount: (amount: string) => void;
     handleTokenRatio: (token: string, amount: string) => void;
     balances: WalletBalances;
+    basketAmount?: number | 0;
     twoSide: boolean;
     disabled: boolean;
     isNANA?: boolean | false;
@@ -30,6 +37,7 @@ export const TokenInput = ({
     updateAmount,
     handleTokenRatio,
     balances,
+    basketAmount,
     twoSide,
     disabled,
     isNANA,
@@ -50,15 +58,20 @@ export const TokenInput = ({
                 }}
             />
             <span style={{ color: 'lightgrey', height: '25' }}>
-                {toBalanceStr(token, balances)}
+                {toBalanceStr(token, balances, Number(basketAmount))}
             </span>
         </div>
         <button
             className={classNames('token-input-max', { nana: isNANA })}
             disabled={!balances?.[token] || disabled}
             onClick={() => {
-                updateAmount(toBalanceStr(token, balances));
-                handleTokenRatio(token, toBalanceStr(token, balances));
+                updateAmount(
+                    toBalanceStr(token, balances, Number(basketAmount)),
+                );
+                handleTokenRatio(
+                    token,
+                    toBalanceStr(token, balances, Number(basketAmount)),
+                );
             }}
         >
             <div style={{ fontSize: '18px' }}>MAX</div>
