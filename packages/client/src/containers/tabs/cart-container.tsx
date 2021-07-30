@@ -625,7 +625,9 @@ const CartContainer = ({
         let label: string = bananaRewards.onesided.label;
         if (onesides.length > 1) {
             label =
-                onesides.length.toString() + ' ' + bananaRewards.onesided.label;
+                onesides.length.toString() +
+                ' ' +
+                bananaRewards.onesided.label.toString();
         }
         rewards.push({
             label: label,
@@ -639,7 +641,9 @@ const CartContainer = ({
         let label: string = bananaRewards.twosided.label;
         if (twosides.length > 1) {
             label =
-                twosides.length.toString() + ' ' + bananaRewards.twosided.label;
+                twosides.length.toString() +
+                ' ' +
+                bananaRewards.twosided.label.toString();
         }
         rewards.push({
             label: label,
