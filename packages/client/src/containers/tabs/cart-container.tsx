@@ -22,6 +22,9 @@ import pngBanana1 from 'styles/images/banana-1.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
+import gameData from 'constants/gameData.json';
+import { storage } from 'util/localStorage';
+import { Level, Reward, RewardItem } from 'types/game';
 
 import {
     FeeAmount,
@@ -599,6 +602,63 @@ const CartContainer = ({
         // cartData[0].func();
     };
 
+    const level = storage.getLevel();
+    const gameLevels: Level[] = gameData.game;
+    const bananaRewards: Reward = gameLevels[Number(level) - 1].bananarewards;
+    const rewards = [];
+    const onesides = [];
+    const twosides = [];
+    rewards.push(bananaRewards.daily);
+
+    for (let i = 0; i < cartData.length; i++) {
+        const data = cartData[i];
+        if (data.isOneSide) {
+            onesides.push(bananaRewards.onesided);
+        } else {
+            twosides.push(bananaRewards.twosided);
+        }
+    }
+
+    if (onesides.length > 0) {
+        const oneside = bananaRewards.onesided;
+        const amount: number = oneside.amount * onesides.length;
+        let label: string = bananaRewards.onesided.label;
+        if (onesides.length > 1) {
+            label =
+                onesides.length.toString() + ' ' + bananaRewards.onesided.label;
+        }
+        rewards.push({
+            label: label,
+            amount: amount,
+        });
+    }
+
+    if (twosides.length > 0) {
+        const twoside = bananaRewards.twosided;
+        const amount: number = twoside.amount * twosides.length;
+        let label: string = bananaRewards.twosided.label;
+        if (twosides.length > 1) {
+            label =
+                twosides.length.toString() + ' ' + bananaRewards.twosided.label;
+        }
+        rewards.push({
+            label: label,
+            amount: amount,
+        });
+    }
+
+    const totalEther = cartData.reduce(
+        (sum: number, data) => sum + Number(data.ethAmount),
+        0,
+    );
+    if (totalEther >= 200) {
+        rewards.push(bananaRewards.whale);
+    } else if (totalEther >= 10) {
+        rewards.push(bananaRewards.shark);
+    } else if (totalEther >= 4) {
+        rewards.push(bananaRewards.minnow);
+    }
+
     if (cartData.length === 0) {
         return (
             <div className='cart-container'>
@@ -795,27 +855,29 @@ const CartContainer = ({
                 <div className='caption white'>REWARDS</div>
                 <div className='cart-reward-wrapper'>
                     <div className='cart-award'>
-                        <div className='cart-award-item'>
-                            <div className='cart-award-title'>
-                                NANAS AWARDED
-                            </div>
-                            <div className='cart-award-description'>
-                                +15
-                                <img src={pngDancingBanana} />
-                            </div>
-                        </div>
-                        <div className='cart-award-item'>
-                            <div className='cart-award-title'>LOGIN BONUS</div>
-                            <div className='cart-award-description'>
-                                +1
-                                <img src={pngDancingBanana} />
-                            </div>
-                        </div>
+                        {rewards.map((reward, i) => {
+                            return (
+                                <div className='cart-award-item' key={i}>
+                                    <div className='cart-award-title'>
+                                        {reward.label}
+                                    </div>
+                                    <div className='cart-award-description'>
+                                        +{reward.amount}
+                                        <img src={pngDancingBanana} />
+                                    </div>
+                                </div>
+                            );
+                        })}
                         <hr />
                         <div className='cart-award-item'>
                             <div className='cart-award-title pink'>TOTAL</div>
                             <div className='cart-award-description pink'>
-                                +16
+                                +
+                                {rewards.reduce(
+                                    (sum: number, current: RewardItem) =>
+                                        sum + Number(current.amount),
+                                    0,
+                                )}
                                 <img src={pngDancingBanana} />
                             </div>
                         </div>
