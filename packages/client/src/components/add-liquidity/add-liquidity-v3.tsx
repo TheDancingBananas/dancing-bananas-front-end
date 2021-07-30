@@ -62,6 +62,7 @@ import pngBanana2 from 'styles/images/banana-2.png';
 import AlertModal from './alert-modal';
 
 import { getEstimateTime } from 'services/api-etherscan';
+import { storage } from 'util/localStorage';
 
 type Props = {
     balances: WalletBalances;
@@ -125,6 +126,11 @@ export const AddLiquidityV3 = ({
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     // State here is used to compute what tokens are being used to add liquidity with.
     const [copiedShortUrl, setCopiedShortUrl] = useState<boolean>(false);
+    const currentBasketData = storage.getBasketData();
+    const [basketData, setBasketData] = useState<LiquidityBasketData[]>(
+        currentBasketData,
+    );
+
     const initialState: Record<string, any> = useMemo(
         () => ({
             [token0Symbol]: {
@@ -165,6 +171,27 @@ export const AddLiquidityV3 = ({
     const init = (initialState: Record<string, any>) => {
         return initialState;
     };
+
+    const getBasketTokenAmount = (tokenSymbol: any) => {
+        const lToken0TotalAmount = basketData
+            .map((data) =>
+                data.lToken0Name === tokenSymbol ? data.lToken0Amount : 0,
+            )
+            .reduce((sum, value) => sum + Number(value), 0);
+        const lToken1TotalAmount = basketData
+            .map((data) =>
+                data.lToken1Name === tokenSymbol
+                    ? Number(data.lToken1Amount)
+                    : 0,
+            )
+            .reduce((sum, value) => sum + Number(value), 0);
+        return (
+            lToken0TotalAmount +
+            lToken1TotalAmount -
+            Number(initialState[tokenSymbol.toString()].amount)
+        );
+    };
+
     const reducer = (
         state: { [x: string]: any },
         action: {
@@ -1537,6 +1564,19 @@ export const AddLiquidityV3 = ({
                 setShowAlert(true);
                 return;
             }
+
+            const tokenBalanceMinusBasket = new BigNumber(tokenBalance).minus(
+                getBasketTokenAmount(symbol),
+            );
+
+            if (tokenAmount.gt(tokenBalanceMinusBasket)) {
+                setAlertTitle('INSUFFICIENT AMOUNT');
+                setAlertDescription(
+                    'Not ENOUGH LIQUIDITY. PLEASE GO TO BASKET AND EDIT POOLS!',
+                );
+                setShowAlert(true);
+                return;
+            }
         }
 
         if (pendingBounds) {
@@ -1834,6 +1874,7 @@ export const AddLiquidityV3 = ({
                                 }}
                                 handleTokenRatio={handleTokenRatio}
                                 balances={balances}
+                                basketAmount={getBasketTokenAmount('ETH')}
                                 disabled={
                                     disabledInput?.includes('ETH') ||
                                     !isTokenETHActive
@@ -1926,6 +1967,9 @@ export const AddLiquidityV3 = ({
                                     }}
                                     handleTokenRatio={handleTokenRatio}
                                     balances={balances}
+                                    basketAmount={getBasketTokenAmount(
+                                        token0Symbol,
+                                    )}
                                     disabled={
                                         disabledInput?.includes(token0Symbol) ||
                                         !isToken0Active
@@ -2017,6 +2061,9 @@ export const AddLiquidityV3 = ({
                                     }}
                                     handleTokenRatio={handleTokenRatio}
                                     balances={balances}
+                                    basketAmount={getBasketTokenAmount(
+                                        token1Symbol,
+                                    )}
                                     disabled={
                                         disabledInput?.includes(token1Symbol) ||
                                         !isToken1Active
