@@ -20,22 +20,36 @@ function get_user(id) {
 }
 
 bot.on('message', (msg) => {
-    let user = get_user(msg.chat.id);
+    let user = (msg.text) == '/start newsession' ? -1 : get_user(msg.chat.id);
 
     if(user == -1) {
-        bot.sendMessage(msg.chat.id,"🍌I'm the Dancing Banana Monkey Bot!🍌");
-        bot.sendMessage(msg.chat.id,"🙊🙊🙊In X hours, I will let you know when you have bananas ready! 🙊🙊🙊");
+        if(get_user(msg.chat.id) == -1) {
+            bot.sendMessage(msg.chat.id, "🍌I'm the Dancing Banana Monkey Bot!🍌");
+        }
 
-        setTimeout(function() {bot.sendMessage(msg.chat.id, "🍌🍌🍌🍌 You have new bananas ready! 🍌🍌🍌🍌"); }, 20000);
+        bot.sendMessage(msg.chat.id,"🙊🙊🙊In X hours, I will let you know when you have bananas ready! 🙊🙊🙊");
 
         let new_user = {
             id: msg.chat.id,
-            hash: ''
+            hash: '',
+            notified: false
         };
 
-        users.push(new_user);
+        setTimeout(function() {
+                bot.sendMessage(msg.chat.id, "⏰ ⏰ ⏰ It's time! You have new pools ready to play and you have new banana rewards to collect! ⏰ ⏰ ");
+                bot.sendMessage(msg.chat.id, "🍌🍌🍌🍌 Click https://dancingbananas.fun/ and let's go Bananas! 🍌🍌🍌🍌");
+                new_user.notified = true;
+            }, 20000);
+
+
+        //users.push(new_user);
+        if (users.indexOf(new_user) === -1) users.push(new_user);
     } else {
+        if(!user.notified) {
             bot.sendMessage(msg.chat.id,"Please wait your bananas are not ready yet!");
+        } else {
+            bot.sendMessage(msg.chat.id, "Go to https://dancingbananas.fun/ if you want to be notified again! 🍌🍌🍌🍌");
+        }
     }
 });
 
