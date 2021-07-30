@@ -88,7 +88,21 @@
 
             span {
                 padding-right: 5px;
+                padding-left: 8px;
             }
+
+            .bonus-amount {
+                font-size: 24px;
+            }
+            
+            img {
+                height: 28px;
+                margin-left: 2px;
+                margin-top: -6px;
+            }
+        }
+        .yellow {
+            color: #FFDF00;
         }
     }
 

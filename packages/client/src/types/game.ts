@@ -3,12 +3,29 @@ export interface LevelTask {
     complete: boolean;
 }
 
+export interface Reward {
+    daily: RewardItem;
+    onesided: RewardItem;
+    twosided: RewardItem;
+    minnow: RewardItem;
+    shark: RewardItem;
+    whale: RewardItem;
+    remove: RewardItem;
+    levelup: RewardItem;
+}
+
+export interface RewardItem {
+    label: string;
+    amount: number;
+}
+
 export interface Level {
     level: string;
     poolCount: string;
     description: string;
     tasks: LevelTask[];
     rewards: string[];
+    bananarewards: Reward;
 }
 
 export type Tabs =
