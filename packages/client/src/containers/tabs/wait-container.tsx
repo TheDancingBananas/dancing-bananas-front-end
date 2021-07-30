@@ -71,7 +71,8 @@ const WaitContainer = ({
                     <button
                         className='wait-notify-me'
                         onClick={(e) => {
-                            const url = 'https://t.me/DancingBananasBot';
+                            const url =
+                                'https://t.me/DancingBananasBot?start=newsession';
                             window.open(url, '_blank');
                         }}
                     >
