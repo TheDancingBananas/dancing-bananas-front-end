@@ -26,6 +26,7 @@
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/prefer-regexp-exec": "off",
+        "@typescript-eslint/restrict-plus-operands": "off",
         "prettier/prettier": 0
     },
     "ignorePatterns": [

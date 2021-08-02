@@ -47,6 +47,7 @@ function PositionContainer({
                 console.log('positions', data);
                 setPositionsData(data);
             } else {
+                setPositionsData({});
                 setIsError(true);
             }
         };
