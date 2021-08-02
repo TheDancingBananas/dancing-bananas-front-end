@@ -6,27 +6,21 @@ import classNames from 'classnames';
 
 import './position-manager-container.scss';
 
-import pngBananaBasket from 'styles/images/banana-basket.png';
-import pngEmptyBasket from 'styles/images/empty-basket.png';
-import pngNANA from 'styles/images/tokens/nana.png';
 import pngArrowLeft from 'styles/images/left-arrow.png';
 import pngArrowRight from 'styles/images/right-arrow.png';
-import pngBanana1 from 'styles/images/banana-1.png';
-import pngDancingBanana from 'styles/images/dancing-banana.png';
-import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
 import pngChevronUp from 'styles/images/chevron-up.png';
 import pngMonkeyHappy from 'styles/images/monkey-happy.png';
 import pngMonkeySad from 'styles/images/monkey-sad.png';
-
-import pngFireWorks from 'styles/images/fireworks.png';
-import pngTick from 'styles/images/tick.png';
 import pngMoneyBranch from 'styles/images/money-branch.png';
 import pngDanger from 'styles/images/danger.png';
 import pngMoney from 'styles/images/money.png';
-
 import pngTokenCRV from 'styles/images/tokens/CRV.png';
 import pngTokenETH from 'styles/images/tokens/ETH.png';
+
+import { V3PositionData } from '@sommelier/shared-types/src/api';
+import BigNumber from 'bignumber.js';
+type V3PositionDataList = { [key: string]: V3PositionData };
 
 const PositionHeader = ({
     positionType,
@@ -58,12 +52,14 @@ const PositionHeader = ({
 };
 
 const PositionItem = ({
-    liquidity,
+    position,
+    positive = true,
     active = true,
     closedDate,
     onSelect,
 }: {
-    liquidity?: number;
+    position: V3PositionData;
+    positive?: boolean | true;
     active?: boolean | true;
     closedDate?: string | '';
     onSelect?: () => void;
@@ -81,20 +77,17 @@ const PositionItem = ({
                 <div className='position-item-header'>
                     <img
                         className='position-item-mark'
-                        src={liquidity && liquidity > 0 ? pngMoney : pngDanger}
+                        src={positive ? pngMoney : pngDanger}
                     />
-                    {liquidity && (
-                        <span
-                            className={classNames('position-liqudity', {
-                                positive: liquidity > 0,
-                                negative: liquidity < 0,
-                            })}
-                        >
-                            {`${liquidity > 0 ? '+' : '-'} ${formatUSD(
-                                Math.abs(liquidity),
-                            )}`}
-                        </span>
-                    )}
+                    <span
+                        className={classNames('position-liqudity', {
+                            positive,
+                        })}
+                    >
+                        {`${positive ? '+' : '-'} ${formatUSD(
+                            position?.stats?.totalFeesUSD?.toString(),
+                        )}`}
+                    </span>
                 </div>
             )}
             {!active && (
@@ -110,12 +103,22 @@ const PositionItem = ({
                 })}
             >
                 <div className='position-item-token'>
-                    <img src={pngTokenCRV} />
-                    <span>CRV</span>
+                    <div style={{ height: 39 }}>
+                        {resolveLogo(
+                            position.position?.pool?.token0?.id,
+                            '39px',
+                        )}
+                    </div>
+                    <span>{position.position?.pool?.token0?.symbol}</span>
                 </div>
                 <div className='position-item-token'>
-                    <img src={pngTokenETH} />
-                    <span>ETH</span>
+                    <div style={{ height: 39 }}>
+                        {resolveLogo(
+                            position.position?.pool?.token1?.id,
+                            '39px',
+                        )}
+                    </div>
+                    <span>{position.position?.pool?.token1?.symbol}</span>
                 </div>
             </div>
         </div>
@@ -123,19 +126,32 @@ const PositionItem = ({
 };
 
 const PositionManagerContainer = ({
+    positionsData,
     onBack,
     onSelectPosition,
 }: {
+    positionsData: V3PositionDataList;
     onBack: () => void;
-    onSelectPosition: () => void;
+    onSelectPosition: (
+        position: V3PositionData,
+        pt: 'positive' | 'negative',
+    ) => void;
 }): JSX.Element | null => {
     const [positionType, setPositionType] = useState<'positive' | 'negative'>(
         'positive',
     );
+    55;
 
     const [v3Open, setV3Open] = useState<boolean>(true);
     const [v2Open, setV2Open] = useState<boolean>(true);
     const [closedOpen, setClosedOpen] = useState<boolean>(true);
+
+    const [plusPools, setPlusPools] = useState<V3PositionData[]>([]);
+    const [minusPools, setMinusPools] = useState<V3PositionData[]>([]);
+    const [closedPools, setClosedPools] = useState<V3PositionData[]>([]);
+
+    const [plusSum, setPlusSum] = useState<BigNumber>(new BigNumber(0));
+    const [minusSum, setMinusSum] = useState<BigNumber>(new BigNumber(0));
 
     const handleOnArrow = () => {
         setV3Open(true);
@@ -143,6 +159,43 @@ const PositionManagerContainer = ({
         setClosedOpen(true);
         setPositionType(positionType === 'positive' ? 'negative' : 'positive');
     };
+
+    useEffect(() => {
+        const pPools: V3PositionData[] = [];
+        const mPools: V3PositionData[] = [];
+        const cPools: V3PositionData[] = [];
+
+        let pSum: BigNumber = new BigNumber(0);
+        let mSum: BigNumber = new BigNumber(0);
+
+        Object.keys(positionsData).forEach((id) => {
+            const liquidity = new BigNumber(
+                positionsData?.[id]?.position?.liquidity,
+            );
+
+            if (liquidity.isZero()) {
+                cPools.push(positionsData?.[id]);
+            } else {
+                const totalReturn = new BigNumber(
+                    positionsData?.[id]?.stats?.totalReturn,
+                );
+                if (totalReturn.isPositive() || totalReturn.isZero()) {
+                    pPools.push(positionsData?.[id]);
+                    pSum = pSum.plus(liquidity);
+                } else {
+                    mPools.push(positionsData?.[id]);
+                    mSum = mSum.plus(liquidity.toString());
+                }
+            }
+        });
+
+        setPlusPools(pPools);
+        setMinusPools(mPools);
+        setClosedPools(cPools);
+
+        setPlusSum(pSum.div(new BigNumber(10).pow(18)));
+        setMinusSum(mSum.div(new BigNumber(10).pow(18)));
+    }, [positionsData]);
 
     return (
         <div className='position-manager-container'>
@@ -152,7 +205,13 @@ const PositionManagerContainer = ({
                     <img src={pngMoneyBranch} />
                     <div className='position-manager-total-liquidity-amount'>
                         <span className='white'>TOTAL LIQUIDITY</span>
-                        <span className='green amount'>$600.39</span>
+                        <span className='green amount'>
+                            {formatUSD(
+                                positionType === 'positive'
+                                    ? plusSum.toString()
+                                    : minusSum.toString(),
+                            )}
+                        </span>
                     </div>
                 </div>
                 <PositionHeader
@@ -169,34 +228,24 @@ const PositionManagerContainer = ({
                     </div>
                     {v3Open && (
                         <div className='position-list'>
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 200 : -22.34
-                                }
-                                onSelect={() => onSelectPosition()}
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 150 : -83
-                                }
-                                onSelect={() => onSelectPosition()}
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 300 : -400
-                                }
-                                onSelect={() => onSelectPosition()}
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 9800 : -1442
-                                }
-                                onSelect={() => onSelectPosition()}
-                            />
+                            {(positionType === 'positive'
+                                ? plusPools
+                                : minusPools
+                            ).map((position: V3PositionData, index: number) => (
+                                <PositionItem
+                                    key={`active-position-${index}`}
+                                    position={position}
+                                    positive={positionType === 'positive'}
+                                    active={true}
+                                    onSelect={() =>
+                                        onSelectPosition(position, positionType)
+                                    }
+                                />
+                            ))}
                         </div>
                     )}
                 </div>
-                <div className='position-container'>
+                {/* <div className='position-container'>
                     <div className='position-container-header'>
                         <span>ACTIVE V2 POSITIONS</span>
                         <img
@@ -206,50 +255,46 @@ const PositionManagerContainer = ({
                     </div>
                     {v2Open && (
                         <div className='position-list'>
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 200 : -22.34
-                                }
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 150 : -83
-                                }
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 300 : -400
-                                }
-                            />
-                            <PositionItem
-                                liquidity={
-                                    positionType === 'positive' ? 9800 : -1442
-                                }
-                            />
                         </div>
                     )}
-                </div>
-                <div className='position-container'>
-                    <div className='position-container-header'>
-                        <span>CLOSED POSITIONS</span>
-                        <img
-                            src={closedOpen ? pngChevronUp : pngChevronDown}
-                            onClick={(e) => setClosedOpen(!closedOpen)}
-                        />
+                </div> */}
+                {closedPools.length > 0 && (
+                    <div className='position-container'>
+                        <div className='position-container-header'>
+                            <span>CLOSED POSITIONS</span>
+                            <img
+                                src={closedOpen ? pngChevronUp : pngChevronDown}
+                                onClick={(e) => setClosedOpen(!closedOpen)}
+                            />
+                        </div>
+                        {closedOpen && (
+                            <div className='position-list'>
+                                {closedPools.map(
+                                    (
+                                        position: V3PositionData,
+                                        index: number,
+                                    ) => (
+                                        <PositionItem
+                                            key={`closed-position-${index}`}
+                                            position={position}
+                                            positive={
+                                                positionType === 'positive'
+                                            }
+                                            active={false}
+                                            closedDate='SEPTEMBER 2020'
+                                            onSelect={() =>
+                                                onSelectPosition(
+                                                    position,
+                                                    positionType,
+                                                )
+                                            }
+                                        />
+                                    ),
+                                )}
+                            </div>
+                        )}
                     </div>
-                    {closedOpen && (
-                        <div className='position-list'>
-                            <PositionItem
-                                active={false}
-                                closedDate='JUNE 2021'
-                            />
-                            <PositionItem
-                                active={false}
-                                closedDate='SEPTEMBER 2020'
-                            />
-                        </div>
-                    )}
-                </div>
+                )}
             </div>
         </div>
     );

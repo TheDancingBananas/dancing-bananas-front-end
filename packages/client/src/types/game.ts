@@ -42,6 +42,7 @@ export type Tabs =
     | 'cart'
     | 'shop'
     | 'levelup'
+    | 'position'
     | 'positionManager'
     | 'positionDetail'
     | 'exchange';

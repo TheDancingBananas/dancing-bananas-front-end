@@ -26,9 +26,8 @@ import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
 import ExchangeContainer from './tabs/exchange-container';
-import PositionManagerContainer from './tabs/position-manager-container';
-import PositionDetailContainer from './tabs/position-detail-container';
 import LevelUpContainer from './tabs/level-up-container';
+import PositionContainer from './position-container';
 
 import pngWait from 'styles/images/wait.png';
 import gifLoading from 'styles/images/loading-animation.gif';
@@ -392,22 +391,8 @@ function LandingContainer({
                         onRemove={(i: number) => handleRemoveCart(i)}
                     />
                 )}
-                {tab === 'positionManager' && (
-                    <PositionManagerContainer
-                        onBack={() => {
-                            handleChangeTab('home');
-                        }}
-                        onSelectPosition={() => {
-                            handleChangeTab('positionDetail');
-                        }}
-                    />
-                )}
-                {tab === 'positionDetail' && (
-                    <PositionDetailContainer
-                        onBack={() => {
-                            handleChangeTab('positionManager');
-                        }}
-                    />
+                {tab === 'position' && (
+                    <PositionContainer gasPrices={gasPrices} />
                 )}
             </Box>
             <Box
@@ -444,26 +429,19 @@ function LandingContainer({
                             fill={tab === 'task' ? '#000' : '#808080'}
                         />
                     </div>
-                    {/* <div
+                    <div
                         className={classNames('footer-tab', {
-                            active:
-                                tab === 'positionManager' ||
-                                tab === 'positionDetail',
+                            active: tab === 'position',
                         })}
                         role='button'
                         onClick={(e) => {
-                            handleChangeTab('positionManager');
+                            handleChangeTab('position');
                         }}
                     >
                         <IconDollar
-                            fill={
-                                tab === 'positionManager' ||
-                                tab === 'positionDetail'
-                                    ? '#000'
-                                    : '#808080'
-                            }
+                            fill={tab === 'position' ? '#000' : '#808080'}
                         />
-                    </div> */}
+                    </div>
                     <div
                         className={classNames('footer-tab', {
                             active: tab === 'shop',

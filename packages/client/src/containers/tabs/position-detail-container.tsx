@@ -8,34 +8,25 @@ import './position-manager-container.scss';
 
 import { IconShop } from 'components/icon';
 
-import pngBananaBasket from 'styles/images/banana-basket.png';
-import pngEmptyBasket from 'styles/images/empty-basket.png';
-import pngNANA from 'styles/images/tokens/nana.png';
-import pngArrowLeft from 'styles/images/left-arrow.png';
-import pngArrowRight from 'styles/images/right-arrow.png';
-import pngBanana1 from 'styles/images/banana-1.png';
-import pngDancingBanana from 'styles/images/dancing-banana.png';
-import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
 import pngChevronUp from 'styles/images/chevron-up.png';
 import pngMonkeyHappy from 'styles/images/monkey-happy.png';
-import pngMonkeySad from 'styles/images/monkey-sad.png';
-
-import pngFireWorks from 'styles/images/fireworks.png';
-import pngTick from 'styles/images/tick.png';
-import pngMoneyBranch from 'styles/images/money-branch.png';
-import pngDanger from 'styles/images/danger.png';
-import pngMoney from 'styles/images/money.png';
-
 import pngTokenCRV from 'styles/images/tokens/CRV.png';
 import pngTokenETH from 'styles/images/tokens/ETH.png';
 
 import pngArrowLeft_1 from 'styles/images/left-arrow-1.png';
 import pngChevronRight from 'styles/images/chevron-right.png';
 
+import { V3PositionData } from '@sommelier/shared-types/src/api';
+import BigNumber from 'bignumber.js';
+
 const PositionDetailContainer = ({
+    positionData,
+    positionType,
     onBack,
 }: {
+    positionData: V3PositionData | null;
+    positionType: 'positive' | 'negative';
     onBack: () => void;
 }): JSX.Element | null => {
     const [detailOpen, setDetailOpen] = useState<boolean>(true);
@@ -46,7 +37,7 @@ const PositionDetailContainer = ({
                 <img src={pngArrowLeft_1} onClick={(e) => onBack()} />
                 <span>DANCING BANANA POSITIONS</span>
                 <img height='10' src={pngChevronRight} />
-                <span className='green'>CRV/ETH</span>
+                <span className='green'>{`${positionData?.position?.pool?.token0?.symbol}/${positionData?.position?.pool?.token1?.symbol}`}</span>
             </div>
             <div className='position-detail-unlock'>
                 <button>
@@ -61,18 +52,46 @@ const PositionDetailContainer = ({
             <div className='position-detail-info'>
                 <div className='position-detail-token'>
                     <div className='position-item-token'>
-                        <img src={pngTokenCRV} />
-                        <span>CRV</span>
+                        <div style={{ height: 52 }}>
+                            {resolveLogo(
+                                positionData?.position?.pool?.token0?.id,
+                                '52px',
+                            )}
+                        </div>
+                        <span>
+                            {positionData?.position?.pool?.token0?.symbol}
+                        </span>
                     </div>
                     <div className='position-item-token'>
-                        <img src={pngTokenETH} />
-                        <span>ETH</span>
+                        <div style={{ height: 52 }}>
+                            {resolveLogo(
+                                positionData?.position?.pool?.token1?.id,
+                                '52px',
+                            )}
+                        </div>
+                        <span>
+                            {positionData?.position?.pool?.token1?.symbol}
+                        </span>
                     </div>
                 </div>
                 <div className='position-detail-separator'></div>
                 <div className='position-detail-type'>
                     <img src={pngMonkeyHappy} />
-                    <span className='green'>{`+ ${formatUSD(200)}`}</span>
+                    <span
+                        className={classNames({
+                            green: positionType === 'positive',
+                            red: positionType === 'negative',
+                        })}
+                    >
+                        {positionType === 'positive' ? '+ ' : '- '}
+                        {formatUSD(
+                            positionData?.stats?.totalFeesUSD !== undefined
+                                ? new BigNumber(
+                                      positionData?.stats?.totalFeesUSD,
+                                  ).toString()
+                                : 0,
+                        )}
+                    </span>
                 </div>
             </div>
             <div className='position-detail-stats'>
@@ -90,7 +109,16 @@ const PositionDetailContainer = ({
                                 ENTRY LIQUIDITY
                             </div>
                             <div className='position-detail-stats-value'>
-                                {formatUSD(100)}
+                                {formatUSD(
+                                    positionData?.position?.liquidity !==
+                                        undefined
+                                        ? new BigNumber(
+                                              positionData?.position?.liquidity,
+                                          )
+                                              .div(new BigNumber(10).pow(18))
+                                              .toString()
+                                        : 0,
+                                )}
                             </div>
                         </div>
                         <div className='position-detail-stats-row'>
@@ -98,7 +126,16 @@ const PositionDetailContainer = ({
                                 CURRENT LIQUIDITY
                             </div>
                             <div className='position-detail-stats-value'>
-                                {formatUSD(100)}
+                                {formatUSD(
+                                    positionData?.position?.liquidity !==
+                                        undefined
+                                        ? new BigNumber(
+                                              positionData?.position?.liquidity,
+                                          )
+                                              .div(new BigNumber(10).pow(18))
+                                              .toString()
+                                        : 0,
+                                )}
                             </div>
                         </div>
                         <div className='position-detail-stats-row'>
@@ -106,15 +143,22 @@ const PositionDetailContainer = ({
                                 RETURN
                             </div>
                             <div className='position-detail-stats-value'>
-                                {formatUSD(100)}
+                                {formatUSD(
+                                    positionData?.stats?.totalReturn !==
+                                        undefined
+                                        ? new BigNumber(
+                                              positionData?.stats?.totalReturn,
+                                          ).toString()
+                                        : 0,
+                                )}
                             </div>
                         </div>
-                        <div className='position-detail-stats-action'>
+                        {/* <div className='position-detail-stats-action'>
                             <button className='btn-remove-liquidity'>
                                 REMOVE
                             </button>
                             <button className='btn-add-liquidity'>ADD</button>
-                        </div>
+                        </div> */}
                     </div>
                 )}
             </div>
