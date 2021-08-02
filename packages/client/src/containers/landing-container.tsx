@@ -25,6 +25,7 @@ import ShopContainer from './tabs/shop-container';
 import CartContainer from './tabs/cart-container';
 import TaskContainer from './tabs/task-container';
 import SuccessContainer from './tabs/success-container';
+import ExchangeContainer from './tabs/exchange-container';
 import PositionManagerContainer from './tabs/position-manager-container';
 import PositionDetailContainer from './tabs/position-detail-container';
 import LevelUpContainer from './tabs/level-up-container';
@@ -87,6 +88,8 @@ function LandingContainer({
     const [poolCount, setPoolCount] = useState<number>(
         Number(currentLevelData.poolCount),
     );
+
+    const [exchangeKey, setExchangeKey] = useState<string>('speedup');
 
     const handleChangePoolIndex = (index: number) => {
         setPoolIndex(index % poolCount);
@@ -253,6 +256,11 @@ function LandingContainer({
         setHomeMode('edit');
     };
 
+    const handleExchange = (exchangeKey: string) => {
+        setExchangeKey(exchangeKey);
+        handleChangeTab('exchange');
+    };
+
     const handleRemoveCart = (poolIndex: number) => {
         basketData.splice(poolIndex, 1);
         storage.setBasketData(basketData);
@@ -309,6 +317,9 @@ function LandingContainer({
                             poolIndex={poolIndex}
                             poolCount={poolCount}
                             mode={homeMode}
+                            onGoShop={() => {
+                                handleChangeTab('shop');
+                            }}
                             onRefreshPool={() => handleRefreshPool()}
                             handleWalletConnect={() => showWalletModal()}
                             onAddBasket={(
@@ -344,6 +355,14 @@ function LandingContainer({
                         }}
                     />
                 )}
+                {tab === 'exchange' && (
+                    <ExchangeContainer
+                        exchangeKey={exchangeKey}
+                        onBack={() => {
+                            handleChangeTab('shop');
+                        }}
+                    />
+                )}
                 {tab === 'levelup' && (
                     <LevelUpContainer
                         onBack={() => {
@@ -351,7 +370,13 @@ function LandingContainer({
                         }}
                     />
                 )}
-                {tab === 'shop' && <ShopContainer />}
+                {tab === 'shop' && (
+                    <ShopContainer
+                        onExchange={(exchangeKey: string) => {
+                            handleExchange(exchangeKey);
+                        }}
+                    />
+                )}
                 {tab === 'cart' && (
                     <CartContainer
                         gasPrices={gasPrices}

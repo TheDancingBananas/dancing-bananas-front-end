@@ -50,6 +50,7 @@
         width: 193px;
         height: 193px;
         margin-bottom: 15px;
+        position: relative;
     }
 
     .reward-item {
@@ -63,22 +64,28 @@
         width: 193px;
         height: 193px;
         align-items: center;
+        justify-content: center;
         cursor: pointer;
         opacity: 0.5;
+        position: relative;
+
+        &.speedup-wrap {
+            padding-top: 90px;
+            & > img {
+                position: absolute;
+                top: 10px;
+                left: 0;
+                transform: rotate(4deg);
+                z-index: 10;
+            }
+        }
 
         &.enable {
             opacity: 1;
         }
 
-        &-img {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            img {
-                height: 70px;
-            }
+        img {
+            height: 75px;
         }
 
         &-name {
@@ -88,11 +95,13 @@
             text-shadow: -1.2px 0 rgba(0, 0, 0, 0.75), 0 1.2px rgba(0, 0, 0, 0.75), 1.2px 0 rgba(0, 0, 0, 0.75), 0 -1.2px rgba(0, 0, 0, 0.75);
             margin-top: 10px;
             text-align: center;
+            position: relative;
+            z-index: 20;
         }
 
         &-button {
             margin-top: 10px;
-            background: #FF90D0;
+            background: #9200FF;
             border: 1px solid #000000;
             box-sizing: border-box;
             border-radius: 5.8px;
@@ -123,7 +132,7 @@
     .reward-lock {
         position: absolute;
         height: 36px;
-        margin-left: 155px;
-        margin-top: -185px;
+        right: 10px;
+        top: 10px;
     }
 }

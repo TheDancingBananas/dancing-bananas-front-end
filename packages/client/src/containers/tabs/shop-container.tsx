@@ -7,7 +7,7 @@ import './shop-container.scss';
 import pngRewardRoof from 'styles/images/reward-roof.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 
-import pngTimer from 'styles/images/timer.png';
+import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
 import pngRemoveBanana from 'styles/images/banana-3.png';
 import pngMonkeyHappy from 'styles/images/monkey-1.png';
 import pngMonkeys from 'styles/images/monkeys.png';
@@ -22,6 +22,7 @@ const ShopItem = ({
     active,
     imageHeight,
     onUnlock,
+    onExchange,
 }: {
     itemName: string | JSX.Element;
     itemImage: string;
@@ -29,15 +30,27 @@ const ShopItem = ({
     active?: boolean | false;
     imageHeight?: number;
     onUnlock: () => void;
+    onExchange: () => void;
 }): JSX.Element | null => {
     const style = imageHeight ? { height: `${imageHeight}px` } : {};
+    const isSpeedUp = itemName === 'SPEED UP!';
 
+    const handleExchange = () => {
+        if (active) {
+            onExchange();
+        }
+    };
     return (
         <div className='reward-item-wrapper'>
-            <div className={classNames('reward-item', { enable: active })}>
-                <div className='reward-item-img'>
-                    <img src={itemImage} style={style} />
-                </div>
+            <div
+                className={classNames(
+                    'reward-item',
+                    { enable: active },
+                    { 'speedup-wrap': isSpeedUp },
+                )}
+                onClick={handleExchange}
+            >
+                <img src={itemImage} style={style} />
                 <span className='reward-item-name'>{itemName}</span>
                 {active && (
                     <div className='reward-item-button' role='button'>
@@ -52,7 +65,11 @@ const ShopItem = ({
     );
 };
 
-const RewardContainer = (): JSX.Element | null => {
+const ShopContainer = ({
+    onExchange,
+}: {
+    onExchange: (exchangeKey: string) => void;
+}): JSX.Element | null => {
     const handleUnlock = () => {
         console.log('unlocked clicked');
     };
@@ -69,11 +86,12 @@ const RewardContainer = (): JSX.Element | null => {
                 <div className='reward-wrapper'>
                     <ShopItem
                         itemName='SPEED UP!'
-                        itemImage={pngTimer}
-                        banana={1}
+                        itemImage={pngSpeedUp}
+                        banana={300}
                         active={true}
-                        imageHeight={90}
+                        imageHeight={140}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('speedup')}
                     />
                     <ShopItem
                         itemName={
@@ -86,6 +104,7 @@ const RewardContainer = (): JSX.Element | null => {
                         itemImage={pngRemoveBanana}
                         banana={1}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -98,6 +117,7 @@ const RewardContainer = (): JSX.Element | null => {
                         itemImage={pngMonkeyHappy}
                         banana={1}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -111,6 +131,7 @@ const RewardContainer = (): JSX.Element | null => {
                         banana={1}
                         imageHeight={50}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -123,6 +144,7 @@ const RewardContainer = (): JSX.Element | null => {
                         itemImage={png3Hours}
                         banana={1}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -135,6 +157,7 @@ const RewardContainer = (): JSX.Element | null => {
                         itemImage={pngSpeed}
                         banana={1}
                         onUnlock={() => handleUnlock()}
+                        onExchange={() => onExchange('')}
                     />
                 </div>
             </div>
@@ -142,4 +165,4 @@ const RewardContainer = (): JSX.Element | null => {
     );
 };
 
-export default RewardContainer;
+export default ShopContainer;

@@ -28,6 +28,13 @@ export interface Level {
     bananarewards: Reward;
 }
 
+export interface ExchangeData {
+    key: string;
+    title: string;
+    desc: string;
+    amount: number;
+}
+
 export type Tabs =
     | 'home'
     | 'task'
@@ -36,4 +43,5 @@ export type Tabs =
     | 'shop'
     | 'levelup'
     | 'positionManager'
-    | 'positionDetail';
+    | 'positionDetail'
+    | 'exchange';

@@ -99,5 +99,13 @@
                 }
             }
         }
+    ],
+    "exchangeData" : [
+        {
+            "key" : "speedup",
+            "title" : "SPEED UP!",
+            "desc" : "Speed up the waiting time for the next dancing banana pool",
+            "amount" : 300
+        }
     ]
 }

@@ -6,15 +6,17 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import './wait-container.scss';
 
-import pngTimer from 'styles/images/timer.png';
+import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
 import pngPaperPlane from 'styles/images/paper-plane.png';
 
 import { storage, SKIP_DURATION } from 'util/localStorage';
 
 const WaitContainer = ({
     onSkipFinish,
+    onGoShop,
 }: {
     onSkipFinish: () => void;
+    onGoShop: () => void;
 }): JSX.Element | null => {
     const [time, setTime] = useState<number>(storage.getRemainingWaitingTime());
 
@@ -65,8 +67,11 @@ const WaitContainer = ({
                     </div>
                 </div>
                 <div className='wait-actions'>
-                    <button className='wait-speed-up'>
-                        <span>SPEED UP!</span> <img src={pngTimer} />
+                    <button
+                        className='wait-speed-up'
+                        onClick={() => onGoShop()}
+                    >
+                        <span>SPEED UP!</span> <img src={pngSpeedUp} />
                     </button>
                     <button
                         className='wait-notify-me'
