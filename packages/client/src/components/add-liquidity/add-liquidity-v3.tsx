@@ -58,6 +58,7 @@ import pngApySad from 'styles/images/apy-sad.png';
 import pngETH from 'styles/images/eth.png';
 import pngNANA from 'styles/images/tokens/nana.png';
 import pngBanana2 from 'styles/images/banana-2.png';
+import gifBonusBanana from 'styles/images/Bonus_bananas.gif';
 
 import AlertModal from './alert-modal';
 
@@ -1737,14 +1738,8 @@ export const AddLiquidityV3 = ({
                         {rightArrow && <img src={pngRight} />}
                     </div> */}
                 </div>
-                <div className={classNames('reward')}>
-                    <img src={pngBanana2} />
-                    <div className='reward-count'>{rewardBananas}</div>
-                    <div className='reward-amount'>
-                        BONUS
-                        <br />
-                        BANANAS
-                    </div>
+                <div className='bonus-banana-gif'>
+                    <img src={gifBonusBanana} />
                 </div>
                 <div className='pool-info'>
                     <div className='pool-pairs'>
