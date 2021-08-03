@@ -84,9 +84,10 @@ const PositionItem = ({
                             positive,
                         })}
                     >
-                        {`${positive ? '+' : '-'} ${formatUSD(
+                        {/* {`${positive ? '+' : '-'} ${formatUSD(
                             position?.stats?.totalFeesUSD?.toString(),
-                        )}`}
+                        )}`} */}
+                        {formatUSD(position?.stats?.totalFeesUSD?.toString())}
                     </span>
                 </div>
             )}
@@ -176,15 +177,18 @@ const PositionManagerContainer = ({
             if (liquidity.isZero()) {
                 cPools.push(positionsData?.[id]);
             } else {
-                const totalReturn = new BigNumber(
-                    positionsData?.[id]?.stats?.totalReturn,
+                // const totalReturn = new BigNumber(
+                //     positionsData?.[id]?.stats?.totalReturn,
+                // );
+                const totalLiquidity = new BigNumber(
+                    positionsData?.[id]?.stats?.usdAmount,
                 );
-                if (totalReturn.isPositive() || totalReturn.isZero()) {
+                if (totalLiquidity.gt(new BigNumber(100))) {
                     pPools.push(positionsData?.[id]);
-                    pSum = pSum.plus(liquidity);
+                    pSum = pSum.plus(totalLiquidity);
                 } else {
                     mPools.push(positionsData?.[id]);
-                    mSum = mSum.plus(liquidity.toString());
+                    mSum = mSum.plus(totalLiquidity);
                 }
             }
         });
@@ -193,8 +197,8 @@ const PositionManagerContainer = ({
         setMinusPools(mPools);
         setClosedPools(cPools);
 
-        setPlusSum(pSum.div(new BigNumber(10).pow(18)));
-        setMinusSum(mSum.div(new BigNumber(10).pow(18)));
+        setPlusSum(pSum);
+        setMinusSum(mSum);
     }, [positionsData]);
 
     return (

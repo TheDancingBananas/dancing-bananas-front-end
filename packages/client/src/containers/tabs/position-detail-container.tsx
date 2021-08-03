@@ -31,6 +31,32 @@ const PositionDetailContainer = ({
 }): JSX.Element | null => {
     const [detailOpen, setDetailOpen] = useState<boolean>(true);
 
+    const getTotalGains = () => {
+        const currentLiquidity =
+            positionData?.stats?.usdAmount !== undefined
+                ? new BigNumber(positionData?.stats?.usdAmount)
+                : new BigNumber(0);
+        const feeCollected =
+            positionData?.stats?.collectedFeesUSD !== undefined
+                ? new BigNumber(positionData?.stats?.collectedFeesUSD)
+                : new BigNumber(0);
+        const feeUnCollected =
+            positionData?.stats?.uncollectedFeesUSD !== undefined
+                ? new BigNumber(positionData?.stats?.uncollectedFeesUSD)
+                : new BigNumber(0);
+        const entryLiquidity =
+            positionData?.stats?.entryUsdAmount !== undefined
+                ? new BigNumber(positionData?.stats?.entryUsdAmount)
+                : new BigNumber(0);
+
+        const gains = currentLiquidity
+            .plus(feeCollected)
+            .plus(feeUnCollected)
+            .minus(entryLiquidity);
+
+        return formatUSD(gains.toString());
+    };
+
     return (
         <div className='position-detail-container'>
             <div className='position-detail-header'>
@@ -83,7 +109,7 @@ const PositionDetailContainer = ({
                             red: positionType === 'negative',
                         })}
                     >
-                        {positionType === 'positive' ? '+ ' : '- '}
+                        {/* {positionType === 'positive' ? '+ ' : '- '} */}
                         {formatUSD(
                             positionData?.stats?.totalFeesUSD !== undefined
                                 ? new BigNumber(
@@ -106,51 +132,54 @@ const PositionDetailContainer = ({
                     <div className='position-detail-stats-wrapper'>
                         <div className='position-detail-stats-row'>
                             <div className='position-detail-stats-property'>
-                                ENTRY LIQUIDITY
-                            </div>
-                            <div className='position-detail-stats-value'>
-                                {formatUSD(
-                                    positionData?.position?.liquidity !==
-                                        undefined
-                                        ? new BigNumber(
-                                              positionData?.position?.liquidity,
-                                          )
-                                              .div(new BigNumber(10).pow(18))
-                                              .toString()
-                                        : 0,
-                                )}
-                            </div>
-                        </div>
-                        <div className='position-detail-stats-row'>
-                            <div className='position-detail-stats-property'>
                                 CURRENT LIQUIDITY
                             </div>
                             <div className='position-detail-stats-value'>
                                 {formatUSD(
-                                    positionData?.position?.liquidity !==
-                                        undefined
+                                    positionData?.stats?.usdAmount !== undefined
                                         ? new BigNumber(
-                                              positionData?.position?.liquidity,
-                                          )
-                                              .div(new BigNumber(10).pow(18))
-                                              .toString()
+                                              positionData?.stats?.usdAmount,
+                                          ).toString()
                                         : 0,
                                 )}
                             </div>
                         </div>
                         <div className='position-detail-stats-row'>
                             <div className='position-detail-stats-property'>
-                                RETURN
+                                FEES COLLECTED
                             </div>
                             <div className='position-detail-stats-value'>
                                 {formatUSD(
-                                    positionData?.stats?.totalReturn !==
+                                    positionData?.stats?.collectedFeesUSD !==
                                         undefined
                                         ? new BigNumber(
-                                              positionData?.stats?.totalReturn,
+                                              positionData?.stats?.collectedFeesUSD,
                                           ).toString()
                                         : 0,
                                 )}
+                            </div>
+                        </div>
+                        <div className='position-detail-stats-row'>
+                            <div className='position-detail-stats-property'>
+                                -INITIAL LIQUIDITY
+                            </div>
+                            <div className='position-detail-stats-value'>
+                                {formatUSD(
+                                    positionData?.stats?.entryUsdAmount !==
+                                        undefined
+                                        ? new BigNumber(
+                                              positionData?.stats?.entryUsdAmount,
+                                          ).toString()
+                                        : 0,
+                                )}
+                            </div>
+                        </div>
+                        <div className='position-detail-stats-row'>
+                            <div className='position-detail-stats-property'>
+                                TOTAL GAINS
+                            </div>
+                            <div className='position-detail-stats-value green'>
+                                {getTotalGains()}
                             </div>
                         </div>
                         {/* <div className='position-detail-stats-action'>
