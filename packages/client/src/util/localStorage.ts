@@ -1,6 +1,6 @@
 import { LiquidityBasketData } from 'types/states';
 
-export const SKIP_DURATION = 5; // 5 sec for test. Should be 240 mins in production
+export const SKIP_DURATION = 240; // 5 sec for test. Should be 240 mins in production
 
 const getLastSkipTime = (): number => {
     const lastSkipTime = localStorage.getItem('last-skip-time');

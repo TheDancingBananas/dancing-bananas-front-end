@@ -27,6 +27,13 @@ const WaitContainer = ({
         return `${hours}:${mins < 10 ? '0' : ''}${mins}`;
     };
 
+    const handleClick = (): void => {
+        const url = `https://t.me/DancingBananasBot?start=${
+            storage.getRemainingWaitingTime() * 1000
+        }`;
+        window.open(url, '_blank');
+    };
+
     useEffect(() => {
         let interval: any = null;
 
@@ -76,9 +83,7 @@ const WaitContainer = ({
                     <button
                         className='wait-notify-me'
                         onClick={(e) => {
-                            const url =
-                                'https://t.me/DancingBananasBot?start=newsession';
-                            window.open(url, '_blank');
+                            handleClick();
                         }}
                     >
                         <span>
