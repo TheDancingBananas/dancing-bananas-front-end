@@ -149,7 +149,7 @@ async function getRandomPool(
 
     // console.log('lastPoolId', lastPoolId);
 
-    const data = await fetcher.getTopPools(50, sort);
+    const data = await fetcher.getTopPools(30, sort);
     const findIndex = data.findIndex(
         (d) => lastPoolId !== '' && d.id.toString() === lastPoolId.toString(),
     );
