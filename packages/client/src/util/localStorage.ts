@@ -1,6 +1,6 @@
 import { LiquidityBasketData } from 'types/states';
 
-export const SKIP_DURATION = 240; // 5 sec for test. Should be 240 mins in production
+export const SKIP_DURATION = 5; // 5 sec for test. Should be 240 mins in production
 
 const getLastSkipTime = (): number => {
     const lastSkipTime = localStorage.getItem('last-skip-time');
@@ -31,7 +31,14 @@ const getRemainingWaitingTime = (): number => {
     const lastSkipTime = getLastSkipTime();
     const currentTime = Math.floor(Date.now() / 1000);
 
-    return SKIP_DURATION - currentTime + lastSkipTime;
+    let time_left = SKIP_DURATION - currentTime + lastSkipTime;
+
+    if (time_left < 0) {
+        time_left = SKIP_DURATION;
+        setLastSkipTime(0);
+    }
+
+    return time_left;
 };
 
 const setLevel = (level: string): void => {
