@@ -121,6 +121,8 @@ function LandingContainer({
     useEffect(() => {
         const getPoolAsync = async (address: string) => {
             const poolId = await getRandomPoolID(address);
+            console.log('prev pool', currentPoolId);
+            console.log('new pool', poolId);
             setCurrentPoolId(poolId);
         };
         if (shouldRefreshPool && wallet.account) {
