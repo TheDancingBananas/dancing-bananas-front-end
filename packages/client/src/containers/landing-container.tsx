@@ -126,8 +126,9 @@ function LandingContainer({
             setCurrentPoolId(poolId);
         };
         if (shouldRefreshPool && wallet.account) {
-            setShouldRefreshPool(false);
+            console.log('started refresh pool');
             getPoolAsync(wallet.account);
+            setShouldRefreshPool(false);
         }
     }, [shouldRefreshPool, wallet.account]);
     // const positionList = usePositionManagers();
