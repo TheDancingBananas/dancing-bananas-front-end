@@ -102,6 +102,7 @@ function LandingContainer({
             if (currentTime - lastPoolFetchTime > SKIP_DURATION) {
                 setLastPoolFetchTime(0);
                 storage.setLastSkipTime(0);
+                storage.setSkipStatus('off');
                 refresh = true;
             }
         }
@@ -136,6 +137,7 @@ function LandingContainer({
     const handleRefreshPool = () => {
         console.log('handle refresh');
         storage.setLastSkipTime(0);
+        storage.setSkipStatus('off');
         // setCurrentPoolId('');
         setShouldRefreshPool(true);
     };
@@ -253,7 +255,7 @@ function LandingContainer({
     };
 
     const handleEditCart = (poolIndex: number) => {
-        setPoolIndex(poolIndex % poolCount);
+        setPoolIndex(0);
         setTab('home');
         setHomeMode('edit');
     };

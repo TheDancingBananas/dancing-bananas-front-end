@@ -35,7 +35,6 @@ const getRemainingWaitingTime = (): number => {
 
     if (time_left < 0) {
         time_left = SKIP_DURATION;
-        setLastSkipTime(0);
     }
 
     return time_left;
