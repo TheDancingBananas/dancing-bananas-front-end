@@ -31,6 +31,7 @@ export interface Level {
 export interface ExchangeData {
     key: string;
     title: string;
+    subtitle: string;
     desc: string;
     amount: number;
 }
