@@ -254,9 +254,10 @@ function LandingContainer({
         setTab(t);
     };
 
-    const handleEditCart = (poolIndex: number) => {
+    const handleEditCart = (poolId: string) => {
         setPoolIndex(0);
         setTab('home');
+        setCurrentPoolId(poolId);
         setHomeMode('edit');
     };
 
@@ -392,7 +393,7 @@ function LandingContainer({
                         onStatus={(status: boolean, time?: number) =>
                             handleChangePendingStatus(status, time)
                         }
-                        onEdit={(i: number) => handleEditCart(i)}
+                        onEdit={(poolId: string) => handleEditCart(poolId)}
                         onRemove={(i: number) => handleRemoveCart(i)}
                     />
                 )}

@@ -548,11 +548,17 @@ export const AddLiquidityV3 = ({
             // is less heavily weighted towards, we won't have enough of the other token. So we need to
             // scale it up.
 
-            if (updatedAmount.lt(new BigNumber(selectedAmount))) {
+            if (updatedAmount.isZero()) {
+                // It means getting position is failed.
+                otherAmount = expectedBaseAmount;
+
+                updatedAmount = expectedQuoteAmount;
+            } else if (updatedAmount.lt(new BigNumber(selectedAmount))) {
                 // We ended up with less, so we need to scale up
                 const scale = new BigNumber(selectedAmount).div(updatedAmount);
 
                 updatedAmount = updatedAmount.times(scale);
+
                 otherAmount = otherAmount.times(scale);
             }
 

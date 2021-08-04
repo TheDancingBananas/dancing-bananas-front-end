@@ -64,7 +64,7 @@ const CartContainer = ({
     onBack: () => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean, time?: number) => void;
-    onEdit: (i: number) => void;
+    onEdit: (poolId: string) => void;
     onRemove: (i: number) => void;
 }): JSX.Element | null => {
     // console.log('cart', cartData);
@@ -834,7 +834,7 @@ const CartContainer = ({
                                             <div className='row-detail-right'>
                                                 <button
                                                     onClick={(e) =>
-                                                        onEdit(index)
+                                                        onEdit(item.poolId)
                                                     }
                                                 >
                                                     EDIT

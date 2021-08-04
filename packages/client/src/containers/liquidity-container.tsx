@@ -195,9 +195,10 @@ export const LiquidityContainer = ({
 
     const originalLiquidity: any = useMemo(() => {
         if (mode !== 'edit') return {};
-        if (poolIndex === undefined) return;
 
-        const selectedPool: any = basket[poolIndex];
+        const selectedPool: any = basket.find(
+            (element) => element.poolId === poolId,
+        );
         if (selectedPool === undefined) return;
         const origin = {
             [selectedPool.lToken0Name]: selectedPool.lToken0Amount,
@@ -207,7 +208,7 @@ export const LiquidityContainer = ({
         }
 
         return origin;
-    }, [mode, basket, poolIndex]);
+    }, [mode, basket, poolId]);
 
     const handleSkip = (status: number) => {
         if (!wallet.account) {
