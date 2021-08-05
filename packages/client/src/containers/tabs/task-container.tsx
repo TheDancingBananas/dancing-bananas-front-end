@@ -22,9 +22,9 @@ const TaskContainer = ({
     onBack: () => void;
     onLevelUp: () => void;
 }): JSX.Element | null => {
-    const taskCompleteStatus = storage.getTask();
+    const taskStatus = storage.getTaskStatus();
+    const taskCompleted = storage.getLevelTaskCompleted();
     const level = storage.getLevel();
-
     const gameLevels: Level[] = gameData.game;
     const currentLevel: Level = gameLevels[Number(level) - 1];
 
@@ -47,38 +47,36 @@ const TaskContainer = ({
                     FOR LEVEL UP
                 </p>
                 <div className='task-content'>
-                    {currentLevel.tasks.map(
-                        (task: LevelTask, index: number) => {
-                            if (taskCompleteStatus === 'incomplete') {
-                                return (
-                                    <button
-                                        key={`level-task-${index}`}
-                                        className='task-item'
-                                        onClick={(e) => onBack()}
-                                    >
-                                        {task.taskName}
-                                    </button>
-                                );
-                            }
-                            if (taskCompleteStatus === 'complete') {
-                                return (
-                                    <button
-                                        key={`level-task-${index}`}
-                                        className='task-item'
-                                    >
-                                        TASK COMPLETED
-                                        <img
-                                            src={pngTickBlack}
-                                            style={{ marginLeft: 15 }}
-                                            width='10'
-                                        />
-                                    </button>
-                                );
-                            }
+                    {taskStatus.map((task: LevelTask, index: number) => {
+                        if (task.complete === false) {
+                            return (
+                                <button
+                                    key={`level-task-${index}`}
+                                    className='task-item active'
+                                    onClick={(e) => onBack()}
+                                >
+                                    {task.taskName}
+                                </button>
+                            );
+                        }
+                        if (task.complete === true) {
+                            return (
+                                <button
+                                    key={`level-task-${index}`}
+                                    className='task-item'
+                                >
+                                    TASK COMPLETED
+                                    <img
+                                        src={pngTickBlack}
+                                        style={{ marginLeft: 15 }}
+                                        width='10'
+                                    />
+                                </button>
+                            );
+                        }
 
-                            return null;
-                        },
-                    )}
+                        return null;
+                    })}
                 </div>
                 <div className='reward-divider'>
                     <div className='line'></div>
@@ -87,13 +85,10 @@ const TaskContainer = ({
                 </div>
                 <button
                     className={classNames('level-up-button', {
-                        disabled: taskCompleteStatus !== 'complete',
+                        disabled: taskCompleted === false,
                     })}
                     onClick={(e) => {
-                        if (taskCompleteStatus === 'complete') {
-                            const nextLevel = Number(level) + 1;
-                            storage.setLevel(nextLevel.toString());
-                            storage.setTask('incomplete');
+                        if (taskCompleted === true) {
                             onLevelUp();
                         }
                     }}

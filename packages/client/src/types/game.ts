@@ -1,5 +1,8 @@
 export interface LevelTask {
     taskName: string;
+    taskType: string;
+    goal: number;
+    current: number;
     complete: boolean;
 }
 

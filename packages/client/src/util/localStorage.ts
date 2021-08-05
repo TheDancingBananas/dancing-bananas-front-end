@@ -1,4 +1,6 @@
 import { LiquidityBasketData } from 'types/states';
+import { Level, LevelTask } from 'types/game';
+import gameData from 'constants/gameData.json';
 
 export const SKIP_DURATION = 60; // 5 sec for test. Should be 240 mins in production
 
@@ -49,13 +51,34 @@ const getLevel = (): string => {
     return value ? value : '1';
 };
 
-const setTask = (task: string): void => {
-    localStorage.setItem('task', task);
+const setTaskStatus = (task: LevelTask[]): void => {
+    const value = JSON.stringify(task);
+    localStorage.setItem('task', value);
 };
 
-const getTask = (): string => {
-    const value = localStorage.getItem('task');
-    return value ? value : 'incomplete';
+const getDefaultTaskStatus = (): LevelTask[] => {
+    const gameLevels: Level[] = gameData.game;
+    const currentLevelData: Level = gameLevels[Number(getLevel()) - 1];
+    return JSON.parse(JSON.stringify(currentLevelData.tasks));
+};
+
+const getTaskStatus = (): LevelTask[] => {
+    try {
+        const value = localStorage.getItem('task');
+        if (!value) return getDefaultTaskStatus();
+        const data: LevelTask[] = JSON.parse(value);
+        return data;
+    } catch (e) {
+        return getDefaultTaskStatus();
+    }
+};
+
+const getLevelTaskCompleted = (): boolean => {
+    const taskStatus = getTaskStatus();
+
+    const incomplete = taskStatus.filter((val) => val.complete === false);
+
+    return incomplete.length === 0;
 };
 
 const setBasketData = (data: LiquidityBasketData[]): void => {
@@ -100,9 +123,11 @@ export const storage = {
     getSkip,
     setLevel,
     getLevel,
-    setTask,
-    getTask,
+    setTaskStatus,
+    getTaskStatus,
     setBasketData,
     addBasketData,
     getBasketData,
+    getDefaultTaskStatus,
+    getLevelTaskCompleted,
 };
