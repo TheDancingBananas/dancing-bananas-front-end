@@ -28,6 +28,7 @@ function App(): ReactElement {
     // });
 
     const gasPrices = useEthGasPrices();
+
     const [showConnectWallet, setShowConnectWallet] = useState(false);
     // subscribe to the hook, will propogate to the nearest boundary
 

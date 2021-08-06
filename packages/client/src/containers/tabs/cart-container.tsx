@@ -46,7 +46,7 @@ import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity_2.json';
 import batchLiquidityAbi from 'constants/abis/uniswap_v3_batch_liquidity.json';
 import erc20Abi from 'constants/abis/erc20.json';
 
-import { getEstimateTime } from 'services/api-etherscan';
+import { getEstimateTime, getGasPrice } from 'services/api-etherscan';
 
 const ETH_ID = config.ethAddress;
 
@@ -125,9 +125,10 @@ const CartContainer = ({
             return;
         }
 
-        const baseGasPrice = ethers.utils
-            .parseUnits(currentGasPrice.toString(), 9)
-            .toString();
+        // const gasPrice = await getGasPrice();
+        // const baseGasPrice = ethers.utils
+        //     .parseUnits(gasPrice.high.toString(), 9)
+        //     .toString();
 
         const batchLiquidityContractAddress =
             config.networks[wallet.network || '1']?.contracts
@@ -283,6 +284,12 @@ const CartContainer = ({
 
                     // Call the contract and sign
                     let approvalEstimate: ethers.BigNumber;
+
+                    // Get gas price
+                    const gasPrice = await getGasPrice();
+                    const baseGasPrice = ethers.utils
+                        .parseUnits(gasPrice.high.toString(), 9)
+                        .toString();
 
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
@@ -472,6 +479,12 @@ const CartContainer = ({
                     // Call the contract and sign
                     let approvalEstimate: ethers.BigNumber;
 
+                    // Get gas price
+                    const gasPrice = await getGasPrice();
+                    const baseGasPrice = ethers.utils
+                        .parseUnits(gasPrice.high.toString(), 9)
+                        .toString();
+
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
@@ -549,6 +562,12 @@ const CartContainer = ({
 
         const value = baseMsgValue.toString();
         console.log('totalEth', value);
+
+        // Get gas price
+        const gasPrice = await getGasPrice();
+        const baseGasPrice = ethers.utils
+            .parseUnits(gasPrice.high.toString(), 9)
+            .toString();
 
         // Call the contract and sign
         let gasEstimate: ethers.BigNumber;

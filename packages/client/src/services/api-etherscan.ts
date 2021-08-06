@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { debug } from 'util/debug';
 import config from 'config/app';
+import axios from 'axios';
 
 export async function getEstimateTimeEtherscan(
     gasPrice: string,
@@ -22,7 +23,8 @@ export async function getEstimateTimeEtherscan(
         const quote = await response.json();
         debug.quote = quote;
 
-        if (quote.result && !isNaN(quote.result)) return parseFloat(quote.result);
+        if (quote.result && !isNaN(quote.result))
+            return parseFloat(quote.result);
 
         return undefined;
     } catch (err) {
@@ -38,7 +40,9 @@ export async function getEstimateTime(
 ): Promise<number | undefined> {
     try {
         const transaction = await provider.getTransaction(transactionHash);
-        const gasPrice = transaction.gasPrice ? transaction.gasPrice.toString() : defaultPrice;
+        const gasPrice = transaction.gasPrice
+            ? transaction.gasPrice.toString()
+            : defaultPrice;
 
         const estimateTime = await getEstimateTimeEtherscan(gasPrice);
 
@@ -47,4 +51,18 @@ export async function getEstimateTime(
         console.log('get Estimate Time error:', JSON.stringify(err));
         return undefined;
     }
+}
+
+export async function getGasPrice() {
+    const response = await axios.get(
+        'https://ethgasstation.info/json/ethgasAPI.json',
+    );
+
+    const prices = {
+        low: response.data.safeLow / 10,
+        medium: response.data.average / 10,
+        high: response.data.fast / 10,
+        fastest: Math.round(response.data.fastest / 10),
+    };
+    return prices;
 }
