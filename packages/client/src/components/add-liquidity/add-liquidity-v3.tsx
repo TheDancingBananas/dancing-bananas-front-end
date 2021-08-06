@@ -418,23 +418,20 @@ export const AddLiquidityV3 = ({
         );
         upperBoundTick -= upperBoundTick % uniPool.tickSpacing;
 
-        const sortedTicks = [lowerBoundTick, upperBoundTick].sort(
-            (a, b) => a - b,
-        ) as [number, number];
         const priceLower = tickToPrice(
             baseTokenCurrency,
             quoteTokenCurrency,
-            sortedTicks[0],
+            lowerBoundTick,
         );
         const priceUpper = tickToPrice(
             baseTokenCurrency,
             quoteTokenCurrency,
-            sortedTicks[1],
+            upperBoundTick,
         );
 
         return {
             prices: [lowerBound, upperBound] as [number, number],
-            ticks: sortedTicks,
+            ticks: [lowerBoundTick, upperBoundTick] as [number, number],
             ticksFromPrice: [priceLower, priceUpper] as [Price, Price],
         };
     };
@@ -646,10 +643,12 @@ export const AddLiquidityV3 = ({
             )
             .toString();
 
+        const tickLower = ticks[0] > ticks[1] ? ticks[1] : ticks[0];
+        const tickUpper = ticks[0] > ticks[1] ? ticks[0] : ticks[1];
         const position = Position.fromAmounts({
             pool: uniPool,
-            tickLower: ticks[0],
-            tickUpper: ticks[1],
+            tickLower: tickLower,
+            tickUpper: tickUpper,
             amount0: baseAmount0,
             amount1: baseAmount1,
         });
@@ -696,7 +695,7 @@ export const AddLiquidityV3 = ({
                 ),
             });
 
-            setDisabledInput(disabledSymbols);
+            //setDisabledInput(disabledSymbols);
         } else {
             setWarning({ status: false });
             setDisabledInput(null);
