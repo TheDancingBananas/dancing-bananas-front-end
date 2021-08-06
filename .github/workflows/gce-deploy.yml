@@ -15,7 +15,7 @@ jobs:
       - name: build 
         run: |
           cd /opt/actions-runner/il-loss-charts
-          git pull
+          git pull origin banana-game
           yarn config set workspaces-experimental true
           yarn
           
