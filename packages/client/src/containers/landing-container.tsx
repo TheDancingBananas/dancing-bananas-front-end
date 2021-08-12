@@ -135,11 +135,11 @@ function LandingContainer({
     // const positionList = usePositionManagers();
 
     const handleRefreshPool = () => {
+        setShouldRefreshPool(true);
         console.log('handle refresh');
         storage.setLastSkipTime(0);
         storage.setSkipStatus('off');
         // setCurrentPoolId('');
-        setShouldRefreshPool(true);
     };
 
     const showWalletModal = () => setShowConnectWallet(true);

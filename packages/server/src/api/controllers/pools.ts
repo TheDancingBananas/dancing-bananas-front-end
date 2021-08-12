@@ -31,7 +31,7 @@ import {
     networkValidator,
 } from 'api/util/validators';
 import { getUser, getDefaultUser, saveUser } from 'api/util/user-redis';
-
+import { getTopPoolsFromRedis } from 'api/util/pool-redis';
 // poolToPair(pool: Pool): IUniswapPair {
 // const totalSupply = '0'; // TODO
 // const feesUSD:string = <any> new BigNumber(pool.uncollectedFeesUSD + pool.collectedFeesUSD).toString();
@@ -147,9 +147,13 @@ async function getRandomPool(
             userInfo.lastPoolIds.length > 0 ? userInfo.lastPoolIds[0] : '';
     }
 
-    // console.log('lastPoolId', lastPoolId);
+    console.log('lastPoolId', lastPoolId);
 
-    const data = await fetcher.getTopPools(30, sort);
+    let data = await getTopPoolsFromRedis();
+    console.log('redis pool data : ', data);
+    if (data === null) {
+        data = await fetcher.getTopPools(30, sort);
+    }
     const findIndex = data.findIndex(
         (d) => lastPoolId !== '' && d.id.toString() === lastPoolId.toString(),
     );
