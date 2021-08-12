@@ -23,7 +23,10 @@ export async function keepCachePopulated(
                 'EX',
                 (interval + 300) * 1000,
             );
-
+            console.log(
+                'cache successfully populated --------------',
+                redisKey,
+            );
             return; // cache succcessfully populated
         } catch (err) {
             // If more than 5 attempts, don't try to populate cache
@@ -41,57 +44,57 @@ export async function keepCachePopulated(
     };
 
     // Make sure cache isn't already being tracked
-    const currentlyCached = await redis.get('cached_fns');
+    let currentlyCached = await redis.get('cached_fns');
+    if (!currentlyCached) {
+        const cachedFns: Record<string, boolean> = {
+            cachestarting: true,
+        };
+        currentlyCached = JSON.stringify(cachedFns);
+        await redis.set('cached_fns', currentlyCached);
+    }
 
     if (currentlyCached) {
         try {
             const cachedFns: FnCache = JSON.parse(currentlyCached);
 
-            if (cachedFns[redisKey]) {
-                // we can no-op, since an interval already exists
-                console.warn(
-                    `Attempting to double-cache ${redisKey} - ignoring`,
-                );
-                return;
-            } else {
-                // Start the interval and tell redis we're already caching it
+            void callFn();
+            // Start the interval and tell redis we're already caching it
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const callInterval: NodeJS.Timeout = <any>setInterval(() => {
-                    void callFn();
-                }, interval);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const callInterval: NodeJS.Timeout = <any>setInterval(() => {
+                void callFn();
+            }, interval * 1000);
 
-                // Unref prevents the interval from blocking app shutdown
-                callInterval.unref();
+            // Unref prevents the interval from blocking app shutdown
+            callInterval.unref();
 
-                cachedFns[redisKey] = true;
-                await redis.set('cached_fns', JSON.stringify(cachedFns));
+            cachedFns[redisKey] = true;
+            await redis.set('cached_fns', JSON.stringify(cachedFns));
 
-                if (expires) {
-                    setTimeout(() => {
-                        clearInterval(callInterval);
+            if (expires) {
+                setTimeout(() => {
+                    clearInterval(callInterval);
 
-                        // Remove function from cache
-                        void redis.get('cached_fns').then((currentlyCached) => {
-                            if (currentlyCached) {
-                                try {
-                                    const cachedFns: FnCache = JSON.parse(
-                                        currentlyCached,
-                                    );
-                                    delete cachedFns[redisKey];
-                                    return redis.set(
-                                        'cached_fns',
-                                        JSON.stringify(cachedFns),
-                                    );
-                                } catch (e) {
-                                    console.error(
-                                        'Could not delete cached function at end of interval',
-                                    );
-                                }
+                    // Remove function from cache
+                    void redis.get('cached_fns').then((currentlyCached) => {
+                        if (currentlyCached) {
+                            try {
+                                const cachedFns: FnCache = JSON.parse(
+                                    currentlyCached,
+                                );
+                                delete cachedFns[redisKey];
+                                return redis.set(
+                                    'cached_fns',
+                                    JSON.stringify(cachedFns),
+                                );
+                            } catch (e) {
+                                console.error(
+                                    'Could not delete cached function at end of interval',
+                                );
                             }
-                        });
-                    }, expires * 1000);
-                }
+                        }
+                    });
+                }, expires * 1000);
             }
         } catch (err) {
             throw new Error(

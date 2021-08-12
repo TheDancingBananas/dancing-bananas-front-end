@@ -14,7 +14,9 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import * as middleware from '../api/middlewares';
 
 import config from '@config';
-
+import { keepCachePopulated } from 'util/redis-data-cache';
+import { UniswapV3Fetchers } from 'services/uniswap-v3';
+import redis from 'util/redis';
 let mixpanel: Mixpanel.Mixpanel;
 
 if (config.mixpanel.apiKey.length > 0) {
@@ -65,6 +67,16 @@ class ExpressServer {
 
             res.sendFile(path.join(clientRoot, 'build', 'index.html'));
         });
+
+        const fetcher = UniswapV3Fetchers.get('mainnet');
+        void keepCachePopulated(
+            redis,
+            async function getTopPools() {
+                return await fetcher.getTopPools(30, 'volumeUSD');
+            },
+            [],
+            60 * 60,
+        );
     }
 
     router(routes: (app: Application) => void): ExpressServer {

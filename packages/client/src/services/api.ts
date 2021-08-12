@@ -336,6 +336,7 @@ export const getRandomPoolID = async (wallet: string) => {
     console.log('my wallet', wallet);
     const response = await fetch(
         `/api/v1/${networkName}/randomPool?wallet=${wallet}`,
+        { cache: 'no-store' },
     );
     if (!response.ok) throw new Error(`Failed to fetch top pools`);
 
