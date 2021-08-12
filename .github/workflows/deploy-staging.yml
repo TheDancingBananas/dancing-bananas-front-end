@@ -1,0 +1,23 @@
+name: Deploy staging
+on:
+  push:
+    branches: [ dev-banana-game ]
+  pull_request:
+    branches: [ dev-banana-game ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: staging
+    steps:
+      - name: build 
+        run: |
+          source /home/backend/.nvm/nvm.sh
+          cd /opt/actions-runner/il-loss-charts
+          git pull origin dev-banana-game
+          yarn config set workspaces-experimental true
+          yarn
+          
+      - name: restart service
+        run: |
+          sudo systemctl restart banana-staging
