@@ -115,6 +115,20 @@ const CartContainer = ({
         return;
     };
 
+    const handleAllowanceError = (
+        symbol: string,
+        allowanceAmount: string,
+        amount: string,
+    ): undefined => {
+        // We could not estimate gas, for whaever reason, so we should not let the transaction continue.
+
+        const toastMsg = `${symbol} token's amount(${amount}) is less than allowed amount(${allowanceAmount})`;
+
+        toastError(toastMsg);
+
+        return;
+    };
+
     const handleUserRejectError = (err: Error): undefined => {
         // The user rejected transaction.
 
@@ -283,8 +297,14 @@ const CartContainer = ({
                         );
 
                         // skip approval on allowance
-                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance))
+                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
+                            handleAllowanceError(
+                                tokenSymbol,
+                                new BigNumber(tokenAllowance).toFixed(2),
+                                new BigNumber(baseTokenAmount).toFixed(2),
+                            );
                             continue;
+                        }
                     }
 
                     // Call the contract and sign
@@ -489,8 +509,14 @@ const CartContainer = ({
                         );
 
                         // skip approval on allowance
-                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance))
+                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
+                            handleAllowanceError(
+                                tokenSymbol,
+                                new BigNumber(tokenAllowance).toFixed(2),
+                                new BigNumber(baseTokenAmount).toFixed(2),
+                            );
                             continue;
+                        }
                     }
 
                     // Call the contract and sign
