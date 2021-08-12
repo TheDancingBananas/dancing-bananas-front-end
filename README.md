@@ -1,4 +1,7 @@
+[![Deploy Production](https://github.com/TheDancingBananas/dancing-bananas-front-end/actions/workflows/deploy-prod.yml/badge.svg)](https://github.com/TheDancingBananas/dancing-bananas-front-end/actions/workflows/deploy-prod.yml)[![Deploy Staging](https://github.com/TheDancingBananas/dancing-bananas-front-end/actions/workflows/deploy-staging.yml/badge.svg)](https://github.com/TheDancingBananas/dancing-bananas-front-end/actions/workflows/deploy-staging.yml)
+
 # Dancing Bananas
+
 
 This repo is a fork of the web application for [Sommelier.finance](https://app.sommelier.finance) and a new game for silly apes.
 
