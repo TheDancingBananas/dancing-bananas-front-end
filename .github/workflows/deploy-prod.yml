@@ -1,0 +1,23 @@
+name: Deploy production
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: production
+    steps:
+      - name: build
+        run: |
+          source /home/backend/.nvm/nvm.sh
+          cd /opt/actions-runner/il-loss-charts
+          git pull origin main
+          yarn config set workspaces-experimental true
+          yarn
+
+      - name: restart service
+        run: |
+          sudo systemctl restart banana-prod
