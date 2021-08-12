@@ -46,7 +46,7 @@ import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity_2.json';
 import batchLiquidityAbi from 'constants/abis/uniswap_v3_batch_liquidity.json';
 import erc20Abi from 'constants/abis/erc20.json';
 
-import { getEstimateTime, getGasPrice } from 'services/api-etherscan';
+import { getEstimateTime } from 'services/api-etherscan';
 
 const ETH_ID = config.ethAddress;
 
@@ -76,11 +76,6 @@ const CartContainer = ({
 
     if (wallet.provider) {
         provider = new ethers.providers.Web3Provider(wallet?.provider);
-    }
-
-    let currentGasPrice: number | null = null;
-    if (gasPrices) {
-        currentGasPrice = gasPrices.fast;
     }
 
     const handleClickMoreDetails = (poolId: string) => {
@@ -120,11 +115,20 @@ const CartContainer = ({
         return;
     };
 
+    const handleUserRejectError = (err: Error): undefined => {
+        // The user rejected transaction.
+
+        toastError(err.message);
+
+        return;
+    };
+
     const handleAddLiquidity = async () => {
-        if (!provider || !currentGasPrice) {
+        if (!provider || !gasPrices) {
             return;
         }
 
+        let status = 'none';
         // const gasPrice = await getGasPrice();
         // const baseGasPrice = ethers.utils
         //     .parseUnits(gasPrice.high.toString(), 9)
@@ -179,6 +183,7 @@ const CartContainer = ({
             }
 
             if (data.isOneSide) {
+                status = 'starting';
                 const selectedToken = data.lToken0Name;
                 const tokenData = {
                     id: data.lToken0Address,
@@ -286,9 +291,14 @@ const CartContainer = ({
                     let approvalEstimate: ethers.BigNumber;
 
                     // Get gas price
-                    const gasPrice = await getGasPrice();
+
+                    let gasprices = storage.getGasPrices();
+                    if (!gasprices) {
+                        gasprices = gasPrices;
+                    }
+
                     const baseGasPrice = ethers.utils
-                        .parseUnits(gasPrice.high.toString(), 9)
+                        .parseUnits(gasprices.fastest.toString(), 9)
                         .toString();
 
                     try {
@@ -303,14 +313,14 @@ const CartContainer = ({
                             approvalEstimate.div(3),
                         );
                     } catch (err) {
-                        // handleGasEstimationError(err, {
-                        //     type: 'approve',
-                        //     account: wallet.account,
-                        //     token: tokenInputState[tokenSymbol].id,
-                        //     target: addLiquidityContractAddress,
-                        //     amount: baseApproveAmount,
-                        //     gasPrice: baseGasPrice,
-                        // });
+                        handleGasEstimationError(err, {
+                            type: 'approve',
+                            account: wallet.account,
+                            token: tokenSymbol,
+                            target: addLiquidityContractAddress,
+                            amount: baseApproveAmount,
+                            gasPrice: baseGasPrice,
+                        });
                         continue;
                     }
 
@@ -327,7 +337,8 @@ const CartContainer = ({
                             },
                         );
                         approveHash = hash;
-                    } catch (e) {
+                    } catch (err) {
+                        handleUserRejectError(err);
                         continue;
                     }
 
@@ -342,6 +353,11 @@ const CartContainer = ({
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
                     }
+                    status = 'pending';
+                }
+
+                if (status === 'starting') {
+                    continue;
                 }
 
                 if (
@@ -370,6 +386,7 @@ const CartContainer = ({
 
             // Two side token
             if (!data.isOneSide) {
+                status = 'starting';
                 const isEthAdd =
                     data.lToken0Name === 'ETH' ||
                     (data.lToken1Name && data.lToken1Name === 'ETH');
@@ -480,9 +497,14 @@ const CartContainer = ({
                     let approvalEstimate: ethers.BigNumber;
 
                     // Get gas price
-                    const gasPrice = await getGasPrice();
+
+                    let gasprices = storage.getGasPrices();
+                    if (!gasprices) {
+                        gasprices = gasPrices;
+                    }
+
                     const baseGasPrice = ethers.utils
-                        .parseUnits(gasPrice.high.toString(), 9)
+                        .parseUnits(gasprices.fastest.toString(), 9)
                         .toString();
 
                     try {
@@ -497,14 +519,14 @@ const CartContainer = ({
                             approvalEstimate.div(3),
                         );
                     } catch (err) {
-                        // handleGasEstimationError(err, {
-                        //     type: 'approve',
-                        //     account: wallet.account,
-                        //     to: tokenInputState[tokenSymbol].id,
-                        //     target: addLiquidityContractAddress,
-                        //     amount: baseApproveAmount,
-                        //     gasPrice: baseGasPrice,
-                        // });
+                        handleGasEstimationError(err, {
+                            type: 'approve',
+                            account: wallet.account,
+                            to: tokenSymbol,
+                            target: addLiquidityContractAddress,
+                            amount: baseApproveAmount,
+                            gasPrice: baseGasPrice,
+                        });
                         continue;
                     }
 
@@ -520,7 +542,8 @@ const CartContainer = ({
                             },
                         );
                         approveHash = hash;
-                    } catch (e) {
+                    } catch (err) {
+                        handleUserRejectError(err);
                         continue;
                     }
 
@@ -535,6 +558,11 @@ const CartContainer = ({
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
                     }
+                    status = 'pending';
+                }
+
+                if (status === 'starting') {
+                    continue;
                 }
 
                 if (
@@ -564,9 +592,13 @@ const CartContainer = ({
         console.log('totalEth', value);
 
         // Get gas price
-        const gasPrice = await getGasPrice();
+
+        let gasprices = storage.getGasPrices();
+        if (!gasprices) {
+            gasprices = gasPrices;
+        }
         const baseGasPrice = ethers.utils
-            .parseUnits(gasPrice.high.toString(), 9)
+            .parseUnits(gasprices.fastest.toString(), 9)
             .toString();
 
         // Call the contract and sign

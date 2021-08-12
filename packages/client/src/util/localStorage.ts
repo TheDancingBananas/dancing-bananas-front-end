@@ -1,6 +1,7 @@
 import { LiquidityBasketData } from 'types/states';
 import { Level, LevelTask } from 'types/game';
 import gameData from 'constants/gameData.json';
+import { EthGasPrices } from '@sommelier/shared-types';
 
 export const SKIP_DURATION = 60; // 5 sec for test. Should be 240 mins in production
 
@@ -114,6 +115,22 @@ const getBasketData = (): LiquidityBasketData[] => {
     }
 };
 
+const setGasPrices = (data: EthGasPrices): void => {
+    const value = JSON.stringify(data);
+    localStorage.setItem('gasprices', value);
+};
+
+const getGasPrices = (): EthGasPrices | null => {
+    try {
+        const value = localStorage.getItem('gasprices');
+        if (!value) return null;
+        const data: EthGasPrices = JSON.parse(value);
+        return data;
+    } catch (e) {
+        return null;
+    }
+};
+
 export const storage = {
     setLastSkipTime,
     getLastSkipTime,
@@ -130,4 +147,6 @@ export const storage = {
     getBasketData,
     getDefaultTaskStatus,
     getLevelTaskCompleted,
+    getGasPrices,
+    setGasPrices,
 };

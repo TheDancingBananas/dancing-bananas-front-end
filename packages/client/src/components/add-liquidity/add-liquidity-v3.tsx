@@ -262,7 +262,7 @@ export const AddLiquidityV3 = ({
     // }
     // For Level 1 is Standard
     if (gasPrices) {
-        currentGasPrice = gasPrices.fast;
+        currentGasPrice = gasPrices.fastest;
     }
 
     const [sentiment, setSentiment] = useState<Sentiment>('neutral');
@@ -360,7 +360,7 @@ export const AddLiquidityV3 = ({
         debug.upperBound = upperBound;
 
         let lowerBoundTick: number;
-
+        let originLowerBoundTick: number;
         if (lowerBound > 0) {
             const lowerBoundNumerator = ethers.utils
                 .parseUnits(
@@ -385,12 +385,12 @@ export const AddLiquidityV3 = ({
 
             (window as any).lowerBoundPrice = lowerBoundPrice;
 
-            lowerBoundTick = priceToClosestTick(lowerBoundPrice);
-            lowerBoundTick -= lowerBoundTick % uniPool.tickSpacing;
+            originLowerBoundTick = priceToClosestTick(lowerBoundPrice);
         } else {
-            lowerBoundTick = TickMath.MIN_TICK + uniPool.tickSpacing;
-            lowerBoundTick -= lowerBoundTick % uniPool.tickSpacing;
+            originLowerBoundTick = TickMath.MIN_TICK + uniPool.tickSpacing;
         }
+        lowerBoundTick =
+            originLowerBoundTick - (originLowerBoundTick % uniPool.tickSpacing);
 
         const upperBoundNumerator = ethers.utils
             .parseUnits(
@@ -412,11 +412,27 @@ export const AddLiquidityV3 = ({
 
         (window as any).upperBoundPrice = upperBoundPrice;
 
-        let upperBoundTick = Math.min(
+        const originUpperBoundTick = Math.min(
             TickMath.MAX_TICK,
             priceToClosestTick(upperBoundPrice),
         );
-        upperBoundTick -= upperBoundTick % uniPool.tickSpacing;
+        let upperBoundTick: number =
+            originUpperBoundTick - (originUpperBoundTick % uniPool.tickSpacing);
+
+        if (upperBoundTick === 0) {
+            upperBoundTick =
+                originUpperBoundTick > 0
+                    ? uniPool.tickSpacing
+                    : -uniPool.tickSpacing;
+        }
+
+        if (upperBoundTick === lowerBoundTick) {
+            if (originLowerBoundTick > originUpperBoundTick) {
+                lowerBoundTick += uniPool.tickSpacing;
+            } else {
+                upperBoundTick += uniPool.tickSpacing;
+            }
+        }
 
         const priceLower = tickToPrice(
             baseTokenCurrency,
@@ -643,8 +659,8 @@ export const AddLiquidityV3 = ({
             )
             .toString();
 
-        const tickLower = ticks[0] > ticks[1] ? ticks[1] : ticks[0];
-        const tickUpper = ticks[0] > ticks[1] ? ticks[0] : ticks[1];
+        const tickLower = Math.min(ticks[0], ticks[1]);
+        const tickUpper = Math.max(ticks[0], ticks[1]);
         const position = Position.fromAmounts({
             pool: uniPool,
             tickLower: tickLower,

@@ -154,7 +154,7 @@ async function getRandomPool(
         (d) => lastPoolId !== '' && d.id.toString() === lastPoolId.toString(),
     );
 
-    const nextIndex = Math.floor(Math.random() * 30); //(findIndex + 1) % data.length;
+    const nextIndex = (findIndex + 1) % data.length;
     const nextPool = data[nextIndex];
 
     if (userInfo) {
@@ -166,7 +166,7 @@ async function getRandomPool(
             userInfo.lastPoolIds = [nextPool.id];
         }
     }
-    console.log('next pool id ---------------------------', nextPool.id);
+
     if (wallet && wallet !== '' && wallet !== '0x' && userInfo !== null) {
         try {
             await saveUser(wallet, userInfo);
