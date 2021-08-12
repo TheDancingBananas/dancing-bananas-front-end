@@ -26,15 +26,22 @@ import gameData from 'constants/gameData.json';
 
 const LevelUpContainer = ({
     onBack,
+    onSetLevel,
 }: {
     onBack: () => void;
+    onSetLevel: () => void;
 }): JSX.Element | null => {
+    if (storage.getLevelTaskCompleted()) {
+        storage.setLevel((Number(storage.getLevel()) + 1).toString());
+        storage.setTaskStatus(storage.getDefaultTaskStatus());
+    }
     const currentLevel = storage.getLevel();
 
     const gameLevels: Level[] = gameData.game;
     const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];
     const levelupReward: RewardItem =
         gameLevels[Number(currentLevel) - 2].bananarewards.levelup;
+    onSetLevel();
     return (
         <div className='level-up-container'>
             <div className='level-up-container-head'>

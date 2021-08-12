@@ -262,7 +262,7 @@ export const AddLiquidityV3 = ({
     // }
     // For Level 1 is Standard
     if (gasPrices) {
-        currentGasPrice = gasPrices.fast;
+        currentGasPrice = gasPrices.fastest;
     }
 
     const [sentiment, setSentiment] = useState<Sentiment>('neutral');
@@ -360,7 +360,7 @@ export const AddLiquidityV3 = ({
         debug.upperBound = upperBound;
 
         let lowerBoundTick: number;
-
+        let originLowerBoundTick: number;
         if (lowerBound > 0) {
             const lowerBoundNumerator = ethers.utils
                 .parseUnits(
@@ -385,12 +385,12 @@ export const AddLiquidityV3 = ({
 
             (window as any).lowerBoundPrice = lowerBoundPrice;
 
-            lowerBoundTick = priceToClosestTick(lowerBoundPrice);
-            lowerBoundTick -= lowerBoundTick % uniPool.tickSpacing;
+            originLowerBoundTick = priceToClosestTick(lowerBoundPrice);
         } else {
-            lowerBoundTick = TickMath.MIN_TICK + uniPool.tickSpacing;
-            lowerBoundTick -= lowerBoundTick % uniPool.tickSpacing;
+            originLowerBoundTick = TickMath.MIN_TICK + uniPool.tickSpacing;
         }
+        lowerBoundTick =
+            originLowerBoundTick - (originLowerBoundTick % uniPool.tickSpacing);
 
         const upperBoundNumerator = ethers.utils
             .parseUnits(
@@ -412,29 +412,42 @@ export const AddLiquidityV3 = ({
 
         (window as any).upperBoundPrice = upperBoundPrice;
 
-        let upperBoundTick = Math.min(
+        const originUpperBoundTick = Math.min(
             TickMath.MAX_TICK,
             priceToClosestTick(upperBoundPrice),
         );
-        upperBoundTick -= upperBoundTick % uniPool.tickSpacing;
+        let upperBoundTick: number =
+            originUpperBoundTick - (originUpperBoundTick % uniPool.tickSpacing);
 
-        const sortedTicks = [lowerBoundTick, upperBoundTick].sort(
-            (a, b) => a - b,
-        ) as [number, number];
+        if (upperBoundTick === 0) {
+            upperBoundTick =
+                originUpperBoundTick > 0
+                    ? uniPool.tickSpacing
+                    : -uniPool.tickSpacing;
+        }
+
+        if (upperBoundTick === lowerBoundTick) {
+            if (originLowerBoundTick > originUpperBoundTick) {
+                lowerBoundTick += uniPool.tickSpacing;
+            } else {
+                upperBoundTick += uniPool.tickSpacing;
+            }
+        }
+
         const priceLower = tickToPrice(
             baseTokenCurrency,
             quoteTokenCurrency,
-            sortedTicks[0],
+            lowerBoundTick,
         );
         const priceUpper = tickToPrice(
             baseTokenCurrency,
             quoteTokenCurrency,
-            sortedTicks[1],
+            upperBoundTick,
         );
 
         return {
             prices: [lowerBound, upperBound] as [number, number],
-            ticks: sortedTicks,
+            ticks: [lowerBoundTick, upperBoundTick] as [number, number],
             ticksFromPrice: [priceLower, priceUpper] as [Price, Price],
         };
     };
@@ -548,11 +561,17 @@ export const AddLiquidityV3 = ({
             // is less heavily weighted towards, we won't have enough of the other token. So we need to
             // scale it up.
 
-            if (updatedAmount.lt(new BigNumber(selectedAmount))) {
+            if (updatedAmount.isZero()) {
+                // It means getting position is failed.
+                otherAmount = expectedBaseAmount;
+
+                updatedAmount = expectedQuoteAmount;
+            } else if (updatedAmount.lt(new BigNumber(selectedAmount))) {
                 // We ended up with less, so we need to scale up
                 const scale = new BigNumber(selectedAmount).div(updatedAmount);
 
                 updatedAmount = updatedAmount.times(scale);
+
                 otherAmount = otherAmount.times(scale);
             }
 
@@ -640,10 +659,12 @@ export const AddLiquidityV3 = ({
             )
             .toString();
 
+        const tickLower = Math.min(ticks[0], ticks[1]);
+        const tickUpper = Math.max(ticks[0], ticks[1]);
         const position = Position.fromAmounts({
             pool: uniPool,
-            tickLower: ticks[0],
-            tickUpper: ticks[1],
+            tickLower: tickLower,
+            tickUpper: tickUpper,
             amount0: baseAmount0,
             amount1: baseAmount1,
         });
@@ -690,7 +711,7 @@ export const AddLiquidityV3 = ({
                 ),
             });
 
-            setDisabledInput(disabledSymbols);
+            //setDisabledInput(disabledSymbols);
         } else {
             setWarning({ status: false });
             setDisabledInput(null);

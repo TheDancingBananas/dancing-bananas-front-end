@@ -130,6 +130,10 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 15px;
+        
+        &.active {
+            background: #71FFB9;
+        }
     }
 
     .reward-divider {

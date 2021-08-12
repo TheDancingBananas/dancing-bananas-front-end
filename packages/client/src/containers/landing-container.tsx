@@ -70,8 +70,8 @@ function LandingContainer({
         setTransactionEstimatedTimeUnit,
     ] = useState('');
 
-    const [levelCompleteStatus, setLevelCompleteStatus] = useState<string>(
-        storage.getTask(),
+    const [taskCompleted, setTaskCompleted] = useState<boolean>(
+        storage.getLevelTaskCompleted(),
     );
 
     let is_visible = true;
@@ -102,6 +102,7 @@ function LandingContainer({
             if (currentTime - lastPoolFetchTime > SKIP_DURATION) {
                 setLastPoolFetchTime(0);
                 storage.setLastSkipTime(0);
+                storage.setSkipStatus('off');
                 refresh = true;
             }
         }
@@ -136,6 +137,7 @@ function LandingContainer({
     const handleRefreshPool = () => {
         console.log('handle refresh');
         storage.setLastSkipTime(0);
+        storage.setSkipStatus('off');
         // setCurrentPoolId('');
         setShouldRefreshPool(true);
     };
@@ -194,9 +196,48 @@ function LandingContainer({
     };
 
     const handleTransactionSuccess = () => {
+        const nAddLiquidities = basketData.filter(
+            (item) => item.actionType === 'add',
+        ).length;
+        const nTwosidedliquidities = basketData.filter(
+            (item) => item.actionType === 'add' && item.isOneSide === false,
+        ).length;
+        const taskStatus = storage.getTaskStatus();
+        const addLiquidityIndex = taskStatus.findIndex(
+            (task) => task.taskType === 'addliquidity',
+        );
+        let newTaskCompleted = false;
+        if (addLiquidityIndex > -1) {
+            taskStatus[addLiquidityIndex].current += nAddLiquidities;
+            if (
+                taskStatus[addLiquidityIndex].current >=
+                taskStatus[addLiquidityIndex].goal
+            ) {
+                taskStatus[addLiquidityIndex].complete = true;
+                newTaskCompleted = true;
+            }
+        }
+
+        const twosidedAddLiquidityIndex = taskStatus.findIndex(
+            (task) => task.taskType === 'addtwosidedliquidity',
+        );
+        if (twosidedAddLiquidityIndex > -1) {
+            taskStatus[
+                twosidedAddLiquidityIndex
+            ].current += nTwosidedliquidities;
+            if (
+                taskStatus[twosidedAddLiquidityIndex].current >=
+                taskStatus[twosidedAddLiquidityIndex].goal
+            ) {
+                taskStatus[twosidedAddLiquidityIndex].complete = true;
+                newTaskCompleted = true;
+            }
+        }
+
+        localStorage.setItem('newTaskCompleted', String(newTaskCompleted));
+        storage.setTaskStatus(taskStatus);
+        setTaskCompleted(storage.getLevelTaskCompleted());
         setTab('transactionSuccess');
-        setLevelCompleteStatus('complete');
-        storage.setTask('complete');
         setBasketData([]);
     };
 
@@ -252,9 +293,10 @@ function LandingContainer({
         setTab(t);
     };
 
-    const handleEditCart = (poolIndex: number) => {
-        setPoolIndex(poolIndex % poolCount);
+    const handleEditCart = (poolId: string) => {
+        setPoolIndex(0);
         setTab('home');
+        setCurrentPoolId(poolId);
         setHomeMode('edit');
     };
 
@@ -345,7 +387,6 @@ function LandingContainer({
                             handleChangeTab('home');
                         }}
                         onLevelUp={() => {
-                            setLevelCompleteStatus('incomplete');
                             handleChangeTab('levelup');
                         }}
                     />
@@ -353,7 +394,13 @@ function LandingContainer({
                 {tab === 'transactionSuccess' && (
                     <SuccessContainer
                         onBack={() => {
+                            handleChangeTab('home');
+                        }}
+                        onToTask={() => {
                             handleChangeTab('task');
+                        }}
+                        onLevelup={() => {
+                            handleChangeTab('levelup');
                         }}
                     />
                 )}
@@ -367,6 +414,9 @@ function LandingContainer({
                 )}
                 {tab === 'levelup' && (
                     <LevelUpContainer
+                        onSetLevel={() => {
+                            setTaskCompleted(storage.getLevelTaskCompleted());
+                        }}
                         onBack={() => {
                             handleChangeTab('task');
                         }}
@@ -390,7 +440,7 @@ function LandingContainer({
                         onStatus={(status: boolean, time?: number) =>
                             handleChangePendingStatus(status, time)
                         }
-                        onEdit={(i: number) => handleEditCart(i)}
+                        onEdit={(poolId: string) => handleEditCart(poolId)}
                         onRemove={(i: number) => handleRemoveCart(i)}
                     />
                 )}
@@ -421,7 +471,7 @@ function LandingContainer({
                                 tab === 'task' ||
                                 tab === 'transactionSuccess' ||
                                 tab === 'levelup',
-                            mark: levelCompleteStatus === 'complete',
+                            mark: taskCompleted === true,
                         })}
                         role='button'
                         onClick={(e) => {

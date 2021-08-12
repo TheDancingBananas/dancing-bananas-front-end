@@ -7,6 +7,9 @@
             "tasks": [
                 {
                     "taskName": "ADD LIQUIDITY 1 TIME",
+                    "taskType": "addliquidity",
+                    "goal" : 1,
+                    "current" : 0,
                     "complete": false
                 }
             ],
@@ -52,11 +55,17 @@
             "description": "MYSTERIOUS CHIMP",
             "tasks": [
                 {
-                    "taskName": "ADD LIQUIDITY 1 TIME",
+                    "taskName": "ADD LIQUIDITY 2 TIMES",
+                    "taskType": "addliquidity",
+                    "goal" : 2,
+                    "current" : 0,
                     "complete": false
                 },
                 {
-                    "taskName": "REMOVE LIQUIDITY 1 TIME",
+                    "taskName": "ADD 2-SIDED LIQUIDITY",
+                    "taskType": "addtwosidedliquidity",
+                    "goal" : 1,
+                    "current" : 0,
                     "complete": false
                 }
             ],
@@ -103,7 +112,8 @@
     "exchangeData" : [
         {
             "key" : "speedup",
-            "title" : "SPEED UP!",
+            "title" : "SPEED UP 48",
+            "subtitle" : "48 HRS",
             "desc" : "Speed up the waiting time for the next dancing banana pool",
             "amount" : 300
         }

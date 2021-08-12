@@ -2,12 +2,14 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+
 import 'react-circular-progressbar/dist/styles.css';
 
 import './wait-container.scss';
 
 import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
-import pngPaperPlane from 'styles/images/paper-plane.png';
+import pngPaperPlane from 'styles/images/telegram-108.png';
 
 import { storage, SKIP_DURATION } from 'util/localStorage';
 
@@ -21,10 +23,20 @@ const WaitContainer = ({
     const [time, setTime] = useState<number>(storage.getRemainingWaitingTime());
 
     const getHours = (time: number): string => {
-        const hours = Math.floor(time / 60);
-        const mins = time % 60;
+        const hours = Math.floor(time / 3600).toString();
+        const mins = Math.floor((time % 3600) / 60).toString();
+        const seconds = (time % 60).toString();
 
-        return `${hours}:${mins < 10 ? '0' : ''}${mins}`;
+        return `${('0' + hours).slice(-2)}:${('0' + mins).slice(-2)}:${(
+            '0' + seconds
+        ).slice(-2)}`;
+    };
+
+    const handleClick = (): void => {
+        const url = `https://t.me/DancingBananasBot?start=${
+            storage.getRemainingWaitingTime() * 1000
+        }`;
+        window.open(url, '_blank');
     };
 
     useEffect(() => {
@@ -52,33 +64,37 @@ const WaitContainer = ({
                 </h2>
                 <div className='wait-wrapper'>
                     <div style={{ width: 300, height: 300 }}>
-                        <CircularProgressbar
+                        <CircularProgressbarWithChildren
                             value={
                                 ((SKIP_DURATION - time) / SKIP_DURATION) * 100
                             }
-                            text={`${getHours(time)}`}
                             strokeWidth={6}
                             styles={buildStyles({
                                 pathColor: '#FFDF03',
-                                textSize: '25px',
+                                textSize: '15px',
                                 textColor: '#fff',
                             })}
-                        />
+                        >
+                            <div className='wait-timer-text'>{`${getHours(
+                                time,
+                            )}`}</div>
+                            <div className='wait-timer-action'>
+                                <button
+                                    className='wait-speed-up'
+                                    onClick={() => onGoShop()}
+                                >
+                                    <span>SPEED UP!</span>{' '}
+                                    <img src={pngSpeedUp} />
+                                </button>
+                            </div>
+                        </CircularProgressbarWithChildren>
                     </div>
                 </div>
                 <div className='wait-actions'>
                     <button
-                        className='wait-speed-up'
-                        onClick={() => onGoShop()}
-                    >
-                        <span>SPEED UP!</span> <img src={pngSpeedUp} />
-                    </button>
-                    <button
                         className='wait-notify-me'
                         onClick={(e) => {
-                            const url =
-                                'https://t.me/DancingBananasBot?start=newsession';
-                            window.open(url, '_blank');
+                            handleClick();
                         }}
                     >
                         <span>

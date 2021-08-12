@@ -33,7 +33,7 @@ const ShopItem = ({
     onExchange: () => void;
 }): JSX.Element | null => {
     const style = imageHeight ? { height: `${imageHeight}px` } : {};
-    const isSpeedUp = itemName === 'SPEED UP!';
+    const isSpeedUp = itemName === 'SPEED UP 48';
 
     const handleExchange = () => {
         if (active) {
@@ -52,6 +52,9 @@ const ShopItem = ({
             >
                 <img src={itemImage} style={style} />
                 <span className='reward-item-name'>{itemName}</span>
+                {isSpeedUp && (
+                    <span className='reward-item-subtitle'>48 HRS</span>
+                )}
                 {active && (
                     <div className='reward-item-button' role='button'>
                         <span>{banana}</span>
@@ -85,7 +88,7 @@ const ShopContainer = ({
                 </h2>
                 <div className='reward-wrapper'>
                     <ShopItem
-                        itemName='SPEED UP!'
+                        itemName='SPEED UP 48'
                         itemImage={pngSpeedUp}
                         banana={300}
                         active={true}

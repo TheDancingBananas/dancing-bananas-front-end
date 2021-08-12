@@ -1,0 +1,25 @@
+name: GCE deploy
+
+on:
+  push:
+    branches: [ banana-game ]
+  pull_request:
+    branches: [ banana-game ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: build 
+        run: |
+          source /home/backend/.nvm/nvm.sh
+          cd /opt/actions-runner/il-loss-charts
+          git pull origin banana-game
+          yarn config set workspaces-experimental true
+          yarn
+          
+      - name: restart service
+        run: |
+          sudo systemctl restart banana-game

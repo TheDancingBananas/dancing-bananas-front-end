@@ -4,7 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import { debug } from 'util/debug';
 import { EthGasPrices } from '@sommelier/shared-types';
 import config from 'config/app';
-
+import { storage } from 'util/localStorage';
 export const ethGasPriceTopic = 'ethGas:getGasPrices';
 export const gasPriceTopicRex = /^ethGas:getGasPrices/;
 
@@ -41,6 +41,11 @@ export function useEthGasPrices(): EthGasPrices | null {
             // ensure the price actually changed before setting
             if (isChangedPrice(gasPrices, newGasPrices)) {
                 setGasPrices(newGasPrices);
+                storage.setGasPrices(newGasPrices);
+                console.log(
+                    'new gas prices----------------------',
+                    newGasPrices,
+                );
             }
 
             debug.gasPrices = newGasPrices;

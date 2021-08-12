@@ -168,7 +168,11 @@ async function getRandomPool(
     }
 
     if (wallet && wallet !== '' && wallet !== '0x' && userInfo !== null) {
-        await saveUser(wallet, userInfo);
+        try {
+            await saveUser(wallet, userInfo);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return nextPool.id;

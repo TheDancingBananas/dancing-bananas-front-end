@@ -1,5 +1,8 @@
 export interface LevelTask {
     taskName: string;
+    taskType: string;
+    goal: number;
+    current: number;
     complete: boolean;
 }
 
@@ -31,6 +34,7 @@ export interface Level {
 export interface ExchangeData {
     key: string;
     title: string;
+    subtitle: string;
     desc: string;
     amount: number;
 }
