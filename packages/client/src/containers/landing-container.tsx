@@ -112,8 +112,10 @@ function LandingContainer({
 
     useEffect(() => {
         const getCurrentPoolAsync = async (address: string) => {
-            const poolId = await getCurrentPoolID(address);
-            setCurrentPoolId(poolId);
+            const poolId = await getCurrentPoolID(address, currentPoolId);
+            if (poolId != currentPoolId) {
+                setCurrentPoolId(poolId);
+            }
         };
         const address = wallet.account ? wallet.account : '0x';
         getCurrentPoolAsync(address);
@@ -124,7 +126,9 @@ function LandingContainer({
             const poolId = await getRandomPoolID(address);
             console.log('prev pool', currentPoolId);
             console.log('new pool', poolId);
-            setCurrentPoolId(poolId);
+            if (poolId != currentPoolId) {
+                setCurrentPoolId(poolId);
+            }
         };
         if (shouldRefreshPool && wallet.account) {
             console.log('started refresh pool');
@@ -135,11 +139,11 @@ function LandingContainer({
     // const positionList = usePositionManagers();
 
     const handleRefreshPool = () => {
+        setShouldRefreshPool(true);
         console.log('handle refresh');
         storage.setLastSkipTime(0);
         storage.setSkipStatus('off');
         // setCurrentPoolId('');
-        setShouldRefreshPool(true);
     };
 
     const showWalletModal = () => setShowConnectWallet(true);
@@ -375,9 +379,9 @@ function LandingContainer({
                                 handleChangePendingStatus(status, time)
                             }
                             handleChangeTab={(t: Tabs) => handleChangeTab(t)}
-                            handleChangePoolIndex={(i: number) =>
-                                handleChangePoolIndex(i)
-                            }
+                            handleChangePoolIndex={(i: number) => {
+                                if (poolIndex != i) handleChangePoolIndex(i);
+                            }}
                         />
                     )}
 
