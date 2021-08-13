@@ -66,6 +66,11 @@ type GetRandomPoolsQuery = {
     wallet: string | '';
 };
 
+type GetCurrentPoolQuery = {
+    wallet: string | '';
+    poolId: string | '';
+};
+
 const getTopPoolsValidator = celebrate({
     [Segments.QUERY]: Joi.object().keys({
         // If you change the default values for count or sort, you'll ned to update
@@ -87,6 +92,16 @@ const getRandomPoolsValidator = celebrate({
     [Segments.PARAMS]: networkSchema,
 });
 
+const getCurrentPoolValidator = celebrate({
+    [Segments.QUERY]: Joi.object().keys({
+        // If you change the default values for count or sort, you'll ned to update
+        // the cache warming work in packages/workers
+        wallet: Joi.string().default(''),
+        poolId: Joi.string().default(''),
+    }),
+    [Segments.PARAMS]: networkSchema,
+});
+
 async function getTopPools(
     req: Request<Path, unknown, unknown, GetTopPoolsQuery>,
 ): Promise<GetTopPoolsResult> {
@@ -102,13 +117,14 @@ async function getTopPools(
 }
 
 async function getCurrentPool(
-    req: Request<Path, unknown, unknown, GetRandomPoolsQuery>,
+    req: Request<Path, unknown, unknown, GetCurrentPoolQuery>,
 ): Promise<string> {
-    const { wallet }: GetRandomPoolsQuery = <any>req.query;
+    const { wallet, poolId }: GetCurrentPoolQuery = <any>req.query;
 
     let userInfo = await getUser(wallet);
 
-    const defaultPoolId = '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'; // usdc/weth
+    const defaultPoolId =
+        poolId === '' ? '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8' : poolId; // usdc/weth
 
     if (wallet !== '0x' && userInfo === null) {
         userInfo = getDefaultUser();
@@ -122,9 +138,16 @@ async function getCurrentPool(
         return defaultPoolId;
     }
 
-    return userInfo.lastPoolIds.length > 0
-        ? userInfo.lastPoolIds[0]
-        : defaultPoolId;
+    let currentPoolId =
+        userInfo.lastPoolIds.length > 0
+            ? userInfo.lastPoolIds[0]
+            : defaultPoolId;
+    if (poolId != '' && currentPoolId != poolId) {
+        userInfo.lastPoolIds = [poolId];
+        currentPoolId = poolId;
+        await saveUser(wallet, userInfo);
+    }
+    return currentPoolId;
 }
 
 async function getRandomPool(
@@ -280,7 +303,7 @@ route.get(
 
 route.get(
     '/:network/currentPool',
-    getRandomPoolsValidator,
+    getCurrentPoolValidator,
     // sMaxAge != memoizer ttl here because we have the cache warmer, we want the cdn to revalidate more often
     catchAsyncRoute(getCurrentPool, poolConfig),
 );

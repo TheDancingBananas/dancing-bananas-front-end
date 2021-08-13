@@ -348,13 +348,18 @@ export const getRandomPoolID = async (wallet: string) => {
     return data;
 };
 
-export const getCurrentPoolID = async (wallet: string) => {
+export const getCurrentPoolID = async (
+    wallet: string,
+    currentPoolId: string,
+) => {
     const networkName = 'mainnet';
 
     const response = await fetch(
-        `/api/v1/${networkName}/currentPool?wallet=${wallet}`,
+        `/api/v1/${networkName}/currentPool?wallet=${wallet}${
+            currentPoolId === '' ? '' : '&poolId=' + currentPoolId
+        }`,
     );
-    if (!response.ok) throw new Error(`Failed to fetch top pools`);
+    if (!response.ok) throw new Error(`Failed to fetch current pool Id`);
 
     const data = await (response.json() as Promise<string>);
 
