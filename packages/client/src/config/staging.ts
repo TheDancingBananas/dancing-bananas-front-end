@@ -1,7 +1,7 @@
 import AppConfig from 'types/app-config';
 
 const config: Partial<AppConfig> = {
-    wsApi: 'wss://dev.dancingbananas.fun/realtime',
+    wsApi: 'wss://dev.sommelier.finance/realtime',
 };
 
 export default config;
