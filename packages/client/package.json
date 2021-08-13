@@ -139,8 +139,5 @@
     },
     "volta": {
         "node": "14.17.3"
-    },
-    "resolutions": {
-        "react-dev-utils": "^10.2.1"
     }
 }
