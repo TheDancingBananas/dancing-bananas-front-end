@@ -4,7 +4,7 @@ import type { AppConfig } from '@config';
 
 const config: RecursivePartial<AppConfig> = {
     server: {
-        host: 'https://dev.sommelier.finance',
+        host: 'https://dev.dancingbananas.fun',
     },
     uniswap: {
         v3: {

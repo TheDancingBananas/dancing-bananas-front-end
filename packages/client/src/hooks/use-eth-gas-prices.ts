@@ -14,6 +14,8 @@ export function useEthGasPrices(): EthGasPrices | null {
     const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
     const { sendJsonMessage, lastJsonMessage } = useWebSocket(config.wsApi);
 
+    console.log(config.wsApi);
+
     useEffect(() => {
         if (!isSubscribed) {
             sendJsonMessage({
