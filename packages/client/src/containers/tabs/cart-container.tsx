@@ -26,6 +26,8 @@ import gameData from 'constants/gameData.json';
 import { storage } from 'util/localStorage';
 import { Level, Reward, RewardItem } from 'types/game';
 
+import { useEthGasPrices } from 'hooks';
+
 import {
     FeeAmount,
     Pool,
@@ -77,6 +79,24 @@ const CartContainer = ({
     if (wallet.provider) {
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
+
+    const getGasPrices = () => {
+        let gasprices = storage.getGasPrices();
+
+        if (!gasprices) {
+            gasprices = useEthGasPrices();
+        }
+
+        if (!gasprices) {
+            gasprices = {
+                safeLow: 1,
+                standard: 1,
+                fast: 1,
+                fastest: 1,
+            };
+        }
+        return gasprices;
+    };
 
     const handleClickMoreDetails = (poolId: string) => {
         if (viewId === poolId) {
@@ -138,7 +158,7 @@ const CartContainer = ({
     };
 
     const handleAddLiquidity = async () => {
-        if (!provider || !gasPrices) {
+        if (!provider) {
             return;
         }
 
@@ -312,10 +332,7 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = storage.getGasPrices();
-                    if (!gasprices) {
-                        gasprices = gasPrices;
-                    }
+                    const gasprices = getGasPrices();
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprices.fastest.toString(), 9)
@@ -524,10 +541,7 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = storage.getGasPrices();
-                    if (!gasprices) {
-                        gasprices = gasPrices;
-                    }
+                    const gasprices = getGasPrices();
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprices.fastest.toString(), 9)
@@ -619,10 +633,8 @@ const CartContainer = ({
 
         // Get gas price
 
-        let gasprices = storage.getGasPrices();
-        if (!gasprices) {
-            gasprices = gasPrices;
-        }
+        const gasprices = getGasPrices();
+
         const baseGasPrice = ethers.utils
             .parseUnits(gasprices.fastest.toString(), 9)
             .toString();
