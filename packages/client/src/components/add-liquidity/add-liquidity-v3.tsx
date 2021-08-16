@@ -448,7 +448,10 @@ export const AddLiquidityV3 = ({
         return {
             prices: [lowerBound, upperBound] as [number, number],
             ticks: [lowerBoundTick, upperBoundTick] as [number, number],
-            ticksFromPrice: [priceLower, priceUpper] as [Price, Price],
+            ticksFromPrice: [priceLower, priceUpper] as [
+                Price<Token, Token>,
+                Price<Token, Token>,
+            ],
         };
     };
 
@@ -667,6 +670,7 @@ export const AddLiquidityV3 = ({
             tickUpper: tickUpper,
             amount0: baseAmount0,
             amount1: baseAmount1,
+            useFullPrecision: true,
         });
 
         (window as any).position = position;
