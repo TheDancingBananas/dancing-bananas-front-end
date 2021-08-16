@@ -80,23 +80,13 @@ const CartContainer = ({
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
 
-    const getGasPrices = () => {
-        let gasprices = storage.getGasPrices();
+    useEffect(() => {
+        const gasprices = useEthGasPrices();
 
-        if (!gasprices) {
-            gasprices = useEthGasPrices();
+        if (gasprices) {
+            storage.setGasPrices(gasprices);
         }
-
-        if (!gasprices) {
-            gasprices = {
-                safeLow: 1,
-                standard: 1,
-                fast: 1,
-                fastest: 1,
-            };
-        }
-        return gasprices;
-    };
+    }, []);
 
     const handleClickMoreDetails = (poolId: string) => {
         if (viewId === poolId) {
@@ -332,7 +322,15 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const gasprices = getGasPrices();
+                    let gasprices = storage.getGasPrices();
+                    if (!gasprices) {
+                        gasprices = {
+                            safeLow: 1,
+                            standard: 1,
+                            fast: 1,
+                            fastest: 1,
+                        };
+                    }
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprices.fastest.toString(), 9)
@@ -541,7 +539,16 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const gasprices = getGasPrices();
+                    let gasprices = storage.getGasPrices();
+
+                    if (!gasprices) {
+                        gasprices = {
+                            safeLow: 1,
+                            standard: 1,
+                            fast: 1,
+                            fastest: 1,
+                        };
+                    }
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprices.fastest.toString(), 9)
@@ -633,7 +640,16 @@ const CartContainer = ({
 
         // Get gas price
 
-        const gasprices = getGasPrices();
+        let gasprices = storage.getGasPrices();
+
+        if (!gasprices) {
+            gasprices = {
+                safeLow: 1,
+                standard: 1,
+                fast: 1,
+                fastest: 1,
+            };
+        }
 
         const baseGasPrice = ethers.utils
             .parseUnits(gasprices.fastest.toString(), 9)
