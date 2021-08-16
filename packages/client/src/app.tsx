@@ -27,7 +27,14 @@ function App(): ReactElement {
     //     byLiquidity: null,
     // });
 
-    const gasPrices = useEthGasPrices();
+    //const gasPrices = useEthGasPrices();
+
+    const gasPrices = {
+        safeLow: 1,
+        standard: 1,
+        fast: 1,
+        fastest: 1,
+    };
 
     const [showConnectWallet, setShowConnectWallet] = useState(false);
     // subscribe to the hook, will propogate to the nearest boundary
