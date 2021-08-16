@@ -22,6 +22,7 @@ import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity.json';
 import { LiquidityContext } from 'containers/liquidity-container';
 import { TokenInput } from 'components/token-input';
 import { toastSuccess, toastWarn, toastError } from 'util/toasters';
+import { useEthGasPrices } from 'hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCheckCircle,
@@ -249,6 +250,20 @@ export const AddLiquidityV3 = ({
         }
     };
 
+    let savedPrice: number | null = null;
+
+    const currentGasPrice = () => {
+        if (savedPrice === null) {
+            const gasPrices = useEthGasPrices();
+
+            if (gasPrices) {
+                savedPrice = gasPrices.fastest;
+            }
+        }
+
+        return savedPrice;
+    };
+
     const [tokenInputState, dispatch] = useReducer(reducer, initialState, init);
 
     // const [token, setToken] = useState('ETH');
@@ -256,14 +271,6 @@ export const AddLiquidityV3 = ({
     const { selectedGasPrice, slippageTolerance } = useContext(
         LiquidityContext,
     );
-    let currentGasPrice: number | null = null;
-    // if (gasPrices && selectedGasPrice) {
-    //     currentGasPrice = gasPrices[selectedGasPrice];
-    // }
-    // For Level 1 is Standard
-    if (gasPrices) {
-        currentGasPrice = gasPrices.fastest;
-    }
 
     const [sentiment, setSentiment] = useState<Sentiment>('neutral');
     const [bounds, setBounds] = useState<BoundsState>({
