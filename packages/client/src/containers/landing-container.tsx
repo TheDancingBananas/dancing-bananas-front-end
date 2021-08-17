@@ -41,10 +41,12 @@ import { calculatePoolEntryData } from 'util/uniswap-pricing';
 
 function LandingContainer({
     setShowConnectWallet,
+    isGettingGasPrice,
     gasPrices,
 }: {
     setShowConnectWallet: (wallet: boolean) => void;
     gasPrices: EthGasPrices | null;
+    isGettingGasPrice: boolean;
 }): JSX.Element {
     const { wallet } = useWallet();
 
@@ -311,8 +313,8 @@ function LandingContainer({
 
     const handleRemoveCart = (poolIndex: number) => {
         basketData.splice(poolIndex, 1);
-        storage.setBasketData(basketData);
-        setBasketData(basketData);
+        storage.setBasketData([...basketData]);
+        setBasketData([...basketData]);
     };
 
     // useEffect(() => {
@@ -437,6 +439,7 @@ function LandingContainer({
                     <CartContainer
                         gasPrices={gasPrices}
                         cartData={basketData}
+                        isGettingGasPrice={isGettingGasPrice}
                         onBack={() => {
                             handleChangeTab('home');
                         }}
