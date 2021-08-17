@@ -22,6 +22,7 @@ export const AppHeader = (): JSX.Element => {
     }, [wallet?.account, wallet?.network]);
 
     const showWalletModal = () => setShowConnectWallet(true);
+
     useEffect(() => {
         try {
             mixpanel.track('pageview:landing', {});
