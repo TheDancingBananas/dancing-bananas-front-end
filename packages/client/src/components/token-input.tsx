@@ -30,6 +30,7 @@ type TokenInputProps = {
     twoSide: boolean;
     disabled: boolean;
     isNANA?: boolean | false;
+    selected: boolean;
 };
 export const TokenInput = ({
     token,
@@ -41,6 +42,7 @@ export const TokenInput = ({
     twoSide,
     disabled,
     isNANA,
+    selected,
 }: TokenInputProps): JSX.Element => (
     <div className={classNames({ 'token-input': true, disabled })}>
         <div className={classNames('token-input-balances', { nana: isNANA })}>
@@ -57,7 +59,12 @@ export const TokenInput = ({
                     }
                 }}
             />
-            <span style={{ color: 'lightgrey', height: '25' }}>
+            <span
+                style={{ height: '25' }}
+                className={classNames('token-input-balance', {
+                    selected: selected,
+                })}
+            >
                 {toBalanceStr(token, balances, Number(basketAmount))}
             </span>
         </div>
@@ -75,7 +82,14 @@ export const TokenInput = ({
             }}
         >
             <div style={{ fontSize: '18px' }}>MAX</div>
-            <span style={{ fontSize: '12px' }}>BALANCE</span>
+            <span
+                style={{ fontSize: '12px' }}
+                className={classNames('token-input-balance', {
+                    selected: selected,
+                })}
+            >
+                BALANCE
+            </span>
         </button>
     </div>
 );
