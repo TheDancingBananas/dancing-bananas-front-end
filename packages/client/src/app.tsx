@@ -29,6 +29,8 @@ function App(): ReactElement {
 
     //const gasPrices = useEthGasPrices();
 
+    const isGettingGasPrice = false;
+
     const gasPrices = {
         safeLow: 1,
         standard: 1,
@@ -115,6 +117,9 @@ function App(): ReactElement {
                                                 <Route path='/'>
                                                     <LandingContainer
                                                         gasPrices={gasPrices}
+                                                        isGettingGasPrice={
+                                                            isGettingGasPrice
+                                                        }
                                                         setShowConnectWallet={
                                                             setShowConnectWallet
                                                         }
