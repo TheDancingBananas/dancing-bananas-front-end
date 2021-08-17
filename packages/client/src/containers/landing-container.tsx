@@ -148,7 +148,8 @@ function LandingContainer({
         // setCurrentPoolId('');
     };
 
-    const showWalletModal = () => handleChangeTab('task');
+    const showWalletModal = () =>
+        wallet.account ? handleChangeTab('task') : setShowConnectWallet(true);
 
     useEffect(() => {
         try {
