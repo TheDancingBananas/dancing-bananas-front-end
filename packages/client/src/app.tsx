@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LandingContainer from 'containers/landing-container';
 import ConnectWalletModal from 'components/connect-wallet-modal';
-
+import { storage } from 'util/localStorage';
 import { PageError, ModalError } from 'components/page-error';
 
 import { WalletProvider } from 'hooks/use-wallet';
@@ -30,7 +30,7 @@ function App(): ReactElement {
     //const gasPrices = useEthGasPrices();
 
     const isGettingGasPrice = false;
-
+    storage.setGasPrices(null);
     const gasPrices = {
         safeLow: 1,
         standard: 1,

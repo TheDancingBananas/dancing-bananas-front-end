@@ -90,6 +90,15 @@ const CartContainer = ({
         isGettingGasPrice = true;
     }
 
+    const getGasPrices = async () => {
+        let value = storage.getGasPrices();
+        while (!value) {
+            await new Promise((f) => setTimeout(f, 1000));
+            value = storage.getGasPrices();
+        }
+        return value;
+    };
+
     const handleClickMoreDetails = (poolId: string) => {
         if (viewId === poolId) {
             setViewId('');
@@ -324,7 +333,7 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = storage.getGasPrices();
+                    let gasprices = await getGasPrices();
                     if (!gasprices) {
                         gasprices = {
                             safeLow: 1,
@@ -541,7 +550,7 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = storage.getGasPrices();
+                    let gasprices = await getGasPrices();
 
                     if (!gasprices) {
                         gasprices = {
@@ -642,7 +651,7 @@ const CartContainer = ({
 
         // Get gas price
 
-        let gasprices = storage.getGasPrices();
+        let gasprices = await getGasPrices();
 
         if (!gasprices) {
             gasprices = {
