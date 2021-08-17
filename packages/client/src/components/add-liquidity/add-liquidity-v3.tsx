@@ -15,7 +15,8 @@ import { resolveLogo } from 'components/token-with-logo';
 import { TokenWithBalance } from 'components/token-with-balance';
 import './add-liquidity-v3.scss';
 import 'rc-slider/assets/index.css';
-import { Box } from '@material-ui/core';
+import { Box, Switch } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import config from 'config/app';
 import erc20Abi from 'constants/abis/erc20.json';
 import addLiquidityAbi from 'constants/abis/uniswap_v3_add_liquidity.json';
@@ -1729,6 +1730,55 @@ export const AddLiquidityV3 = ({
         onAddBasket(poolInfo);
     };
 
+    const DefaultSwitch = withStyles((theme) => ({
+        root: {
+            width: 34,
+            height: 16,
+            padding: 0,
+            marginLeft: '8px',
+            display: 'flex',
+        },
+        switchBase: {
+            padding: 0,
+            marginTop: '2px',
+            color: theme.palette.common.white,
+            border: `1px solid ${theme.palette.common.black}`,
+            transform: 'translateX(3px)',
+            '&$checked': {
+                padding: 0,
+                marginTop: '2px',
+                transform: 'translateX(19px)',
+                color: theme.palette.common.white,
+                '& + $track': {
+                    opacity: 1,
+                    backgroundColor: '#00FE81',
+                    borderColor: theme.palette.common.black,
+                },
+            },
+        },
+        thumb: {
+            width: 10,
+            height: 10,
+            boxShadow: 'none',
+        },
+        track: {
+            border: `1px solid ${theme.palette.common.black}`,
+            borderRadius: 18 / 2,
+            alignItems: 'center',
+            opacity: 1,
+            backgroundColor: '#E7EBF2',
+        },
+        checked: {},
+    }))(Switch);
+
+    const [state, setState] = useState({
+        checkedEth: true,
+        checkedToken0: false,
+        checkedToken1: false,
+    });
+
+    const [activeCard, setActiveCard] = useState('');
+
     return (
         <>
             <div className='add-v3-container'>
@@ -1847,25 +1897,48 @@ export const AddLiquidityV3 = ({
                             justifyContent='space-between'
                             className={classNames('token-input-control', {
                                 nana: isNANA,
-                                active: isTokenETHActive,
-                                inactive: !isTokenETHActive,
+                                // active: isTokenETHActive,
+                                // inactive: !isTokenETHActive,
+                                selected: activeCard === 'Eth',
+                                unselected: activeCard !== 'Eth',
+                                disabled: isTokenETHDisabled,
+                                nanaselected: activeCard === 'Eth' && isNANA,
+                                nanaunselected: activeCard !== 'Eth' && isNANA,
                             })}
+                            onClick={() => {
+                                if (
+                                    !isTokenETHActive &&
+                                    selectedSymbolCount === 2
+                                )
+                                    return;
+                                if (isTokenETHDisabled) return;
+                                // dispatch({
+                                //     type: 'toggle',
+                                //     payload: { sym: 'ETH' },
+                                // });
+                                setActiveCard('Eth');
+                            }}
                         >
-                            <Box
-                                display='flex'
-                                justifyContent='flex-start'
-                                onClick={() => {
-                                    if (
-                                        !isTokenETHActive &&
-                                        selectedSymbolCount === 2
-                                    )
-                                        return;
-                                    if (isTokenETHDisabled) return;
+                            <DefaultSwitch
+                                checked={state.checkedEth}
+                                disabled={isTokenETHDisabled}
+                                onChange={(event: any) => {
+                                    setState({
+                                        ...state,
+                                        [event.target.name]:
+                                            event.target.checked,
+                                    });
                                     dispatch({
                                         type: 'toggle',
                                         payload: { sym: 'ETH' },
                                     });
                                 }}
+                                name='checkedEth'
+                            />
+                            <Box
+                                className='token-logo-box'
+                                display='flex'
+                                justifyContent='flex-start'
                             >
                                 <div
                                     style={{
@@ -1875,7 +1948,10 @@ export const AddLiquidityV3 = ({
                                     }}
                                     className={classNames(
                                         'token-balance-wrapper',
-                                        { active: isTokenETHActive },
+                                        {
+                                            selected: activeCard === 'Eth',
+                                            unselected: activeCard !== 'Eth',
+                                        },
                                     )}
                                 >
                                     <TokenWithBalance
@@ -1915,6 +1991,7 @@ export const AddLiquidityV3 = ({
                                 }
                                 twoSide={true}
                                 isNANA={isNANA}
+                                selected={activeCard === 'Eth'}
                             />
                         </Box>
                         {/* )} */}
@@ -1925,30 +2002,60 @@ export const AddLiquidityV3 = ({
                                 justifyContent='space-between'
                                 className={classNames('token-input-control', {
                                     nana: isNANA,
-                                    active: isToken0Active,
-                                    inactive: !isToken0Active,
+                                    // active: isToken0Active,
+                                    // inactive: !isToken0Active,
+                                    selected: activeCard === token0Symbol,
+                                    unselected: activeCard !== token0Symbol,
+                                    disabled:
+                                        isToken0Disabled ||
+                                        (token0Symbol === 'WETH' &&
+                                            disableWETH),
+                                    nanaselected:
+                                        activeCard === token0Symbol && isNANA,
+                                    nanaunselected:
+                                        activeCard !== token0Symbol && isNANA,
                                 })}
+                                onClick={() => {
+                                    if (
+                                        !isToken0Active &&
+                                        selectedSymbolCount === 2
+                                    )
+                                        return;
+                                    if (
+                                        isToken0Disabled ||
+                                        (token0Symbol === 'WETH' && disableWETH)
+                                    )
+                                        return;
+                                    // dispatch({
+                                    //     type: 'toggle',
+                                    //     payload: { sym: token0Symbol },
+                                    // });
+                                    setActiveCard(token0Symbol);
+                                }}
                             >
-                                <Box
-                                    display='flex'
-                                    justifyContent='flex-start'
-                                    onClick={() => {
-                                        if (
-                                            !isToken0Active &&
-                                            selectedSymbolCount === 2
-                                        )
-                                            return;
-                                        if (
-                                            isToken0Disabled ||
-                                            (token0Symbol === 'WETH' &&
-                                                disableWETH)
-                                        )
-                                            return;
+                                <DefaultSwitch
+                                    checked={state.checkedToken0}
+                                    disabled={
+                                        isToken0Disabled ||
+                                        (token0Symbol === 'WETH' && disableWETH)
+                                    }
+                                    onChange={(event: any) => {
+                                        setState({
+                                            ...state,
+                                            [event.target.name]:
+                                                event.target.checked,
+                                        });
                                         dispatch({
                                             type: 'toggle',
                                             payload: { sym: token0Symbol },
                                         });
                                     }}
+                                    name='checkedToken0'
+                                />
+                                <Box
+                                    className='token-logo-box'
+                                    display='flex'
+                                    justifyContent='flex-start'
                                 >
                                     <div
                                         style={{
@@ -1959,7 +2066,10 @@ export const AddLiquidityV3 = ({
                                         className={classNames(
                                             'token-balance-wrapper',
                                             {
-                                                active: isToken0Active,
+                                                selected:
+                                                    activeCard === token0Symbol,
+                                                unselected:
+                                                    activeCard !== token0Symbol,
                                             },
                                         )}
                                     >
@@ -2010,6 +2120,7 @@ export const AddLiquidityV3 = ({
                                     }
                                     twoSide={true}
                                     isNANA={isNANA}
+                                    selected={activeCard === token0Symbol}
                                 />
                             </Box>
                         )}
@@ -2020,30 +2131,60 @@ export const AddLiquidityV3 = ({
                                 justifyContent='space-between'
                                 className={classNames('token-input-control', {
                                     nana: isNANA,
-                                    active: isToken1Active,
-                                    inactive: !isToken1Active,
+                                    // active: isToken1Active,
+                                    // inactive: !isToken1Active,
+                                    selected: activeCard === token1Symbol,
+                                    unselected: activeCard !== token1Symbol,
+                                    disabled:
+                                        isToken1Disabled ||
+                                        (token1Symbol === 'WETH' &&
+                                            disableWETH),
+                                    nanaselected:
+                                        activeCard === token1Symbol && isNANA,
+                                    nanaunselected:
+                                        activeCard !== token1Symbol && isNANA,
                                 })}
+                                onClick={() => {
+                                    if (
+                                        !isToken1Active &&
+                                        selectedSymbolCount === 2
+                                    )
+                                        return;
+                                    if (
+                                        isToken1Disabled ||
+                                        (token1Symbol === 'WETH' && disableWETH)
+                                    )
+                                        return;
+                                    // dispatch({
+                                    //     type: 'toggle',
+                                    //     payload: { sym: token1Symbol },
+                                    // });
+                                    setActiveCard(token1Symbol);
+                                }}
                             >
-                                <Box
-                                    display='flex'
-                                    justifyContent='flex-start'
-                                    onClick={() => {
-                                        if (
-                                            !isToken1Active &&
-                                            selectedSymbolCount === 2
-                                        )
-                                            return;
-                                        if (
-                                            isToken1Disabled ||
-                                            (token1Symbol === 'WETH' &&
-                                                disableWETH)
-                                        )
-                                            return;
+                                <DefaultSwitch
+                                    checked={state.checkedToken1}
+                                    disabled={
+                                        isToken1Disabled ||
+                                        (token1Symbol === 'WETH' && disableWETH)
+                                    }
+                                    onChange={(event: any) => {
+                                        setState({
+                                            ...state,
+                                            [event.target.name]:
+                                                event.target.checked,
+                                        });
                                         dispatch({
                                             type: 'toggle',
                                             payload: { sym: token1Symbol },
                                         });
                                     }}
+                                    name='checkedToken1'
+                                />
+                                <Box
+                                    className='token-logo-box'
+                                    display='flex'
+                                    justifyContent='flex-start'
                                 >
                                     <div
                                         style={{
@@ -2054,7 +2195,10 @@ export const AddLiquidityV3 = ({
                                         className={classNames(
                                             'token-balance-wrapper',
                                             {
-                                                active: isToken1Active,
+                                                selected:
+                                                    activeCard === token1Symbol,
+                                                unselected:
+                                                    activeCard !== token1Symbol,
                                             },
                                         )}
                                     >
@@ -2104,6 +2248,7 @@ export const AddLiquidityV3 = ({
                                     }
                                     twoSide={true}
                                     isNANA={isNANA}
+                                    selected={activeCard === token1Symbol}
                                 />
                             </Box>
                         )}

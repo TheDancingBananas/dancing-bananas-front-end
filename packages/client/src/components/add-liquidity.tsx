@@ -916,6 +916,7 @@ function AddLiquidity({
                     // options={twoSide ? ['ETH', 'WETH'] : dropdownOptions}
                     balances={balances}
                     twoSide={twoSide}
+                    selected={false}
                 />
                 {showTwoSide()}
                 {twoSide && (
@@ -929,6 +930,7 @@ function AddLiquidity({
                         // options={dropdownOptionsPairTwo || []}
                         balances={balances}
                         twoSide={twoSide}
+                        selected={false}
                     />
                 )}
                 <TransactionSettings />
