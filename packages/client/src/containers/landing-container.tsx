@@ -313,8 +313,8 @@ function LandingContainer({
 
     const handleRemoveCart = (poolIndex: number) => {
         basketData.splice(poolIndex, 1);
-        storage.setBasketData(basketData);
-        setBasketData(basketData);
+        storage.setBasketData([...basketData]);
+        setBasketData([...basketData]);
     };
 
     // useEffect(() => {
