@@ -3,6 +3,7 @@ import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { Price, Token } from '@uniswap/sdk-core';
+import Marquee from 'react-fast-marquee';
 import {
     FeeAmount,
     Pool,
@@ -1838,11 +1839,20 @@ export const AddLiquidityV3 = ({
                 </div>
                 {!wallet.account && (
                     <div
-                        className='bonus-banana-gif'
+                        className='bonus-banana-banner'
                         role='button'
                         onClick={(e) => onGetBonusBananas()}
                     >
-                        <img src={pngBonusBanana} />
+                        <Marquee
+                            className='bonus-banana-banner-content'
+                            gradient={false}
+                            speed={90}
+                        >
+                            <img src={pngBanana2} />
+                            <span>CONNECT YOUR WALLET</span>
+                            <img src={pngBanana2} />
+                            <span>GET 100 BANANAS</span>
+                        </Marquee>
                     </div>
                 )}
                 <div className='pool-info'>

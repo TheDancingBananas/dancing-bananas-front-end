@@ -277,11 +277,11 @@ export const LiquidityContainer = ({
     };
 
     const handleClickLeft = () => {
-        handleChangePoolIndex(poolIndex - 1);
+        // handleChangePoolIndex(poolIndex - 1);
     };
 
     const handleClickRight = () => {
-        handleChangePoolIndex(poolIndex - 1);
+        // handleChangePoolIndex(poolIndex - 1);
     };
 
     return (
