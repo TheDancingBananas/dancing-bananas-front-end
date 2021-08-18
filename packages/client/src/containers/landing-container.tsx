@@ -148,8 +148,8 @@ function LandingContainer({
         // setCurrentPoolId('');
     };
 
-    const showWalletModal = () =>
-        wallet.account ? handleChangeTab('task') : setShowConnectWallet(true);
+    const showWalletModal = () => setShowConnectWallet(true);
+    const showLevelPage = () => handleChangeTab('task');
 
     useEffect(() => {
         try {
@@ -331,7 +331,12 @@ function LandingContainer({
         <div>
             <div className='main-header-container'>
                 <div className='wallet-combo'>
-                    {<ConnectWalletButton onClick={showWalletModal} />}
+                    {
+                        <ConnectWalletButton
+                            onClick={showWalletModal}
+                            onShowLevel={showLevelPage}
+                        />
+                    }
                 </div>
             </div>
 
