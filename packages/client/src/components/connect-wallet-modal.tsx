@@ -6,6 +6,11 @@ import { ReactComponent as MetamaskLogo } from 'styles/metamask-logo.svg';
 import { ReactComponent as WalletConnectLogo } from 'styles/walletconnect-logo.svg';
 import Sentry, { SentryError } from 'util/sentry';
 
+import './connect-wallet-modal.scss';
+
+import metamaskPng from 'styles/metamask.png';
+import walletconnectPng from 'styles/walletconnect.png';
+
 function ConnectWalletModal({
     show,
     setShow,
@@ -25,7 +30,7 @@ function ConnectWalletModal({
     } = useWallet();
     const titleText = wallet?.account
         ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          `Connected: ${wallet?.account}`
+          `Connected`
         : 'Connect Wallet';
 
     const handleConnectMetaMask = async () => {
@@ -56,10 +61,10 @@ function ConnectWalletModal({
         }
     };
 
-    const renderBody = () => {
+    const renderNotConnectedBody = () => {
         if (showReloadModal)
             return (
-                <p className='centered'>
+                <p className='connect-wallet-modal-description'>
                     Could not connect to Wallet Connect provider. Please reload
                     and try again.
                 </p>
@@ -67,63 +72,79 @@ function ConnectWalletModal({
 
         return (
             <>
-                <p className='centered'>
-                    Choose a wallet provider to connect with.
+                <p className='connect-wallet-modal-description'>
+                    Choose a wallet provider
+                    <br />
+                    to connect with
                 </p>
-                <div className='connect-wallet-modal-options-container'>
+                <div className='connect-wallet-modal-button-container'>
                     <button
-                        className='connect-wallet-modal-option'
+                        className='connect-wallet-modal-button'
                         // disabled={!availableProviders.metamask}
                         onClick={handleConnectMetaMask}
                     >
-                        <MetamaskLogo />
+                        <img src={metamaskPng} />
+                        <span>METAMASK</span>
                     </button>
                     <button
-                        className='connect-wallet-modal-option'
+                        className='connect-wallet-modal-button'
                         disabled={!availableProviders.walletconnect}
                         onClick={handleConnectWalletConnect}
                     >
-                        <WalletConnectLogo />
+                        <img src={walletconnectPng} />
+                        <span>WALLETCONNECT</span>
                     </button>
                 </div>
             </>
         );
     };
 
+    const renderConnectedBody = () => (
+        <>
+            <p className='connect-wallet-modal-description'>
+                ${wallet?.account}
+            </p>
+            <div className='connect-wallet-modal-button-container'>
+                <button
+                    className='connect-wallet-modal-button'
+                    onClick={disconnectWallet}
+                >
+                    Disconnect
+                </button>
+            </div>
+        </>
+    );
+
     return (
-        <Modal show={show} onHide={handleClose} dialogClassName='dark'>
-            <Modal.Header className='connect-wallet-modal-header' closeButton>
-                <Modal.Title className='connect-wallet-modal-title'>
-                    {titleText}
-                </Modal.Title>
+        <Modal
+            show={show}
+            onHide={handleClose}
+            dialogClassName='connect-wallet-modal'
+        >
+            <Modal.Header>
+                <div className='connect-wallet-modal-header'>
+                    <div className='connect-wallet-modal-close'>
+                        <button onClick={(e) => handleClose()}>X</button>
+                    </div>
+                    <div className='connect-wallet-modal-header-text'>
+                        {titleText}
+                    </div>
+                </div>
             </Modal.Header>
-            {!wallet?.account && (
-                <Modal.Body className='connect-wallet-modal'>
-                    {renderBody()}
-                </Modal.Body>
-            )}
-            {wallet?.account && (
-                <Modal.Footer className='manage-liquidity-modal-footer'>
-                    <Button
-                        variant='danger'
-                        size='sm'
-                        onClick={disconnectWallet}
-                    >
-                        Disconnect
-                    </Button>
-                </Modal.Footer>
-            )}
-            {!wallet?.account && showReloadModal && (
-                <Modal.Footer className='manage-liquidity-modal-footer'>
-                    <Button
-                        variant='info'
-                        size='sm'
-                        onClick={() => window.location.reload()}
-                    >
-                        Reload
-                    </Button>
-                </Modal.Footer>
-            )}
+            <Modal.Body>
+                {!wallet?.account && renderNotConnectedBody()}
+                {wallet?.account && renderConnectedBody()}
+                {!wallet?.account && showReloadModal && (
+                    <div className='connect-wallet-modal-button-container'>
+                        <button
+                            className='connect-wallet-modal-button'
+                            onClick={() => window.location.reload()}
+                        >
+                            Reload
+                        </button>
+                    </div>
+                )}
+            </Modal.Body>
         </Modal>
     );
 }

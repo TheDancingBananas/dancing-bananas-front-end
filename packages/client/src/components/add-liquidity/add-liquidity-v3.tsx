@@ -61,6 +61,7 @@ import pngETH from 'styles/images/eth.png';
 import pngNANA from 'styles/images/tokens/nana.png';
 import pngBanana2 from 'styles/images/banana-2.png';
 import gifBonusBanana from 'styles/images/Bonus_bananas.gif';
+import pngBonusBanana from 'styles/images/bonus-banana-2.png';
 
 import AlertModal from './alert-modal';
 
@@ -80,6 +81,7 @@ type Props = {
     defaultValue: any;
     onSkipPairs: () => void;
     onAddBasket: (data: LiquidityBasketData) => void;
+    onGetBonusBananas: () => void;
     onLeft: () => void;
     onRight: () => void;
     onAddSuccess: () => void;
@@ -103,6 +105,7 @@ export const AddLiquidityV3 = ({
     defaultValue,
     onSkipPairs,
     onAddBasket,
+    onGetBonusBananas,
     onLeft,
     onRight,
     onAddSuccess,
@@ -1827,9 +1830,15 @@ export const AddLiquidityV3 = ({
                         {rightArrow && <img src={pngRight} />}
                     </div> */}
                 </div>
-                <div className='bonus-banana-gif'>
-                    <img src={gifBonusBanana} />
-                </div>
+                {!wallet.account && (
+                    <div
+                        className='bonus-banana-gif'
+                        role='button'
+                        onClick={(e) => onGetBonusBananas()}
+                    >
+                        <img src={pngBonusBanana} />
+                    </div>
+                )}
                 <div className='pool-info'>
                     <div className='pool-pairs'>
                         {!isNANA && (

@@ -1,0 +1,83 @@
+.connect-wallet-modal {
+    margin-top: 150px;
+    background: #fff;
+    border-radius: 14px;
+    border: 2.11435px solid #000000;
+
+    .modal-header {
+        padding-bottom: 0px;
+    }
+    
+    .modal-body {
+        padding-top: 5px;
+    }
+
+    .connect-wallet-modal-header {
+        width: 100%;
+    }
+
+    .connect-wallet-modal-close {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        button {
+            border: none;
+            outline: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            background: #000;
+            color: #fff;
+            font-size: 16px;
+        }
+    }
+
+    .connect-wallet-modal-header-text {
+        width: 100%;
+        text-align: center;
+        font-size: 23px;
+        line-height: 28px;
+        color: #fff;
+        text-shadow: 0px 1.40956px 0px rgba(0, 0, 0, 0.25);
+        -webkit-text-stroke: 1.72476px black;
+        paint-order: fill;
+    }
+
+    .connect-wallet-modal-description {
+        width: 100%;
+        text-align: center;
+        color: #969AA0;
+        font-size: 18px;
+        line-height: 22px;
+        word-wrap: break-word;
+    }
+
+    .connect-wallet-modal-button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 23px;
+    }
+
+    .connect-wallet-modal-button {
+        background: #000000;
+        border: 2.18551px solid #000000;
+        box-shadow: 0px 2.91401px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 5.82801px;
+        color: #fff;
+        font-size: 18.854px;
+        line-height: 23px;
+        -webkit-text-stroke: 1.457px #000000;
+        text-shadow: 0px 1.457px 0px rgba(0, 0, 0, 0.25);
+        paint-order: fill;
+        width: 284.7px;
+        height: 61.65px;
+        margin-bottom: 20px;
+
+        img {
+            height: 39px;
+            margin-right: 9px;
+        }
+    }
+}

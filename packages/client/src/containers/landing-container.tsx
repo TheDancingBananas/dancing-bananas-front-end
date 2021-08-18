@@ -322,6 +322,11 @@ function LandingContainer({
     //     console.log(basketData);
     // }, [basketData]);
 
+    const handleGetBonusBananas = () => {
+        console.log('clicked nbonus');
+        showWalletModal();
+    };
+
     return (
         <div>
             <div className='main-header-container'>
@@ -378,6 +383,7 @@ function LandingContainer({
                                 navigateToBasket: boolean,
                             ) => handleAddBasket(data, navigateToBasket)}
                             onAddSuccess={() => handleTransactionSuccess()}
+                            onGetBonusBananas={() => handleGetBonusBananas()}
                             onStatus={(status: boolean, time?: number) =>
                                 handleChangePendingStatus(status, time)
                             }
