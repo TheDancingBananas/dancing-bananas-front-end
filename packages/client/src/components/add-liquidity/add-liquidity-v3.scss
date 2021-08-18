@@ -60,6 +60,7 @@
     }
 
     .bonus-banana-gif {
+        cursor: pointer;
         border-bottom: 3px solid black;
     }
 
@@ -426,7 +427,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            // opacity: 0.5;
+            opacity: 0.3;
             background: #671CC9;
             height: 95px;
             border-radius: 8px;
@@ -435,6 +436,18 @@
 
             &.active {
                 opacity: 1;
+                background: #fff;
+                span {
+                    color: #000;
+                }
+            }
+
+            &-lock {
+                width: 19.3px !important;
+                height: 23px;
+                position: absolute;
+                margin-left: 21%;
+                margin-top: -60px;
             }
         }
     }
