@@ -1846,7 +1846,7 @@ export const AddLiquidityV3 = ({
                         <Marquee
                             className='bonus-banana-banner-content'
                             gradient={false}
-                            speed={90}
+                            speed={120}
                         >
                             <img src={pngBanana2} />
                             <span>CONNECT YOUR WALLET</span>
