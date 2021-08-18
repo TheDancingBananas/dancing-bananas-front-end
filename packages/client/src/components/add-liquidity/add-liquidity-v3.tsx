@@ -1693,7 +1693,7 @@ export const AddLiquidityV3 = ({
                         tokenInputState['WETH']?.selected)),
         );
         setDisableWETH(isTokenETHActive);
-    }, [isToken0Active, isToken1Active, isTokenETHActive, state]);
+    }, [isToken0Active, isToken1Active, isTokenETHActive, state, balances]);
 
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
     const baseCoinId = isFlipped ? pool.token0.id : pool.token1.id;
