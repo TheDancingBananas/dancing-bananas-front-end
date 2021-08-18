@@ -158,6 +158,7 @@ export const LiquidityContainer = ({
     handleWalletConnect,
     onAddBasket,
     onAddSuccess,
+    onGetBonusBananas,
     onStatus,
     handleChangeTab,
     handleChangePoolIndex,
@@ -173,6 +174,7 @@ export const LiquidityContainer = ({
     handleWalletConnect: () => void;
     onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
     onAddSuccess: () => void;
+    onGetBonusBananas: () => void;
     onStatus: (status: boolean, time?: number) => void;
     handleChangeTab: (t: Tabs) => void;
     handleChangePoolIndex: (i: number) => void;
@@ -312,6 +314,9 @@ export const LiquidityContainer = ({
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                     onAddSuccess={() => onAddSuccess()}
+                                    onGetBonusBananas={() =>
+                                        onGetBonusBananas()
+                                    }
                                     onStatus={(
                                         status: boolean,
                                         time?: number,
@@ -338,6 +343,9 @@ export const LiquidityContainer = ({
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                     onAddSuccess={() => onAddSuccess()}
+                                    onGetBonusBananas={() =>
+                                        onGetBonusBananas()
+                                    }
                                     onStatus={(
                                         status: boolean,
                                         time?: number,

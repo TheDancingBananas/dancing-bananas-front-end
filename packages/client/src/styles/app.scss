@@ -827,39 +827,6 @@ p {
     justify-content: space-around;
 }
 
-.connect-wallet-modal-title {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 1.2rem;
-}
-
-.connect-wallet-modal-options-container {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.connect-wallet-modal-option {
-    margin: 0.5em;
-    height: 4em;
-    background: var(--objAccent);
-    border: 0;
-    border-radius: 4px;
-}
-.connect-wallet-modal-header,
-.connect-wallet-modal-footer {
-    color: var(--faceAccentAlt);
-    background: var(--bgDefault);
-    .close {
-        color: var(--faceSecondary);
-        text-shadow: none;
-    }
-}
-.connect-wallet-modal {
-    background: var(--bgSecondary);
-    color: var(--facePrimary);
-}
-
 // nasty override dude, get rid of this
 .input-group-append {
     .input-group-text {
@@ -867,16 +834,6 @@ p {
         border: 1px solid var(--borderSecondary);
         color: var(--faceSecondary);
     }
-}
-.connect-wallet-modal-option svg {
-    width: 8rem;
-    color: var(--facePrimary);
-}
-.connect-wallet-modal-option:hover {
-    border: 1px solid var(--borderAccent);
-}
-.connect-wallet-modal .error-container {
-    opacity: 0.7;
 }
 
 .nav-button-container {
