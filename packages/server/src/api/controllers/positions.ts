@@ -129,16 +129,22 @@ async function getPositionsTotalNotionalGain(
     let totalGain = new BigNumber(0);
     const positionKeys = Object.keys(results);
 
-    const currentDate = new Date();
+    // const currentDate = new Date();
 
     for (let i = 0; i < positionKeys.length; i++) {
         const positionData: V3PositionData = results[positionKeys[i]];
         // console.log('*******************************');
-        // console.log(positionData.stats);
+        // console.log(currentDate);
 
         const feeUSD: BigNumber = positionData.stats.totalFeesUSD;
-        const timestamp = positionData.snapshots[0].timestamp;
-        const addDate = new Date(timestamp);
+
+        // const timestamp = positionData.snapshots[0].timestamp;
+        // const addDate = new Date(timestamp);
+
+        const tokenValueDiff = positionData.stats.usdAmount.minus(
+            positionData.stats.entryUsdAmount,
+        );
+        totalGain = totalGain.plus(feeUSD).plus(tokenValueDiff);
 
         // let initialToken0Price: BigNumber;
         // let initialToken1Price: BigNumber;
@@ -175,7 +181,6 @@ async function getPositionsTotalNotionalGain(
         //         )}`,
         //     );
         // }
-        totalGain = totalGain.plus(feeUSD);
     }
 
     return totalGain.isPositive() ? totalGain.valueOf() : '0';
