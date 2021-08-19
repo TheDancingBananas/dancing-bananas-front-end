@@ -19,6 +19,7 @@ import pngNANA from 'styles/images/tokens/nana.png';
 import pngExit from 'styles/images/exit.png';
 import pngArrowLeft from 'styles/images/left.png';
 import pngBanana1 from 'styles/images/banana-1.png';
+import pngBanana2 from 'styles/images/banana-2.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
@@ -1008,8 +1009,8 @@ const CartContainer = ({
                         className='cart-action-move'
                         onClick={(e) => handleAddLiquidity()}
                     >
-                        MOVE BANANAS
-                        <img src={pngBanana1} />
+                        Complete Transaction
+                        <img src={pngBanana2} />
                     </button>
                 </div>
             </div>
