@@ -33,6 +33,11 @@ import WaitContainer from './tabs/wait-container';
 
 import { storage } from 'util/localStorage';
 
+import pngMonkeyHappy from 'styles/images/monkey-happy.png';
+
+import BigNumber from 'bignumber.js';
+import { formatAddress, formatUSD } from 'util/formats';
+
 export enum GasPriceSelection {
     Standard = 'standard',
     Fast = 'fast',
@@ -56,81 +61,6 @@ const initialContext = {
 export const LiquidityContext = createContext<Partial<LiquidityContext>>(
     initialContext,
 );
-
-// const TransactionSettings = ({
-//     gasPrices,
-// }: {
-//     gasPrices: EthGasPrices | null;
-// }) => {
-//     // TODO why does TS think this could be undefined ?
-//     const { selectedGasPrice, setSelectedGasPrice } = useContext(
-//         LiquidityContext,
-//     );
-
-//     // TODO show loader only for prices
-//     const isStandardActive = selectedGasPrice === GasPriceSelection.Standard;
-//     const isFastActive = selectedGasPrice === GasPriceSelection.Fast;
-//     const isFastestActive = selectedGasPrice === GasPriceSelection.Fastest;
-
-//     return (
-//         <div style={{ padding: '1rem', paddingTop: '0' }}>
-//             <p style={{ marginBottom: '1rem' }}>Select Transaction Speed</p>
-//             {setSelectedGasPrice && (
-//                 <Box
-//                     display='flex'
-//                     alignItems='center'
-//                     justifyContent='space-between'
-//                     className='transaction-speed'
-//                 >
-//                     <div
-//                         className={classNames({ active: isStandardActive })}
-//                         onClick={() =>
-//                             setSelectedGasPrice(GasPriceSelection.Standard)
-//                         }
-//                     >
-//                         {isStandardActive && (
-//                             <FontAwesomeIcon icon={faCheckCircle} />
-//                         )}
-//                         <span>
-//                             Standard{' '}
-//                             {gasPrices?.standard ?? <ThreeDots width='24px' />}{' '}
-//                             Gwei
-//                         </span>
-//                     </div>
-//                     <div
-//                         className={classNames({ active: isFastActive })}
-//                         onClick={() =>
-//                             setSelectedGasPrice(GasPriceSelection.Fast)
-//                         }
-//                     >
-//                         {isFastActive && (
-//                             <FontAwesomeIcon icon={faCheckCircle} />
-//                         )}
-//                         <span>
-//                             Fast {gasPrices?.fast ?? <ThreeDots width='24px' />}{' '}
-//                             Gwei
-//                         </span>
-//                     </div>
-//                     <div
-//                         className={classNames({ active: isFastestActive })}
-//                         onClick={() =>
-//                             setSelectedGasPrice(GasPriceSelection.Fastest)
-//                         }
-//                     >
-//                         {isFastestActive && (
-//                             <FontAwesomeIcon icon={faCheckCircle} />
-//                         )}
-//                         <span>
-//                             Fastest{' '}
-//                             {gasPrices?.fastest ?? <ThreeDots width='24px' />}{' '}
-//                             Gwei
-//                         </span>
-//                     </div>
-//                 </Box>
-//             )}
-//         </div>
-//     );
-// };
 
 const level = 1;
 
@@ -189,6 +119,30 @@ export const LiquidityContainer = ({
         wallet.network,
         `0x86e69d1ae728c9cd229f07bbf34e01bf27258354`,
     );
+
+    const [notionalGain, setNotionalGain] = useState(new BigNumber(0));
+    useEffect(() => {
+        if (wallet.account) {
+            const getPositionsNotionalGain = async () => {
+                if (!wallet?.account) return;
+
+                const response = await fetch(
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                    `/api/v1/mainnet/positions/${wallet?.account}/notional-gain`,
+                );
+                if (response?.status === 200) {
+                    const data = await response.json();
+                    console.log('positions', data);
+                    setNotionalGain(new BigNumber(data));
+                } else {
+                    setNotionalGain(new BigNumber(0));
+                }
+            };
+            getPositionsNotionalGain();
+        } else {
+            setNotionalGain(new BigNumber(0));
+        }
+    }, [wallet.account]);
 
     const randomPoolBalances = useBalance({ pool: randomPool });
     const nanaPoolBalances = useBalance({ pool: nanaPool });
@@ -286,6 +240,13 @@ export const LiquidityContainer = ({
 
     return (
         <>
+            <div className='banana-win-badge'>
+                <img className='banana-win-badge-monkey' src={pngMonkeyHappy} />
+                <div className='banana-win-badge-gain'>
+                    BANANA WINS
+                    <span>{formatUSD(notionalGain.valueOf())}</span>
+                </div>
+            </div>
             {randomPool && nanaPool && view === 'pairs' && (
                 <div className='carousel-container'>
                     <Carousel

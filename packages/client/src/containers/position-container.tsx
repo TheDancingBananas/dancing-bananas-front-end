@@ -51,7 +51,7 @@ function PositionContainer({
                 setIsError(true);
             }
         };
-        void getPositionsData();
+        getPositionsData();
     }, [wallet?.account]);
 
     const handleSelectPosition = (
