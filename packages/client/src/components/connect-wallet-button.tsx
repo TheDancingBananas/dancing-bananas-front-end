@@ -16,8 +16,10 @@ import pngMysteriousChimp from 'styles/images/mysterious_chimp-109.png';
 const monkeyLevels = [pngCuriousMonkey, pngMysteriousChimp];
 function ConnectWalletButton({
     onClick,
+    onShowLevel,
 }: {
     onClick: () => void;
+    onShowLevel?: () => void;
 }): JSX.Element {
     const { wallet } = useWallet();
     const account = wallet?.account;
@@ -76,11 +78,14 @@ function ConnectWalletButton({
                 >
                     <button
                         className='connect-wallet-button white'
-                        onClick={onClick}
+                        onClick={onShowLevel}
                     >
                         <span className='monkey-level'>LEVEL {level}</span>
                     </button>
-                    <button className='connect-wallet-button black'>
+                    <button
+                        className='connect-wallet-button black'
+                        onClick={onClick}
+                    >
                         <img src={pngEth} />
                         {parseFloat(
                             ethers.utils.formatUnits(ethBalance, 18),

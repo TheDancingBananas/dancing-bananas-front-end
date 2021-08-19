@@ -1,8 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useContext, useEffect, useReducer, useMemo } from 'react';
+import {
+    useState,
+    useContext,
+    useEffect,
+    useReducer,
+    useMemo,
+    useRef,
+} from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { Price, Token } from '@uniswap/sdk-core';
+import Marquee from 'react-fast-marquee';
 import {
     FeeAmount,
     Pool,
@@ -138,42 +146,55 @@ export const AddLiquidityV3 = ({
         currentBasketData,
     );
 
-    const initialState: Record<string, any> = useMemo(
-        () => ({
+    const initialState: Record<string, any> = useMemo(() => {
+        const selectedTokens = [];
+
+        if (defaultValue[token0Symbol]) {
+            selectedTokens.push(token0Symbol);
+        }
+
+        if (defaultValue[token1Symbol]) {
+            selectedTokens.push(token1Symbol);
+        }
+
+        if (defaultValue['ETH']) {
+            selectedTokens.push('ETH');
+        }
+
+        return {
             [token0Symbol]: {
                 id: pool?.token0?.id,
                 name: pool?.token0?.name,
                 symbol: pool?.token0?.symbol,
                 amount: defaultValue[token0Symbol] ?? '',
-                selected: false,
+                selected: defaultValue[token0Symbol] ? true : false,
             },
             [token1Symbol]: {
                 id: pool?.token1?.id,
                 name: pool?.token1?.name,
                 symbol: pool?.token1?.symbol,
                 amount: defaultValue[token1Symbol] ?? '',
-                selected: false,
+                selected: defaultValue[token1Symbol] ? true : false,
             },
             ETH: {
                 id: ETH_ID,
                 symbol: 'ETH',
                 name: 'Ethereum',
                 amount: defaultValue['ETH'] ?? '',
-                selected: true,
+                selected: defaultValue['ETH'] ? true : false,
             },
-            selectedTokens: ['ETH'],
-        }),
-        [
-            pool?.token0?.id,
-            pool?.token0?.name,
-            pool?.token0?.symbol,
-            pool?.token1?.id,
-            pool?.token1?.name,
-            pool?.token1?.symbol,
-            token0Symbol,
-            token1Symbol,
-        ],
-    );
+            selectedTokens: selectedTokens,
+        };
+    }, [
+        pool?.token0?.id,
+        pool?.token0?.name,
+        pool?.token0?.symbol,
+        pool?.token1?.id,
+        pool?.token1?.name,
+        pool?.token1?.symbol,
+        token0Symbol,
+        token1Symbol,
+    ]);
 
     const init = (initialState: Record<string, any>) => {
         return initialState;
@@ -222,19 +243,23 @@ export const AddLiquidityV3 = ({
                     : [...state.selectedTokens, sym];
 
                 // Ensure ordering of selected symbols
-                [pool!.token0.symbol, pool!.token1.symbol].forEach(
+                ['ETH', pool!.token0.symbol, pool!.token1.symbol].forEach(
                     (pairSymbol) => {
                         if (selectedSymbols.includes(pairSymbol)) {
                             orderedSymbols.push(pairSymbol);
-                        } else if (
-                            pairSymbol === 'WETH' &&
-                            selectedSymbols.includes('ETH')
-                        ) {
-                            orderedSymbols.push('ETH');
                         }
+                        // } else if (
+                        //     pairSymbol === 'WETH' &&
+                        //     selectedSymbols.includes('ETH')
+                        // ) {
+                        //     orderedSymbols.push('ETH');
+                        // }
                     },
                 );
-
+                console.log(
+                    'orderedSymbols----------------------: ',
+                    orderedSymbols,
+                );
                 return {
                     ...state,
                     selectedTokens: orderedSymbols,
@@ -287,9 +312,10 @@ export const AddLiquidityV3 = ({
         [BigNumber, BigNumber]
     >([new BigNumber(0), new BigNumber(0)]);
     const { wallet } = useWallet();
-
+    const isRefreshed = useRef(false);
     useEffect(() => {
         dispatch({ type: 'reset', payload: initialState });
+        isRefreshed.current = false;
     }, [initialState, pool]);
     let provider: ethers.providers.Web3Provider | null = null;
     if (wallet.provider) {
@@ -483,9 +509,6 @@ export const AddLiquidityV3 = ({
         if (Number.isNaN(totalAmount) || !totalAmount || !pool) {
             return;
         }
-
-        console.log('poolinfo', pool);
-
         if (!isWETHPair && selectedToken === 'ETH') {
             const totalLockedUSD = new BigNumber(pool.totalValueLockedUSD);
             const totalLockedETH = new BigNumber(pool.totalValueLockedETH);
@@ -882,8 +905,6 @@ export const AddLiquidityV3 = ({
         }
 
         console.log(tokenInputState);
-
-        console.log(pool);
 
         let hash: string | undefined;
         let addType: string;
@@ -1516,19 +1537,164 @@ export const AddLiquidityV3 = ({
     // if (!pool || !pool?.token0 || !pool?.token1) return null;
     debug.marketData = marketData;
 
-    const selectedSymbolCount = tokenInputState.selectedTokens.length;
-    const isToken0Active = tokenInputState?.[token0Symbol]?.selected;
-    const isToken1Active = tokenInputState?.[token1Symbol]?.selected;
-    const isTokenETHActive = tokenInputState?.['ETH']?.selected;
-    const isToken0Disabled = !isToken0Active && selectedSymbolCount === 2;
-    const isToken1Disabled = !isToken1Active && selectedSymbolCount === 2;
-    const isTokenETHDisabled =
-        !isTokenETHActive &&
-        (selectedSymbolCount === 2 || tokenInputState['WETH']?.selected);
-    // const selectedSymbol0 = tokenInputState.selectedTokens[0];
-    // const selectedSymbol1 = tokenInputState.selectedTokens[1];
-    const disableWETH = tokenInputState['ETH'].selected;
+    const [isTokenETHActive, setIsTokenETHActive] = useState(
+        tokenInputState?.['ETH']?.selected,
+    );
+    const [isToken0Active, setIsToken0Active] = useState(
+        tokenInputState?.[token0Symbol]?.selected,
+    );
+    const [isToken1Active, setIsToken1Active] = useState(
+        tokenInputState?.[token1Symbol]?.selected,
+    );
     const isWETHPair = token0Symbol === 'WETH' || token1Symbol === 'WETH';
+
+    const [state, setState] = useState({
+        checkedEth: isTokenETHActive,
+        checkedToken0: isToken0Active,
+        checkedToken1: isToken1Active,
+    });
+    const selectedSymbolCount = tokenInputState.selectedTokens.length;
+
+    const [isToken0Disabled, setIsToken0Disabled] = useState(
+        Number(balances?.[token0Symbol]?.balance) <= 0 ||
+            (!isToken0Active && selectedSymbolCount === 2),
+    );
+    const [isToken1Disabled, setIsToken1Disabled] = useState(
+        Number(balances?.[token1Symbol]?.balance) <= 0 ||
+            (!isToken1Active && selectedSymbolCount === 2),
+    );
+    const [isTokenETHDisabled, setIsTokenETHDisabled] = useState(
+        Number(balances?.['ETH']?.balance) <= 0 ||
+            (!isTokenETHActive &&
+                (selectedSymbolCount === 2 ||
+                    tokenInputState['WETH']?.selected)),
+    );
+    const [disableWETH, setDisableWETH] = useState(isTokenETHActive);
+
+    useEffect(() => {
+        const selectedSymbolCount = tokenInputState.selectedTokens.length;
+
+        if (selectedSymbolCount === 0 && !isRefreshed.current) {
+            const activeTokens = [];
+            if (isWETHPair) {
+                if (Number(balances?.['ETH']?.balance) > 0) {
+                    setIsTokenETHActive(true);
+                    state.checkedEth = true;
+                    setState(state);
+                    activeTokens.push('ETH');
+                }
+
+                if (
+                    token0Symbol !== 'WETH' &&
+                    Number(balances?.[token0Symbol]?.balance) > 0
+                ) {
+                    setIsToken0Active(true);
+                    state.checkedToken0 = true;
+                    setState(state);
+                    activeTokens.push(token0Symbol);
+                }
+
+                if (
+                    token1Symbol !== 'WETH' &&
+                    Number(balances?.[token1Symbol]?.balance) > 0
+                ) {
+                    setIsToken1Active(true);
+                    state.checkedToken1 = true;
+                    setState(state);
+                    activeTokens.push(token1Symbol);
+                }
+            } else {
+                const totalLockedUSD = new BigNumber(pool.totalValueLockedUSD);
+                const totalLockedETH = new BigNumber(pool.totalValueLockedETH);
+                const ethPrice: BigNumber = totalLockedUSD.div(totalLockedETH);
+                const ethBalancePrice: number =
+                    Number(balances?.['ETH']?.balance) * Number(ethPrice);
+                const token0BalancePrice: number =
+                    Number(balances?.[token0Symbol]?.balance) *
+                    Number(pool.token0Price);
+                const token1BalancePrice: number =
+                    Number(balances?.[token1Symbol]?.balance) *
+                    Number(pool.token1Price);
+
+                const minPrice = Math.min(
+                    ethBalancePrice,
+                    token0BalancePrice,
+                    token1BalancePrice,
+                );
+                console.log('Min Price: ', minPrice);
+
+                if (
+                    Number(balances?.['ETH']?.balance) > 0 &&
+                    ethBalancePrice > minPrice
+                ) {
+                    setIsTokenETHActive(true);
+                    state.checkedEth = true;
+                    setState(state);
+                    activeTokens.push('ETH');
+                }
+
+                if (
+                    Number(balances?.[token0Symbol]?.balance) > 0 &&
+                    token0BalancePrice > minPrice
+                ) {
+                    setIsToken0Active(true);
+                    state.checkedToken0 = true;
+                    setState(state);
+                    activeTokens.push(token0Symbol);
+                }
+
+                if (
+                    Number(balances?.[token1Symbol]?.balance) > 0 &&
+                    token1BalancePrice > minPrice
+                ) {
+                    setIsToken1Active(true);
+                    state.checkedToken1 = true;
+                    setState(state);
+                    activeTokens.push(token1Symbol);
+                }
+            }
+
+            activeTokens.forEach((symbol) => {
+                (async () => {
+                    dispatch({
+                        type: 'toggle',
+                        payload: { sym: symbol },
+                    });
+                    await new Promise((f) => setTimeout(f, 1000));
+                })();
+            });
+            if (activeTokens.length > 0) {
+                isRefreshed.current = true;
+            }
+        }
+    }, [balances]);
+
+    useEffect(() => {
+        const selectedSymbolCount = tokenInputState.selectedTokens.length;
+        setIsToken0Disabled(
+            !balances ||
+                !balances?.[token0Symbol] ||
+                Number(balances?.[token0Symbol]?.balance) <= 0 ||
+                (!isToken0Active && selectedSymbolCount === 2),
+        );
+        console.log('isToken0Disabled : ', isToken0Disabled);
+        setIsToken1Disabled(
+            !balances ||
+                !balances?.[token1Symbol] ||
+                Number(balances?.[token1Symbol]?.balance) <= 0 ||
+                (!isToken1Active && selectedSymbolCount === 2),
+        );
+        setIsTokenETHDisabled(
+            !balances ||
+                !balances?.['ETH'] ||
+                Number(balances?.['ETH']?.balance) <= 0 ||
+                (!isTokenETHActive &&
+                    (selectedSymbolCount === 2 ||
+                        tokenInputState['WETH']?.selected)),
+        );
+        setDisableWETH(isTokenETHActive);
+    }, [isToken0Active, isToken1Active, isTokenETHActive, state, balances]);
+
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
     const baseCoinId = isFlipped ? pool.token0.id : pool.token1.id;
 
@@ -1640,8 +1806,6 @@ export const AddLiquidityV3 = ({
         }
 
         console.log('token input state', tokenInputState);
-
-        console.log(pool);
 
         const poolId = pool.id;
         const poolName = `${pool.token0.symbol}-${pool.token1.symbol}`;
@@ -1775,12 +1939,6 @@ export const AddLiquidityV3 = ({
         checked: {},
     }))(Switch);
 
-    const [state, setState] = useState({
-        checkedEth: true,
-        checkedToken0: false,
-        checkedToken1: false,
-    });
-
     const [activeCard, setActiveCard] = useState('');
 
     const showFeatureLockedAlert = () => {
@@ -1838,11 +1996,20 @@ export const AddLiquidityV3 = ({
                 </div>
                 {!wallet.account && (
                     <div
-                        className='bonus-banana-gif'
+                        className='bonus-banana-banner'
                         role='button'
                         onClick={(e) => onGetBonusBananas()}
                     >
-                        <img src={pngBonusBanana} />
+                        <Marquee
+                            className='bonus-banana-banner-content'
+                            gradient={false}
+                            speed={120}
+                        >
+                            <img src={pngBanana2} />
+                            <span>CONNECT YOUR WALLET</span>
+                            <img src={pngBanana2} />
+                            <span>GET 100 BANANAS</span>
+                        </Marquee>
                     </div>
                 )}
                 <div className='pool-info'>
@@ -1947,6 +2114,7 @@ export const AddLiquidityV3 = ({
                                         type: 'toggle',
                                         payload: { sym: 'ETH' },
                                     });
+                                    setIsTokenETHActive(event.target.checked);
                                 }}
                                 name='checkedEth'
                             />
@@ -2064,6 +2232,7 @@ export const AddLiquidityV3 = ({
                                             type: 'toggle',
                                             payload: { sym: token0Symbol },
                                         });
+                                        setIsToken0Active(event.target.checked);
                                     }}
                                     name='checkedToken0'
                                 />
@@ -2189,10 +2358,13 @@ export const AddLiquidityV3 = ({
                                             [event.target.name]:
                                                 event.target.checked,
                                         });
+
                                         dispatch({
                                             type: 'toggle',
                                             payload: { sym: token1Symbol },
                                         });
+
+                                        setIsToken1Active(event.target.checked);
                                     }}
                                     name='checkedToken1'
                                 />
