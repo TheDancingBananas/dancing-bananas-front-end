@@ -49,7 +49,7 @@ const getBlockAtTime = wrapWithCache(
     false,
 );
 
-async function getEthPriceAtTime(date: Date): Promise<BigNumber> {
+export async function getEthPriceAtTime(date: Date): Promise<BigNumber> {
     const { number: blockNumber } = await getBlockAtTime(date);
     const { ethPrice } = await getEthPrice(blockNumber);
 
