@@ -23,6 +23,10 @@ import pngBanana2 from 'styles/images/banana-2.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
 import pngETH from 'styles/images/eth.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
+import pngDelete from 'styles/images/delete.png';
+import pngEditWhite from 'styles/images/edit-white.png';
+import pngEditBlack from 'styles/images/edit-black.png';
+
 import gameData from 'constants/gameData.json';
 import { storage } from 'util/localStorage';
 import { Level, Reward, RewardItem } from 'types/game';
@@ -870,12 +874,15 @@ const CartContainer = ({
                                                 className='cart-token-exit-image'
                                                 onClick={(e) => onRemove(index)}
                                             >
-                                                <div>
-                                                    <img
-                                                        src={pngExit}
-                                                        width='15'
-                                                    />
-                                                </div>
+                                                <img src={pngDelete} />
+                                            </div>
+                                            <div
+                                                className='cart-token-edit-image'
+                                                onClick={(e) =>
+                                                    onEdit(item.poolId)
+                                                }
+                                            >
+                                                <img src={pngEditWhite} />
                                             </div>
                                             {!item.isNANA && (
                                                 <div className='cart-token-image'>
@@ -983,6 +990,7 @@ const CartContainer = ({
                                                     }
                                                 >
                                                     EDIT
+                                                    <img src={pngEditBlack} />
                                                 </button>
                                             </div>
                                         </div>
