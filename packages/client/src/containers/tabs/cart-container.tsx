@@ -138,23 +138,40 @@ const CartContainer = ({
     };
 
     const handleAllowanceError = (
+        poolName: string,
         symbol: string,
         allowanceAmount: string,
         amount: string,
     ): undefined => {
         // We could not estimate gas, for whaever reason, so we should not let the transaction continue.
 
-        const toastMsg = `${symbol} token's amount(${amount}) is less than allowed amount(${allowanceAmount})`;
+        const toastMsg = `In the ${poolName} pool,${symbol} token's amount(${amount}) is less than allowed amount(${allowanceAmount})`;
 
         toastError(toastMsg);
 
         return;
     };
 
-    const handleUserRejectError = (err: Error): undefined => {
+    const handleLiquidityError = (poolName: string): undefined => {
+        // We could not calculate minLiquidity.
+
+        const toastMsg = `The liquidity amount is not enough in the ${poolName} pool. Please arrange the amount.`;
+
+        toastError(toastMsg);
+
+        return;
+    };
+
+    const handleUserRejectError = (
+        poolName: string,
+        tokenSymbol: string,
+        err: Error,
+    ): undefined => {
         // The user rejected transaction.
 
-        toastError(err.message);
+        const toastMsg = `The user rejected the transaction for the ${tokenSymbol} in the ${poolName} pool.`;
+
+        toastError(toastMsg);
 
         return;
     };
@@ -191,6 +208,8 @@ const CartContainer = ({
 
         // Create signer
         const signer = provider.getSigner();
+
+        // let txFee : ethers.BigNumber = ethers.BigNumber.from(0);
 
         // Create read-write contract instance
         const batchLiquidityContract = new ethers.Contract(
@@ -251,6 +270,11 @@ const CartContainer = ({
                     .exponentiatedBy(2)
                     .div(2)
                     .sqrt();
+
+                if (liquidity.isZero()) {
+                    handleLiquidityError(data.poolName);
+                    continue;
+                }
                 const minLiquidity = liquidity.times(0.98).toFixed(0);
 
                 const sqrtPriceAX96 = TickMath.getSqrtRatioAtTick(
@@ -321,6 +345,7 @@ const CartContainer = ({
                         // skip approval on allowance
                         if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
                             handleAllowanceError(
+                                data.poolName,
                                 tokenSymbol,
                                 new BigNumber(tokenAllowance).toFixed(2),
                                 new BigNumber(baseTokenAmount).toFixed(2),
@@ -385,7 +410,7 @@ const CartContainer = ({
                         );
                         approveHash = hash;
                     } catch (err) {
-                        handleUserRejectError(err);
+                        handleUserRejectError(data.poolName, tokenSymbol, err);
                         continue;
                     }
 
@@ -396,6 +421,7 @@ const CartContainer = ({
                             approveHash,
                             baseGasPrice,
                         );
+                        //txFee = txFee.add(approvalEstimate.mul(baseGasPrice));
                         onStatus(true, estimateTime);
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
@@ -538,6 +564,7 @@ const CartContainer = ({
                         // skip approval on allowance
                         if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
                             handleAllowanceError(
+                                data.poolName,
                                 tokenSymbol,
                                 new BigNumber(tokenAllowance).toFixed(2),
                                 new BigNumber(baseTokenAmount).toFixed(2),
@@ -602,7 +629,7 @@ const CartContainer = ({
                         );
                         approveHash = hash;
                     } catch (err) {
-                        handleUserRejectError(err);
+                        handleUserRejectError(data.poolName, tokenSymbol, err);
                         continue;
                     }
 
@@ -613,6 +640,7 @@ const CartContainer = ({
                             approveHash,
                             baseGasPrice,
                         );
+                        //txFee = txFee.add(approvalEstimate.mul(baseGasPrice));
                         onStatus(true, estimateTime);
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
