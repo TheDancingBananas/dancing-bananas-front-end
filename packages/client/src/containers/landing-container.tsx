@@ -30,6 +30,16 @@ import LevelUpContainer from './tabs/level-up-container';
 import PositionContainer from './position-container';
 
 import pngWait from 'styles/images/wait.png';
+import pngWallet from 'styles/images/wallet.png';
+import pngEth from 'styles/images/eth.png';
+import pngBanana from 'styles/images/dancing-banana.png';
+import pngTelegram from 'styles/images/telegram-108.png';
+import pngCuriousMonkey from 'styles/images/curious-109.png';
+import pngMysteriousChimp from 'styles/images/mysterious_chimp-109.png';
+import pngShopColor from 'styles/images/shop-color.png';
+import pngBasket from 'styles/images/basket.png';
+import pngSearch from 'styles/images/search.png';
+
 import gifLoading from 'styles/images/loading-animation.gif';
 import { SKIP_DURATION, storage } from 'util/localStorage';
 
@@ -330,13 +340,60 @@ function LandingContainer({
     return (
         <div>
             <div className='main-header-container'>
-                <div className='wallet-combo'>
-                    {
+                <div className='top-nav-container'>
+                    {wallet.account ? (
+                        <>
+                            <div
+                                className='top-nav-item pink'
+                                onClick={() => {
+                                    window.open(
+                                        'https://t.me/getbananas',
+                                        '_blank',
+                                    );
+                                }}
+                            >
+                                <img src={pngTelegram} />
+                            </div>
+                            <div
+                                className='top-nav-item white'
+                                onClick={(e) => handleChangeTab('task')}
+                            >
+                                <img src={pngSearch} />
+                                <span className='monkey-level'>
+                                    LEVEL {currentLevel}
+                                </span>
+                            </div>
+                            <div
+                                className='top-nav-item yellow'
+                                onClick={(e) => showWalletModal()}
+                            >
+                                <img src={pngBanana} />
+                                <span>{100}</span>
+                            </div>
+                            <div
+                                className='top-nav-item white'
+                                onClick={(e) => handleChangeTab('shop')}
+                            >
+                                <img src={pngShopColor} />
+                            </div>
+                            <div
+                                className='top-nav-item white'
+                                onClick={(e) => handleChangeTab('cart')}
+                            >
+                                {basketData.length > 0 && (
+                                    <div className='top-nav-badge'>
+                                        {basketData.length}
+                                    </div>
+                                )}
+                                <img src={pngBasket} />
+                            </div>
+                        </>
+                    ) : (
                         <ConnectWalletButton
                             onClick={showWalletModal}
                             onShowLevel={showLevelPage}
                         />
-                    }
+                    )}
                 </div>
             </div>
 
