@@ -12,7 +12,7 @@ import './task-container.scss';
 
 import pngSearch from 'styles/images/search.png';
 import pngDancingBanana from 'styles/images/dancing-banana.png';
-import pngArrowLeft from 'styles/images/left-arrow.png';
+import pngArrowLeft from 'styles/images/left.png';
 import pngTickBlack from 'styles/images/tick-black.png';
 
 const TaskContainer = ({
