@@ -272,6 +272,9 @@ export const LiquidityContainer = ({
                                     onAddBasket={(data: LiquidityBasketData) =>
                                         handleAddBasket(data, false)
                                     }
+                                    onConnectWallet={() =>
+                                        handleWalletConnect()
+                                    }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}
                                     onAddSuccess={() => onAddSuccess()}
@@ -300,6 +303,9 @@ export const LiquidityContainer = ({
                                     onSkipPairs={() => handleSkip(2)}
                                     onAddBasket={(data: LiquidityBasketData) =>
                                         handleAddBasket(data, true)
+                                    }
+                                    onConnectWallet={() =>
+                                        handleWalletConnect()
                                     }
                                     onLeft={() => handleClickLeft()}
                                     onRight={() => handleClickRight()}

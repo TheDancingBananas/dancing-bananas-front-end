@@ -91,6 +91,7 @@ type Props = {
     onSkipPairs: () => void;
     onAddBasket: (data: LiquidityBasketData) => void;
     onGetBonusBananas: () => void;
+    onConnectWallet: () => void;
     onLeft: () => void;
     onRight: () => void;
     onAddSuccess: () => void;
@@ -115,6 +116,7 @@ export const AddLiquidityV3 = ({
     onSkipPairs,
     onAddBasket,
     onGetBonusBananas,
+    onConnectWallet,
     onLeft,
     onRight,
     onAddSuccess,
@@ -2088,6 +2090,10 @@ export const AddLiquidityV3 = ({
                                 nanaunselected: activeCard !== 'Eth' && isNANA,
                             })}
                             onClick={() => {
+                                if (!wallet.account) {
+                                    onConnectWallet();
+                                    return;
+                                }
                                 if (
                                     !isTokenETHActive &&
                                     selectedSymbolCount === 2
@@ -2199,6 +2205,10 @@ export const AddLiquidityV3 = ({
                                         activeCard !== token0Symbol && isNANA,
                                 })}
                                 onClick={() => {
+                                    if (!wallet.account) {
+                                        onConnectWallet();
+                                        return;
+                                    }
                                     if (
                                         !isToken0Active &&
                                         selectedSymbolCount === 2
@@ -2329,6 +2339,10 @@ export const AddLiquidityV3 = ({
                                         activeCard !== token1Symbol && isNANA,
                                 })}
                                 onClick={() => {
+                                    if (!wallet.account) {
+                                        onConnectWallet();
+                                        return;
+                                    }
                                     if (
                                         !isToken1Active &&
                                         selectedSymbolCount === 2
@@ -2459,6 +2473,10 @@ export const AddLiquidityV3 = ({
                             })}
                             role='button'
                             onClick={() => {
+                                if (!wallet.account) {
+                                    onConnectWallet();
+                                    return;
+                                }
                                 if (level > 2) {
                                     setSentiment(
                                         isFlipped ? 'bullish' : 'bearish',
@@ -2486,6 +2504,10 @@ export const AddLiquidityV3 = ({
                             })}
                             role='button'
                             onClick={() => {
+                                if (!wallet.account) {
+                                    onConnectWallet();
+                                    return;
+                                }
                                 setSentiment('neutral');
                                 trackSentimentInteraction(pool, 'neutral');
                             }}
@@ -2503,6 +2525,10 @@ export const AddLiquidityV3 = ({
                             })}
                             role='button'
                             onClick={() => {
+                                if (!wallet.account) {
+                                    onConnectWallet();
+                                    return;
+                                }
                                 if (level > 2) {
                                     setSentiment(
                                         isFlipped ? 'bearish' : 'bullish',
