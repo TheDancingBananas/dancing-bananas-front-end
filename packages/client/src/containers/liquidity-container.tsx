@@ -155,7 +155,7 @@ export const LiquidityContainer = ({
         const selectedPool: any = basket.find(
             (element) => element.poolId === poolId,
         );
-        if (selectedPool === undefined) return;
+        if (selectedPool === undefined) return {};
         const origin = {
             [selectedPool.lToken0Name]: selectedPool.lToken0Amount,
         };

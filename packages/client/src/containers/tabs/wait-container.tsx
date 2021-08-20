@@ -50,7 +50,12 @@ const WaitContainer = ({
                 onSkipFinish();
             }
         }, 1000);
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            setTimeout(() => {
+                onSkipFinish();
+            }, time * 1000);
+        };
     }, [time]);
 
     return (
