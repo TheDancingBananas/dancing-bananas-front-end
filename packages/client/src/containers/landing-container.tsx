@@ -502,6 +502,9 @@ function LandingContainer({
                         onExchange={(exchangeKey: string) => {
                             handleExchange(exchangeKey);
                         }}
+                        onBack={() => {
+                            handleChangeTab('home');
+                        }}
                     />
                 )}
                 {tab === 'cart' && (
