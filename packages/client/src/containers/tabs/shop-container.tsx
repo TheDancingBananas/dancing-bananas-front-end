@@ -14,6 +14,7 @@ import pngMonkeys from 'styles/images/monkeys.png';
 import png3Hours from 'styles/images/3hours.png';
 import pngSpeed from 'styles/images/speed.png';
 import pngLock from 'styles/images/lock.png';
+import pngArrowLeft from 'styles/images/left.png';
 
 const ShopItem = ({
     itemName,
@@ -70,8 +71,10 @@ const ShopItem = ({
 
 const ShopContainer = ({
     onExchange,
+    onBack,
 }: {
     onExchange: (exchangeKey: string) => void;
+    onBack: () => void;
 }): JSX.Element | null => {
     const handleUnlock = () => {
         console.log('unlocked clicked');
@@ -80,7 +83,13 @@ const ShopContainer = ({
     return (
         <div className='reward-container'>
             <img className='reward-container-image' src={pngRewardRoof} />
+
             <div className='reward-container-card'>
+                <img
+                    className='back-image'
+                    src={pngArrowLeft}
+                    onClick={(e) => onBack()}
+                />
                 <h1 className='reward-title'>BANANA SHOP</h1>
                 <h2 className='reward-subtitle'>
                     HERE YOU CAN TRADE BANANAS FOR NEW

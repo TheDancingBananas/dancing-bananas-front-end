@@ -23,6 +23,12 @@
     padding: 80px 1.5rem 1.25rem;
     margin-top: -70px;
 
+    .back-image {
+        position: absolute;
+        width: 37px;
+        cursor: pointer;
+    }
+
     .reward-title {
         font-size: 25px;
         line-height: 30px;
