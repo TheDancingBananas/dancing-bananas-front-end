@@ -30,8 +30,13 @@ export const useBalance = ({ pool }: Props): WalletBalances => {
     useEffect(() => {
         // get balances of both tokens
         const getBalances = async () => {
-            if (!provider || !wallet.account) return;
-            if (!pool || !pool.token0 || !pool.token1) return;
+            if (!provider || !wallet.account) {
+                setBalances({});
+                return;
+            }
+            if (!pool || !pool.token0 || !pool.token1) {
+                return;
+            }
 
             const getTokenBalances = [pool.token0.id, pool.token1.id].map(
                 async (tokenAddress) => {
