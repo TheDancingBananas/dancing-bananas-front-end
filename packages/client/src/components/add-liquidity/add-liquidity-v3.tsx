@@ -309,6 +309,7 @@ export const AddLiquidityV3 = ({
         prices: [0, 0],
         ticks: [0, 0],
     });
+
     const [pendingBounds, setPendingBounds] = useState<boolean>(true);
     const [expectedAmounts, setExpectedAmounts] = useState<
         [BigNumber, BigNumber]
@@ -1680,6 +1681,7 @@ export const AddLiquidityV3 = ({
                 (!isToken0Active && selectedSymbolCount === 2),
         );
         console.log('isToken0Disabled : ', isToken0Disabled);
+        console.log('balances', balances);
         setIsToken1Disabled(
             !balances ||
                 !balances?.[token1Symbol] ||
@@ -1801,6 +1803,13 @@ export const AddLiquidityV3 = ({
 
         // doAddLiquidity();
         // doAddBasket();
+
+        // if (!bounds?.position) {
+        //     const bound = basketData?.find((element) => element.poolId === pool?.id)?.bounds;
+        //     if (bound) {
+        //         setBounds(bound);
+        //     }
+        // }
 
         if (!pool || !provider || !indicators || !bounds.position) return;
         if (!currentGasPrice) {

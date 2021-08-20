@@ -10,14 +10,18 @@ const toBalanceStr = (
 ): string => {
     const balance = balances[token]?.balance;
 
-    return new BigNumber(
+    const calcBalance = new BigNumber(
         ethers.utils.formatUnits(
             balance || 0,
             parseInt(balances[token]?.decimals || '0', 10),
         ),
-    )
-        .minus(basketAmount)
-        .toFixed(2);
+    ).minus(basketAmount);
+
+    if (calcBalance.isNegative()) {
+        return '0.00';
+    }
+
+    return calcBalance.toFixed(2);
 };
 
 type TokenInputProps = {
