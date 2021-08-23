@@ -57,8 +57,8 @@ export const BananaHelp = (): JSX.Element => {
                         </div>
                         <div className='quest-text'>
                             <br />
-                            In Dancing Bananas the Quest is Add The Right
-                            LIquidity for Collect Fees and Nanas!
+                            In the Dancing Bananas Game, Your Quest is To Add
+                            and Remove LIquidity to Collect Fees and NANAS!
                         </div>
                     </Box>
 
@@ -85,11 +85,11 @@ export const BananaHelp = (): JSX.Element => {
                         </div>
                         <div className='banana-help-instructions'>
                             <span className='banana-help-instructions-bold'>
-                                With Nanas you can unlock new features, speed up
-                                waiting times
+                                With NANAS you will unlock new features and
+                                speed up wait times
                             </span>{' '}
-                            and become a better and smarter Ape! Collect as much
-                            as you can!
+                            and you will become a better and smarter Ape!
+                            Collect as much as you can!
                         </div>
                     </Box>
 
@@ -104,7 +104,7 @@ export const BananaHelp = (): JSX.Element => {
                             be reveal for you.
                             <br />
                             <br />
-                            There you have 2 options:
+                            On the Level 1, you have 2 options:
                             <hr className='banana-help-line' />
                         </div>
                     </Box>
