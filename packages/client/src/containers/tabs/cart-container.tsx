@@ -347,15 +347,15 @@ const CartContainer = ({
                         );
 
                         // skip approval on allowance
-                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
-                            handleAllowanceError(
-                                data.poolName,
-                                tokenSymbol,
-                                new BigNumber(tokenAllowance).toFixed(2),
-                                new BigNumber(baseTokenAmount).toFixed(2),
-                            );
-                            continue;
-                        }
+                        // if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
+                        //     handleAllowanceError(
+                        //         data.poolName,
+                        //         tokenSymbol,
+                        //         new BigNumber(tokenAllowance).toFixed(2),
+                        //         new BigNumber(baseTokenAmount).toFixed(2),
+                        //     );
+                        //     continue;
+                        // }
                     }
 
                     // Call the contract and sign
@@ -566,15 +566,15 @@ const CartContainer = ({
                         );
 
                         // skip approval on allowance
-                        if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
-                            handleAllowanceError(
-                                data.poolName,
-                                tokenSymbol,
-                                new BigNumber(tokenAllowance).toFixed(2),
-                                new BigNumber(baseTokenAmount).toFixed(2),
-                            );
-                            continue;
-                        }
+                        // if (new BigNumber(baseTokenAmount).lt(tokenAllowance)) {
+                        //     handleAllowanceError(
+                        //         data.poolName,
+                        //         tokenSymbol,
+                        //         new BigNumber(tokenAllowance).toFixed(2),
+                        //         new BigNumber(baseTokenAmount).toFixed(2),
+                        //     );
+                        //     continue;
+                        // }
                     }
 
                     // Call the contract and sign
