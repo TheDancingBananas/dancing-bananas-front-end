@@ -524,7 +524,12 @@ function LandingContainer({
                     />
                 )}
                 {tab === 'position' && (
-                    <PositionContainer gasPrices={gasPrices} />
+                    <PositionContainer
+                        gasPrices={gasPrices}
+                        onBack={() => {
+                            handleChangeTab('home');
+                        }}
+                    />
                 )}
             </Box>
         </div>
