@@ -15,6 +15,7 @@ import { Position } from '@uniswap/v3-sdk';
 import { Price } from '@uniswap/sdk-core';
 
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 export interface AllPairsState {
     isLoading: boolean;
@@ -145,6 +146,7 @@ export interface LiquidityBasketData {
     token1Amount: string;
     ethAmount: string;
     bounds: BoundsState;
+    minliquidity: string;
     feeTier: string;
     balances: WalletBalances;
     func: () => Promise<void>;
