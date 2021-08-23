@@ -238,9 +238,20 @@ export const LiquidityContainer = ({
         // handleChangePoolIndex(poolIndex - 1);
     };
 
+    const handleClickBananaBadge = () => {
+        if (wallet.account) {
+            handleChangeTab('position');
+        } else {
+            handleWalletConnect();
+        }
+    };
+
     return (
         <>
-            <div className='banana-win-badge'>
+            <div
+                className='banana-win-badge'
+                onClick={(e) => handleClickBananaBadge()}
+            >
                 <img className='banana-win-badge-monkey' src={pngMonkeyHappy} />
                 <div className='banana-win-badge-gain'>
                     BANANA WINS

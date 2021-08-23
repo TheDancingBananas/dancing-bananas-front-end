@@ -14,8 +14,10 @@ type Page = 'list' | 'detail';
 
 function PositionContainer({
     gasPrices,
+    onBack,
 }: {
     gasPrices: EthGasPrices | null;
+    onBack: () => void;
 }): JSX.Element {
     const { wallet } = useWallet();
 
@@ -72,7 +74,7 @@ function PositionContainer({
             {page === 'list' && positionsData && (
                 <PositionManagerContainer
                     positionsData={positionsData}
-                    onBack={() => handleBack()}
+                    onBack={() => onBack()}
                     onSelectPosition={(
                         position: V3PositionData,
                         pt: 'positive' | 'negative',
