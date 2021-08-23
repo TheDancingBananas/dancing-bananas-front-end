@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import './position-manager-container.scss';
 
+import pngArrowLeftCircle from 'styles/images/left.png';
 import pngArrowLeft from 'styles/images/left-arrow.png';
 import pngArrowRight from 'styles/images/right-arrow.png';
 import pngChevronDown from 'styles/images/chevron-down.png';
@@ -203,6 +204,11 @@ const PositionManagerContainer = ({
 
     return (
         <div className='position-manager-container'>
+            <img
+                className='position-manager-header-back'
+                src={pngArrowLeftCircle}
+                onClick={(e) => onBack()}
+            />
             <h1 className='postion-manager-header'>BANANA PORTFOLIO</h1>
             <div className='position-manager-container-card'>
                 <div className='position-manager-total-liquidity-wrapper'>

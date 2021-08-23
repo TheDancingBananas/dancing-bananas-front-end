@@ -17,6 +17,7 @@
     display: flex;
     margin: 10px auto 25px;
     align-items: center;
+    cursor: pointer;
 
     &-monkey {
         width: 96px;
@@ -36,7 +37,8 @@
         line-height: 18px;
         display: flex;
         flex-direction: column;
-        padding-left: 20px;
+        padding-left: 40px;
+        padding-right: 10px;
         align-items: center;
         justify-content: center;
         margin-left: -40px;
