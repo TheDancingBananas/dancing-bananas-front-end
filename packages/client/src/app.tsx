@@ -29,7 +29,6 @@ function App(): ReactElement {
 
     //const gasPrices = useEthGasPrices();
 
-    const isGettingGasPrice = false;
     storage.setGasPrices(null);
     const gasPrices = {
         safeLow: 1,
@@ -37,6 +36,8 @@ function App(): ReactElement {
         fast: 1,
         fastest: 1,
     };
+
+    useEthGasPrices();
 
     const [showConnectWallet, setShowConnectWallet] = useState(false);
     // subscribe to the hook, will propogate to the nearest boundary
@@ -117,9 +118,6 @@ function App(): ReactElement {
                                                 <Route path='/'>
                                                     <LandingContainer
                                                         gasPrices={gasPrices}
-                                                        isGettingGasPrice={
-                                                            isGettingGasPrice
-                                                        }
                                                         setShowConnectWallet={
                                                             setShowConnectWallet
                                                         }

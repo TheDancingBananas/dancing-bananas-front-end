@@ -282,18 +282,9 @@ export const AddLiquidityV3 = ({
         }
     };
 
-    let savedPrice: number | null = null;
-
+    // Not using it now.
     const currentGasPrice = () => {
-        if (savedPrice === null) {
-            const gasPrices = useEthGasPrices();
-
-            if (gasPrices) {
-                savedPrice = gasPrices.fastest;
-            }
-        }
-
-        return savedPrice;
+        return null;
     };
 
     const [tokenInputState, dispatch] = useReducer(reducer, initialState, init);
