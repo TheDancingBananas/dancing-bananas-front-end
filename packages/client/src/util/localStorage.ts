@@ -116,6 +116,7 @@ const getBasketData = (): LiquidityBasketData[] => {
 };
 
 const setGasPrices = (data: EthGasPrices | null): void => {
+    console.log('storage gas setting: ', data);
     const value = JSON.stringify(data);
     localStorage.setItem('gasprices', value);
 };

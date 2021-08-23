@@ -91,6 +91,7 @@ const CartContainer = ({
             await new Promise((f) => setTimeout(f, 1000));
             value = storage.getGasPrices();
         }
+        console.log('getting gas Prices---------', value);
         return value;
     };
 

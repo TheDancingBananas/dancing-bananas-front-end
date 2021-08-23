@@ -29,7 +29,6 @@ function App(): ReactElement {
 
     //const gasPrices = useEthGasPrices();
 
-    storage.setGasPrices(null);
     const gasPrices = {
         safeLow: 1,
         standard: 1,

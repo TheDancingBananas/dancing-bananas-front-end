@@ -42,7 +42,7 @@ export function useEthGasPrices() {
             if (isChangedPrice(gasPrices, newGasPrices)) {
                 setGasPrices(newGasPrices);
                 storage.setGasPrices(newGasPrices);
-                console.log('gas price: ', newGasPrices);
+                console.log('gas price: ', newGasPrices, 'old :', gasPrices);
             }
 
             debug.gasPrices = newGasPrices;
