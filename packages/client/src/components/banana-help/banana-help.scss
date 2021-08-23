@@ -10,8 +10,10 @@
 }
 
 .banana-help-container {
+  position: relative;
+  top: -80px;
   width: 450px !important;
-  background: #FFDF00;
+  background: #FFFFFF;
   border: 3px solid #000;
   border-radius: 8px;
   justify-content: center;
@@ -23,11 +25,86 @@
 }
 
 .banana-help-instructions {
-  margin-left: 10px;
+  font-family: Montserrat !important;
+  margin-left: 10px !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  color: #000000;
+}
+
+.banana-help-instructions-bold {
+  font-family: Montserrat !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  color: #000000;
+}
+
+.quest-box {
+  background: #F2F1F1;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.quest-title {
+  font-family: Bungee;
   font-style: normal;
   font-weight: normal;
-  font-size: 12px;
-  line-height: 13px;
+  font-size: 25px;
+  line-height: 30px;
+
+  text-align: center;
+
+  color: #FFFFFF;
+
+  text-shadow: -1.4px 0 rgba(0, 0, 0, 0.75), 0 1.4px rgba(0, 0, 0, 0.75), 1.4px 0 rgba(0, 0, 0, 0.75), 0 -1.4px rgba(0, 0, 0, 0.75);
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: black;
+}
+
+.quest-text {
+
+  font-family: Montserrat !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  line-height: 15px !important;
+  letter-spacing: 0em !important;
+  text-align: center !important;
 
   color: #000000;
+}
+
+.bananas-icon {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.monkey-icon {
+  z-index: 10;
+}
+
+.banana-help-line {
+  height:1px;
+  border-width:0;
+  color:gray;
+  background-color:gray
+}
+
+.banana-help-large-instructions {
+  font-family: Montserrat !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  line-height: 17px !important;
+  width: 100%;
+  text-align: left;
+  color: #000000 !important;
+  margin-top: 6px;
+  margin-left: 10px;
 }
