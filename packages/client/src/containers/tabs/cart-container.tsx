@@ -171,6 +171,13 @@ const CartContainer = ({
         return;
     };
 
+    const handleTransactionFailError = (): undefined => {
+        const toastMsg = `Your transaction failed due to insufficient ETH balance in your wallet. Please add more ETH and try again.`;
+
+        toastError(toastMsg);
+
+        return;
+    };
     const handleAddLiquidity = async () => {
         if (!provider) {
             return;
@@ -737,6 +744,7 @@ const CartContainer = ({
             }
         } catch (err) {
             console.log(err);
+            handleTransactionFailError();
         }
 
         // cartData[0].func();
