@@ -72,7 +72,7 @@ export const TokenInput = ({
                 {toBalanceStr(token, balances, Number(basketAmount))}
             </span>
         </div>
-        <button
+        {/* <button
             className={classNames('token-input-max', { nana: isNANA })}
             disabled={!balances?.[token] || disabled}
             onClick={() => {
@@ -94,6 +94,6 @@ export const TokenInput = ({
             >
                 BALANCE
             </span>
-        </button>
+        </button> */}
     </div>
 );
