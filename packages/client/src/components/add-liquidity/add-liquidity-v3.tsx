@@ -282,18 +282,9 @@ export const AddLiquidityV3 = ({
         }
     };
 
-    let savedPrice: number | null = null;
-
+    // Not using it now.
     const currentGasPrice = () => {
-        if (savedPrice === null) {
-            const gasPrices = useEthGasPrices();
-
-            if (gasPrices) {
-                savedPrice = gasPrices.fastest;
-            }
-        }
-
-        return savedPrice;
+        return null;
     };
 
     const [tokenInputState, dispatch] = useReducer(reducer, initialState, init);
@@ -1901,6 +1892,12 @@ export const AddLiquidityV3 = ({
             token1Amount,
             ethAmount,
             bounds,
+            minliquidity: new BigNumber(bounds.position.liquidity.toString())
+                .exponentiatedBy(2)
+                .div(2)
+                .sqrt()
+                .times(0.98)
+                .toFixed(0),
             feeTier: pool.feeTier,
             balances,
             func: doAddLiquidity,
