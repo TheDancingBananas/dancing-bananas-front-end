@@ -324,8 +324,9 @@ export const AddLiquidityV3 = ({
         pool,
         wallet.network,
     );
+
     debug.marketData = marketData;
-    debug.indicators = indicators;
+    //debug.indicators = indicators;
     debug.tokenInputState = tokenInputState;
     const getTokensWithAmounts = () => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -564,13 +565,12 @@ export const AddLiquidityV3 = ({
 
         setExpectedAmounts([expectedBaseAmount, expectedQuoteAmount]);
 
-        debug.indicators = indicators;
-
-        if (indicators) {
-            const bounds = handleBounds(pool, indicators, [
-                expectedBaseAmount,
-                expectedQuoteAmount,
-            ]);
+        if (indicators || debug.indicators) {
+            const bounds = handleBounds(
+                pool,
+                indicators ? indicators : debug.indicators,
+                [expectedBaseAmount, expectedQuoteAmount],
+            );
 
             if (!bounds) {
                 return;
@@ -1802,7 +1802,13 @@ export const AddLiquidityV3 = ({
         //     }
         // }
 
-        if (!pool || !provider || !indicators || !bounds.position) return;
+        if (
+            !pool ||
+            !provider ||
+            (!indicators && !debug.indicators) ||
+            !bounds.position
+        )
+            return;
         if (!currentGasPrice) {
             throw new Error('Gas price not selected.');
         }
