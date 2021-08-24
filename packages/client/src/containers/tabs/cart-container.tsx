@@ -59,7 +59,6 @@ const ETH_ID = config.ethAddress;
 
 const CartContainer = ({
     gasPrices,
-    isGettingGasPrice,
     cartData,
     onBack,
     onAddSuccess,
@@ -68,7 +67,6 @@ const CartContainer = ({
     onRemove,
 }: {
     gasPrices: EthGasPrices | null;
-    isGettingGasPrice: boolean;
     cartData: LiquidityBasketData[];
     onBack: () => void;
     onAddSuccess: () => void;
@@ -87,20 +85,13 @@ const CartContainer = ({
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
 
-    if (isGettingGasPrice === false) {
-        const gasprices = useEthGasPrices();
-        if (gasprices) {
-            storage.setGasPrices(gasprices);
-        }
-        isGettingGasPrice = true;
-    }
-
     const getGasPrices = async () => {
         let value = storage.getGasPrices();
         while (!value) {
             await new Promise((f) => setTimeout(f, 1000));
             value = storage.getGasPrices();
         }
+        console.log('getting gas Prices---------', value);
         return value;
     };
 

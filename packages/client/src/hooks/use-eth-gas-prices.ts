@@ -8,7 +8,7 @@ import { storage } from 'util/localStorage';
 export const ethGasPriceTopic = 'ethGas:getGasPrices';
 export const gasPriceTopicRex = /^ethGas:getGasPrices/;
 
-export function useEthGasPrices(): EthGasPrices | null {
+export function useEthGasPrices() {
     const [gasPrices, setGasPrices] = useState<EthGasPrices | null>(null);
 
     const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
@@ -42,13 +42,14 @@ export function useEthGasPrices(): EthGasPrices | null {
             if (isChangedPrice(gasPrices, newGasPrices)) {
                 setGasPrices(newGasPrices);
                 storage.setGasPrices(newGasPrices);
+                console.log('gas price: ', newGasPrices, 'old :', gasPrices);
             }
 
             debug.gasPrices = newGasPrices;
         }
     }, [lastJsonMessage, gasPrices]);
 
-    return gasPrices;
+    return;
 }
 
 export function isChangedPrice(
