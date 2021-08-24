@@ -171,6 +171,13 @@ const CartContainer = ({
         return;
     };
 
+    const handleTransactionFailError = (): undefined => {
+        const toastMsg = `The final transaction was failed as lack of ETH amount. Please arrange amount of Eth.`;
+
+        toastError(toastMsg);
+
+        return;
+    };
     const handleAddLiquidity = async () => {
         if (!provider) {
             return;
@@ -737,6 +744,7 @@ const CartContainer = ({
             }
         } catch (err) {
             console.log(err);
+            handleTransactionFailError();
         }
 
         // cartData[0].func();

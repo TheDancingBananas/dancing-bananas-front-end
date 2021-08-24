@@ -1914,10 +1914,11 @@ export const AddLiquidityV3 = ({
 
     const DefaultSwitch = withStyles((theme) => ({
         root: {
-            width: 34,
-            height: 16,
+            width: 40,
+            height: 20,
             padding: 0,
-            marginLeft: '8px',
+            marginLeft: '25px',
+            marginRight: '25px',
             display: 'flex',
         },
         switchBase: {
@@ -1929,7 +1930,7 @@ export const AddLiquidityV3 = ({
             '&$checked': {
                 padding: 0,
                 marginTop: '2px',
-                transform: 'translateX(19px)',
+                transform: 'translateX(21px)',
                 color: theme.palette.common.white,
                 '& + $track': {
                     opacity: 1,
@@ -1939,13 +1940,13 @@ export const AddLiquidityV3 = ({
             },
         },
         thumb: {
-            width: 10,
-            height: 10,
+            width: 14,
+            height: 14,
             boxShadow: 'none',
         },
         track: {
             border: `1px solid ${theme.palette.common.black}`,
-            borderRadius: 18 / 2,
+            borderRadius: 20 / 2,
             alignItems: 'center',
             opacity: 1,
             backgroundColor: '#E7EBF2',
