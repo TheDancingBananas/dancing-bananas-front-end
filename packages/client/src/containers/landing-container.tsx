@@ -129,6 +129,10 @@ function LandingContainer({
         };
         const address = wallet.account ? wallet.account : '0x';
         getCurrentPoolAsync(address);
+
+        if (!wallet.account) {
+            setBananaHelp(true);
+        }
     }, [wallet.account]);
 
     useEffect(() => {
@@ -335,6 +339,11 @@ function LandingContainer({
         showWalletModal();
     };
 
+    const [bananaHelp, setBananaHelp] = useState<boolean>(true);
+    const toggleBananaHelp = (visible: boolean) => {
+        setBananaHelp(visible);
+    };
+
     return (
         <div>
             <div className='main-header-container'>
@@ -395,7 +404,9 @@ function LandingContainer({
                 </div>
             </div>
 
-            <BananaHelp />
+            {bananaHelp && (
+                <BananaHelp onClose={() => toggleBananaHelp(false)} />
+            )}
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
