@@ -20,13 +20,23 @@
     border: 3px solid #000;
 
     border-radius: 16px;
-    padding: 80px 1.5rem 1.25rem;
+    padding: 80px 1.5rem 4rem;
     margin-top: -70px;
+    margin-bottom: -40px;
 
     .back-image {
         position: absolute;
         width: 37px;
         cursor: pointer;
+    }
+
+    .close-image {
+        position: fixed;
+        bottom: 6.5rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
     }
 
     .reward-title {

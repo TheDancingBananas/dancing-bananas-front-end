@@ -2,6 +2,7 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
 import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
+import pngX from 'styles/images/X-121.png';
 import classNames from 'classnames';
 
 import './position-manager-container.scss';
@@ -24,10 +25,12 @@ const PositionDetailContainer = ({
     positionData,
     positionType,
     onBack,
+    onClose,
 }: {
     positionData: V3PositionData | null;
     positionType: 'positive' | 'negative';
     onBack: () => void;
+    onClose: () => void;
 }): JSX.Element | null => {
     const [detailOpen, setDetailOpen] = useState<boolean>(true);
 
@@ -59,6 +62,11 @@ const PositionDetailContainer = ({
 
     return (
         <div className='position-detail-container'>
+            <img
+                className='close-image'
+                src={pngX}
+                onClick={(e) => onClose()}
+            />
             <div className='position-detail-header'>
                 <img src={pngArrowLeft_1} onClick={(e) => onBack()} />
                 <span>DANCING BANANA POSITIONS</span>

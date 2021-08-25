@@ -25,6 +25,7 @@
         margin-top:  15px;
         margin-bottom: 10px;
     }
+    
 }
 
 .cart-container-head {
@@ -37,7 +38,7 @@
         margin-left: auto;
         margin-right: auto;
     }
-
+    
     .back-image {
         position: absolute;
         width: 37px;
@@ -48,6 +49,7 @@
 }
 
 .cart-container-empty-card {
+    position: relative;
     width: 450px;
     min-width: 225px;
     min-height: 470px;
@@ -76,6 +78,15 @@
         text-align: center;
         color: #E7EBF2;
     }
+
+    .close-image {
+        position: absolute;
+        bottom: 6rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
 }
 
 .cart-container-card {
@@ -87,7 +98,7 @@
     border: 3px solid #000;
 
     border-radius: 16px;
-    padding: 110px 1.5rem 1.25rem;
+    padding: 110px 1.5rem 2.5rem;
     margin-top: -90px;
 
     .cart-title {
@@ -98,6 +109,15 @@
         text-align: center;
     }
     
+    .close-image {
+        position: fixed;
+        bottom: 10rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
+
     .cart-table {
         .cart-table-header {
             display: flex;
@@ -309,7 +329,7 @@
 
     .cart-action {
         text-align: center;
-        margin-top: 40px;
+        margin-top: 60px;
         margin-bottom: 40px;
 
         .cart-action-move {

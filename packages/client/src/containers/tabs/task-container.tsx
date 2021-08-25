@@ -2,6 +2,7 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
 import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
+import pngX from 'styles/images/X-121.png';
 import classNames from 'classnames';
 
 import { Level, LevelTask } from 'types/game';
@@ -30,12 +31,8 @@ const TaskContainer = ({
 
     return (
         <div className='task-container'>
+            <img className='close-image' src={pngX} onClick={(e) => onBack()} />
             <div className='task-container-head'>
-                <img
-                    className='back-image'
-                    src={pngArrowLeft}
-                    onClick={(e) => onBack()}
-                />
                 <img className='head-image' src={pngSearch} />
             </div>
             <div className='task-container-card'>
