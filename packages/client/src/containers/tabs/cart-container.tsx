@@ -26,6 +26,7 @@ import pngChevronDown from 'styles/images/chevron-down.png';
 import pngDelete from 'styles/images/delete.png';
 import pngEditWhite from 'styles/images/edit-white.png';
 import pngEditBlack from 'styles/images/edit-black.png';
+import pngX from 'styles/images/X-121.png';
 
 import gameData from 'constants/gameData.json';
 import { storage } from 'util/localStorage';
@@ -833,6 +834,11 @@ const CartContainer = ({
                         <br />
                         YOUR BASKET
                     </p>
+                    <img
+                        className='close-image'
+                        src={pngX}
+                        onClick={(e) => onBack()}
+                    />
                 </div>
             </div>
         );
@@ -840,14 +846,14 @@ const CartContainer = ({
     return (
         <div className='cart-container'>
             <div className='cart-container-head'>
-                <img
-                    className='back-image'
-                    src={pngArrowLeft}
-                    onClick={(e) => onBack()}
-                />
                 <img className='head-image' src={pngBananaBasket} />
             </div>
             <div className='cart-container-card'>
+                <img
+                    className='close-image'
+                    src={pngX}
+                    onClick={(e) => onBack()}
+                />
                 <h1 className='cart-title'>BANANA BASKET</h1>
                 <div className='cart-table'>
                     <div className='cart-table-header'>

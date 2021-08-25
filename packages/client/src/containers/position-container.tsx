@@ -86,6 +86,7 @@ function PositionContainer({
                     positionData={selectedPosition}
                     positionType={positionType}
                     onBack={() => handleBack()}
+                    onClose={() => onBack()}
                 />
             )}
         </>
