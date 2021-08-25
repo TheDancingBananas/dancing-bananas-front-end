@@ -9,6 +9,15 @@
         margin-top:  15px;
         margin-bottom: 10px;
     }
+
+    .close-image {
+        position: fixed;
+        bottom: 4.5rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
 }
 
 .postion-manager-header {
@@ -222,6 +231,15 @@
 
     color: #fff;
 
+    .close-image {
+        position: fixed;
+        bottom: 4.5rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
+    
     .position-detail-header {
         width: 100%;
         margin-top: 15px;

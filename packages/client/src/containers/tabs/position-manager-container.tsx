@@ -2,6 +2,7 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
 import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
+import pngX from 'styles/images/X-121.png';
 import classNames from 'classnames';
 
 import './position-manager-container.scss';
@@ -204,11 +205,7 @@ const PositionManagerContainer = ({
 
     return (
         <div className='position-manager-container'>
-            <img
-                className='position-manager-header-back'
-                src={pngArrowLeftCircle}
-                onClick={(e) => onBack()}
-            />
+            <img className='close-image' src={pngX} onClick={(e) => onBack()} />
             <h1 className='postion-manager-header'>BANANA PORTFOLIO</h1>
             <div className='position-manager-container-card'>
                 <div className='position-manager-total-liquidity-wrapper'>

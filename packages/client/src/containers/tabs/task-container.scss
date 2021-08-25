@@ -1,4 +1,5 @@
 .task-container {
+    position: relative;
     width: 100%;
     margin-bottom: 80px;
     display: flex;
@@ -25,6 +26,16 @@
         margin-top:  15px;
         margin-bottom: 10px;
     }
+
+    .close-image {
+        position: absolute;
+        bottom: 3rem;
+        width: 3rem;
+        left: 50%;
+        cursor: pointer;
+        transform: translateX(-50%);
+    }
+    
 }
 
 .task-container-head {

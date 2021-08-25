@@ -1237,6 +1237,15 @@ th .caret-4-desc:before {
 th .caret-4-desc:after {
     content: '\2193';
 }
+
+.wallet-button-wrapper {
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
+
 .wallet-combo {
     display: flex;
     align-items: flex-start;

@@ -15,6 +15,7 @@ import png3Hours from 'styles/images/3hours.png';
 import pngSpeed from 'styles/images/speed.png';
 import pngLock from 'styles/images/lock.png';
 import pngArrowLeft from 'styles/images/left.png';
+import pngX from 'styles/images/X-121.png';
 
 const ShopItem = ({
     itemName,
@@ -85,11 +86,6 @@ const ShopContainer = ({
             <img className='reward-container-image' src={pngRewardRoof} />
 
             <div className='reward-container-card'>
-                <img
-                    className='back-image'
-                    src={pngArrowLeft}
-                    onClick={(e) => onBack()}
-                />
                 <h1 className='reward-title'>BANANA SHOP</h1>
                 <h2 className='reward-subtitle'>
                     HERE YOU CAN TRADE BANANAS FOR NEW
@@ -172,6 +168,11 @@ const ShopContainer = ({
                         onExchange={() => onExchange('')}
                     />
                 </div>
+                <img
+                    className='close-image'
+                    src={pngX}
+                    onClick={(e) => onBack()}
+                />
             </div>
         </div>
     );
