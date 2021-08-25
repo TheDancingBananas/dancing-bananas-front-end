@@ -257,7 +257,7 @@ p {
 .app-body {
     width: 100%;
     max-width: 840px;
-    padding: 2rem;
+    padding-bottom: 2rem;
     min-height: 100vh;
     // background: var(--bgDeep);
     margin: 0 auto;
@@ -278,12 +278,21 @@ p {
 }
 
 .main-header-container {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    background: #7233e8;    
 }
 
+.main-content-container {
+    padding-top: 5rem;
+}
 .top-nav-container {
     width: 450px;
     margin: 0px auto;

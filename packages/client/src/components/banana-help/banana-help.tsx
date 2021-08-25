@@ -1,5 +1,9 @@
+import React from 'react';
+
 import './banana-help.scss';
 import { Box } from '@material-ui/core';
+
+import { useWallet } from 'hooks/use-wallet';
 
 import pngClose from './close.png';
 import pngMonkey from './monkey.png';
@@ -7,12 +11,16 @@ import pngBananas from './bananas.png';
 import pngBtnAdd from './add.png';
 import pngBtnSkip from './skip.png';
 
-export const BananaHelp = (): JSX.Element => {
-    const closeClick = () => {
-        const x = document.getElementById('bananaDiv');
-        if (!(x == null)) {
-            x.style.display = 'none';
-        }
+export const BananaHelp = ({
+    onClose,
+}: {
+    onClose: () => void;
+}): JSX.Element => {
+    const { wallet } = useWallet();
+
+    const closeClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        onClose();
     };
 
     return (
@@ -35,15 +43,17 @@ export const BananaHelp = (): JSX.Element => {
                         margin='20px'
                     >
                         <div className='banana-help-title'></div>
-                        <div className='banana-help-close'>
-                            <a href='#' onClick={() => closeClick()}>
-                                <img
-                                    src={pngClose}
-                                    height={'29px'}
-                                    width={'29px'}
-                                />
-                            </a>
-                        </div>
+                        {wallet.account && (
+                            <div className='banana-help-close'>
+                                <a href='#' onClick={(e) => closeClick(e)}>
+                                    <img
+                                        src={pngClose}
+                                        height={'29px'}
+                                        width={'29px'}
+                                    />
+                                </a>
+                            </div>
+                        )}
                     </Box>
 
                     <Box
