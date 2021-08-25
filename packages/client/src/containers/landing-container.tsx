@@ -395,7 +395,7 @@ function LandingContainer({
                 </div>
             </div>
 
-            <BananaHelp></BananaHelp>
+            <BananaHelp />
 
             {pendingTransaction && (
                 <div className='pending-transaction-board'>
@@ -415,120 +415,142 @@ function LandingContainer({
                     </p>
                 </div>
             )}
-            <Box
-                display='flex'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='space-around'
-                className='main-content-container'
-            >
-                {tab === 'home' &&
-                    currentPoolId !== '' &&
-                    gasPrices &&
-                    'fast' in gasPrices && (
-                        <LiquidityContainer
-                            gasPrices={gasPrices}
-                            poolId={currentPoolId}
-                            basket={basketData}
-                            poolIndex={poolIndex}
-                            poolCount={poolCount}
-                            mode={homeMode}
-                            onGoShop={() => {
-                                handleChangeTab('shop');
+            {wallet.account && (
+                <Box
+                    display='flex'
+                    flexDirection='column'
+                    alignItems='center'
+                    justifyContent='space-around'
+                    className='main-content-container'
+                >
+                    {tab === 'home' &&
+                        currentPoolId !== '' &&
+                        gasPrices &&
+                        'fast' in gasPrices && (
+                            <LiquidityContainer
+                                gasPrices={gasPrices}
+                                poolId={currentPoolId}
+                                basket={basketData}
+                                poolIndex={poolIndex}
+                                poolCount={poolCount}
+                                mode={homeMode}
+                                onGoShop={() => {
+                                    handleChangeTab('shop');
+                                }}
+                                onRefreshPool={() => handleRefreshPool()}
+                                handleWalletConnect={() => showWalletModal()}
+                                onAddBasket={(
+                                    data: LiquidityBasketData,
+                                    navigateToBasket: boolean,
+                                ) => handleAddBasket(data, navigateToBasket)}
+                                onAddSuccess={() => handleTransactionSuccess()}
+                                onGetBonusBananas={() =>
+                                    handleGetBonusBananas()
+                                }
+                                onStatus={(status: boolean, time?: number) =>
+                                    handleChangePendingStatus(status, time)
+                                }
+                                handleChangeTab={(t: Tabs) =>
+                                    handleChangeTab(t)
+                                }
+                                handleChangePoolIndex={(i: number) => {
+                                    if (poolIndex != i)
+                                        handleChangePoolIndex(i);
+                                }}
+                            />
+                        )}
+
+                    {tab === 'task' && (
+                        <TaskContainer
+                            onBack={() => {
+                                handleChangeTab('home');
                             }}
-                            onRefreshPool={() => handleRefreshPool()}
-                            handleWalletConnect={() => showWalletModal()}
-                            onAddBasket={(
-                                data: LiquidityBasketData,
-                                navigateToBasket: boolean,
-                            ) => handleAddBasket(data, navigateToBasket)}
-                            onAddSuccess={() => handleTransactionSuccess()}
-                            onGetBonusBananas={() => handleGetBonusBananas()}
-                            onStatus={(status: boolean, time?: number) =>
-                                handleChangePendingStatus(status, time)
-                            }
-                            handleChangeTab={(t: Tabs) => handleChangeTab(t)}
-                            handleChangePoolIndex={(i: number) => {
-                                if (poolIndex != i) handleChangePoolIndex(i);
+                            onLevelUp={() => {
+                                handleChangeTab('levelup');
                             }}
                         />
                     )}
-
-                {tab === 'task' && (
-                    <TaskContainer
-                        onBack={() => {
-                            handleChangeTab('home');
+                    {tab === 'transactionSuccess' && (
+                        <SuccessContainer
+                            onBack={() => {
+                                handleChangeTab('home');
+                            }}
+                            onToTask={() => {
+                                handleChangeTab('task');
+                            }}
+                            onLevelup={() => {
+                                handleChangeTab('levelup');
+                            }}
+                        />
+                    )}
+                    {tab === 'exchange' && (
+                        <ExchangeContainer
+                            exchangeKey={exchangeKey}
+                            onBack={() => {
+                                handleChangeTab('shop');
+                            }}
+                        />
+                    )}
+                    {tab === 'levelup' && (
+                        <LevelUpContainer
+                            onSetLevel={() => {
+                                setTaskCompleted(
+                                    storage.getLevelTaskCompleted(),
+                                );
+                            }}
+                            onBack={() => {
+                                handleChangeTab('task');
+                            }}
+                        />
+                    )}
+                    {tab === 'shop' && (
+                        <ShopContainer
+                            onExchange={(exchangeKey: string) => {
+                                handleExchange(exchangeKey);
+                            }}
+                            onBack={() => {
+                                handleChangeTab('home');
+                            }}
+                        />
+                    )}
+                    {tab === 'cart' && (
+                        <CartContainer
+                            gasPrices={gasPrices}
+                            cartData={basketData}
+                            onBack={() => {
+                                handleChangeTab('home');
+                            }}
+                            onAddSuccess={() => handleTransactionSuccess()}
+                            onStatus={(status: boolean, time?: number) =>
+                                handleChangePendingStatus(status, time)
+                            }
+                            onEdit={(poolId: string) => handleEditCart(poolId)}
+                            onRemove={(i: number) => handleRemoveCart(i)}
+                        />
+                    )}
+                    {tab === 'position' && (
+                        <PositionContainer
+                            gasPrices={gasPrices}
+                            onBack={() => {
+                                handleChangeTab('home');
+                            }}
+                        />
+                    )}
+                </Box>
+            )}
+            {!wallet.account && (
+                <div className='wallet-button-wrapper'>
+                    <button
+                        className='connect-wallet-button black'
+                        onClick={(e) => showWalletModal()}
+                        style={{
+                            marginTop: -70,
                         }}
-                        onLevelUp={() => {
-                            handleChangeTab('levelup');
-                        }}
-                    />
-                )}
-                {tab === 'transactionSuccess' && (
-                    <SuccessContainer
-                        onBack={() => {
-                            handleChangeTab('home');
-                        }}
-                        onToTask={() => {
-                            handleChangeTab('task');
-                        }}
-                        onLevelup={() => {
-                            handleChangeTab('levelup');
-                        }}
-                    />
-                )}
-                {tab === 'exchange' && (
-                    <ExchangeContainer
-                        exchangeKey={exchangeKey}
-                        onBack={() => {
-                            handleChangeTab('shop');
-                        }}
-                    />
-                )}
-                {tab === 'levelup' && (
-                    <LevelUpContainer
-                        onSetLevel={() => {
-                            setTaskCompleted(storage.getLevelTaskCompleted());
-                        }}
-                        onBack={() => {
-                            handleChangeTab('task');
-                        }}
-                    />
-                )}
-                {tab === 'shop' && (
-                    <ShopContainer
-                        onExchange={(exchangeKey: string) => {
-                            handleExchange(exchangeKey);
-                        }}
-                        onBack={() => {
-                            handleChangeTab('home');
-                        }}
-                    />
-                )}
-                {tab === 'cart' && (
-                    <CartContainer
-                        gasPrices={gasPrices}
-                        cartData={basketData}
-                        onBack={() => {
-                            handleChangeTab('home');
-                        }}
-                        onAddSuccess={() => handleTransactionSuccess()}
-                        onStatus={(status: boolean, time?: number) =>
-                            handleChangePendingStatus(status, time)
-                        }
-                        onEdit={(poolId: string) => handleEditCart(poolId)}
-                        onRemove={(i: number) => handleRemoveCart(i)}
-                    />
-                )}
-                {tab === 'position' && (
-                    <PositionContainer
-                        gasPrices={gasPrices}
-                        onBack={() => {
-                            handleChangeTab('home');
-                        }}
-                    />
-                )}
-            </Box>
+                    >
+                        <img src={pngWallet} /> Connect Wallet
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
