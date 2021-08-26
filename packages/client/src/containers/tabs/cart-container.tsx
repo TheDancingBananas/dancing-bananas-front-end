@@ -33,6 +33,7 @@ import { storage } from 'util/localStorage';
 import { Level, Reward, RewardItem } from 'types/game';
 
 import { useEthGasPrices } from 'hooks';
+import { getGasPriceFromInfura } from 'services/infura-json-rpc';
 
 import {
     FeeAmount,
@@ -86,14 +87,10 @@ const CartContainer = ({
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
 
-    const getGasPrices = async () => {
-        let value = storage.getGasPrices();
-        while (!value) {
-            await new Promise((f) => setTimeout(f, 1000));
-            value = storage.getGasPrices();
-        }
-        console.log('getting gas Prices---------', value);
-        return value;
+    const getGasPrice = async (): Promise<string> => {
+        const gas = await getGasPriceFromInfura();
+        console.log('gas price from infra: ', gas);
+        return gas;
     };
 
     const handleClickMoreDetails = (poolId: string) => {
@@ -361,18 +358,10 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = await getGasPrices();
-                    if (!gasprices) {
-                        gasprices = {
-                            safeLow: 1,
-                            standard: 1,
-                            fast: 1,
-                            fastest: 1,
-                        };
-                    }
+                    const gasprice = await getGasPrice();
 
                     const baseGasPrice = ethers.utils
-                        .parseUnits(gasprices.fastest.toString(), 9)
+                        .parseUnits(gasprice, 9)
                         .toString();
                     console.log('baseGasPrice: ', baseGasPrice);
                     try {
@@ -580,19 +569,10 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    let gasprices = await getGasPrices();
-
-                    if (!gasprices) {
-                        gasprices = {
-                            safeLow: 1,
-                            standard: 1,
-                            fast: 1,
-                            fastest: 1,
-                        };
-                    }
+                    const gasprice = await getGasPrice();
 
                     const baseGasPrice = ethers.utils
-                        .parseUnits(gasprices.fastest.toString(), 9)
+                        .parseUnits(gasprice, 9)
                         .toString();
 
                     try {
@@ -682,20 +662,9 @@ const CartContainer = ({
 
         // Get gas price
 
-        let gasprices = await getGasPrices();
+        const gasprice = await getGasPrice();
 
-        if (!gasprices) {
-            gasprices = {
-                safeLow: 1,
-                standard: 1,
-                fast: 1,
-                fastest: 1,
-            };
-        }
-
-        const baseGasPrice = ethers.utils
-            .parseUnits(gasprices.fastest.toString(), 9)
-            .toString();
+        const baseGasPrice = ethers.utils.parseUnits(gasprice, 9).toString();
 
         // Call the contract and sign
         let gasEstimate: ethers.BigNumber;
