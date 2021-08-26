@@ -1,6 +1,7 @@
 import { toast, ToastOptions } from 'react-toastify';
 
 const options: ToastOptions = {
+    className: 'toast-message',
     position: 'top-center',
     autoClose: 5000,
     hideProgressBar: false,
