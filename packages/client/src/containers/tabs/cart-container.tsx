@@ -112,7 +112,6 @@ const CartContainer = ({
         const notEnoughETH =
             err.message.match(/exceeds allowance/) ||
             err.message.match(/insufficient funds/);
-
         let toastMsg =
             'Could not estimate gas for this transaction. Check your parameters or try a different pool.';
 
@@ -375,7 +374,7 @@ const CartContainer = ({
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprices.fastest.toString(), 9)
                         .toString();
-
+                    console.log('baseGasPrice: ', baseGasPrice);
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
