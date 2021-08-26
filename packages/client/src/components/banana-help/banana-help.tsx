@@ -10,11 +10,15 @@ import pngMonkey from './monkey.png';
 import pngBananas from './bananas.png';
 import pngBtnAdd from './add.png';
 import pngBtnSkip from './skip.png';
+import pngBtnToGame from './to_game.png';
+import pngLine from './line.png';
 
 export const BananaHelp = ({
     onClose,
+    onShowWallet,
 }: {
     onClose: () => void;
+    onShowWallet: () => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
 
@@ -165,7 +169,8 @@ export const BananaHelp = ({
                             unlock other sentiments.
                             <br />
                             <br />
-                            <hr className='banana-help-line' />
+                            <img src={pngLine} width={'100%'} />
+                            <br />
                         </div>
                     </Box>
 
@@ -180,6 +185,22 @@ export const BananaHelp = ({
                         </div>
                         <div className='banana-help-large-instructions'>
                             Skip the Pool
+                        </div>
+                    </Box>
+
+                    <Box justifyContent='space-around' margin='20px'>
+                        <div className='banana-help-to-the-game'>
+                            <img src={pngLine} width={'100%'} />
+                            <br />
+                            <br />
+                            <a
+                                href='#'
+                                onClick={(e) => {
+                                    onShowWallet();
+                                }}
+                            >
+                                <img src={pngBtnToGame} />
+                            </a>
                         </div>
                     </Box>
                 </Box>
