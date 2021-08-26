@@ -405,7 +405,10 @@ function LandingContainer({
             </div>
 
             {bananaHelp && (
-                <BananaHelp onClose={() => toggleBananaHelp(false)} />
+                <BananaHelp
+                    onClose={() => toggleBananaHelp(false)}
+                    onShowWallet={showWalletModal}
+                />
             )}
 
             {pendingTransaction && (
