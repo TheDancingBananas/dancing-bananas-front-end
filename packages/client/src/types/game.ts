@@ -50,3 +50,8 @@ export type Tabs =
     | 'positionManager'
     | 'positionDetail'
     | 'exchange';
+
+export type Rewards =
+    | 'SPEED UP 48'
+    | 'REMOVE LIQUIDITY'
+    | 'SENTIMENT PRICE RANGES';

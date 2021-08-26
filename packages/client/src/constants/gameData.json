@@ -45,7 +45,7 @@
                 },
                 "levelup" : {
                     "label" : "Level Up Bonus",
-                    "amount" : 300
+                    "amount" : 1000
                 }
             }
         },
@@ -70,7 +70,57 @@
                 }
             ],
             "rewards": [
-                "REMOVE LIQUIDITY",
+                "REMOVE LIQUIDITY"
+            ],
+            "bananarewards": {
+                "daily" : {
+                    "label" : "Daily Bonus",
+                    "amount" : 100
+                },
+                "onesided" : {
+                    "label" : "One-sided Add",
+                    "amount" : 600
+                },
+                "twosided" : {
+                    "label" : "Two-sided Add",
+                    "amount" : 300
+                },
+                "minnow" : {
+                    "label" : "4 ETH Transaction",
+                    "amount" : 50
+                },
+                "shark" : {
+                    "label" : "10 ETH Transaction",
+                    "amount" : 100
+                },
+                "whale" : {
+                    "label" : "200 ETH Transaction",
+                    "amount" : 300
+                },
+                "remove" : {
+                    "label" : "Remove",
+                    "amount" : 200
+                },
+                "levelup" : {
+                    "label" : "Level Up Bonus",
+                    "amount" : 2000
+                }
+            }
+        },
+        {
+            "level": "3",
+            "poolCount": "2",
+            "description": "BANANA ADDICT",
+            "tasks": [
+                {
+                    "taskName": "ADD LIQUIDITY 2 TIMES",
+                    "taskType": "addliquidity",
+                    "goal" : 2,
+                    "current" : 0,
+                    "complete": false
+                }
+            ],
+            "rewards": [
                 "SENTIMENT PRICE RANGES"
             ],
             "bananarewards": {
