@@ -3,7 +3,7 @@
 # Dancing Bananas
 
 
-This repo is a fork of the web application for [Sommelier.finance](https://app.sommelier.finance) and a new game for silly apes.
+This repo is a fork of the web application for [Sommelier.finance](https://app.sommelier.finance) and designed as a new game for silly apes.
 
 -   Find our website at [https://dancingbananas.fun/](https://dancingbananas.fun/)
 -   💬 Join the [Dancing Bananas](https://t.me/getbananas) channel on Telegram to chat with the community.
