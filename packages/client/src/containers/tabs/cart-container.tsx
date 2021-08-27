@@ -88,9 +88,9 @@ const CartContainer = ({
     }
 
     const getGasPrice = async (): Promise<string> => {
-        const gas = await getGasPriceFromInfura();
+        const gas = Number(await getGasPriceFromInfura()) + 10;
         console.log('gas price from infra: ', gas);
-        return gas;
+        return gas.toString();
     };
 
     const handleClickMoreDetails = (poolId: string) => {
