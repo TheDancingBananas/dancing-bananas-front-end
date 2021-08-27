@@ -407,7 +407,7 @@ function LandingContainer({
             {bananaHelp && (
                 <BananaHelp
                     onClose={() => toggleBananaHelp(false)}
-                    onShowWallet={showWalletModal}
+                    onConnectWallet={() => showWalletModal()}
                 />
             )}
 
