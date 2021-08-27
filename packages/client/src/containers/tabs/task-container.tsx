@@ -2,7 +2,7 @@
 import { useState, useContext, useEffect, useReducer } from 'react';
 import { formatUSD, formatNumber } from 'util/formats';
 import { resolveLogo } from 'components/token-with-logo';
-import pngX from 'styles/images/X-121.png';
+import pngX from 'styles/images/X-119.png';
 import classNames from 'classnames';
 
 import { Level, LevelTask } from 'types/game';
