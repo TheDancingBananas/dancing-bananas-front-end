@@ -898,21 +898,11 @@ const CartContainer = ({
                                                         0.1,
                                                 )}
                                             </span>
-                                            <img
-                                                src={pngChevronDown}
-                                                className='show-cart-item-detail'
-                                                onClick={(e) =>
-                                                    handleClickMoreDetails(
-                                                        item.poolId,
-                                                    )
-                                                }
-                                            />
                                         </div>
                                     </div>
                                     <div
                                         className={classNames(
                                             'cart-table-row-details',
-                                            { hide: item.poolId !== viewId },
                                         )}
                                     >
                                         <div className='row-detail-head white'>
