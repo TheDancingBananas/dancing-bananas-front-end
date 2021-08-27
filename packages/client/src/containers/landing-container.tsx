@@ -558,7 +558,7 @@ function LandingContainer({
                         className='connect-wallet-button black'
                         onClick={(e) => showWalletModal()}
                         style={{
-                            marginTop: -70,
+                            marginTop: 30,
                         }}
                     >
                         <img src={pngWallet} /> Connect Wallet

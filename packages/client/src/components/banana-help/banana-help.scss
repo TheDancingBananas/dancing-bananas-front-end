@@ -1,3 +1,42 @@
+.banana-help-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  width: 383px;
+  margin: 0px auto;
+
+  .text-normal {
+    font-family: Montserrat !important;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000;
+    text-transform: none;
+  }
+
+  .text-bold {
+    font-family: Montserrat !important;
+    font-style: bold;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000;
+  }
+
+  .text-black {
+    font-family: Montserrat !important;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000;
+  }
+
+}
+
 .banana-help-title {
   color: #fff;
   text-shadow: -1.4px 0 rgba(0, 0, 0, 0.75), 0 1.4px rgba(0, 0, 0, 0.75), 1.4px 0 rgba(0, 0, 0, 0.75), 0 -1.4px rgba(0, 0, 0, 0.75);
@@ -9,14 +48,13 @@
   margin-top: 7px;
 }
 
-.banana-help-container {
-  position: relative;
-  top: -80px;
-  width: 450px !important;
+.banana-help-content {
   background: #FFFFFF;
-  border: 3px solid #000;
-  border-radius: 8px;
-  justify-content: center;
+  border: 2.32797px solid #000000;
+  border-radius: 23.2797px;
+  margin-top: -70px;
+  width: 100%;
+  padding: 30px;
 }
 
 .banana-help-close {
@@ -26,6 +64,7 @@
 
 .banana-help-instructions {
   font-family: Montserrat !important;
+  margin-left: 12px !important;
   font-style: normal !important;
   font-weight: bold !important;
   font-size: 14px !important;
@@ -33,13 +72,33 @@
   color: #000000;
 }
 
-.banana-help-instructions-bold {
-  font-family: Montserrat !important;
-  font-style: normal !important;
-  font-weight: bold !important;
-  font-size: 14px !important;
-  line-height: 17px !important;
-  color: #000000;
+.banana-help-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 1.56117px solid #000000;
+  box-shadow: 0px 2.29798px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 4.76003px;
+  width: 140.9px;
+  height: 43px;
+
+  font-family: Bungee;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16.6525px;
+  line-height: 20px;
+  color: #fff;
+  text-shadow: 0px 1.14899px 0px rgba(0, 0, 0, 0.25);
+  -webkit-text-stroke: 1.14px #000;
+
+  &.green {
+    background: linear-gradient(181.22deg, #00FF82 -58.23%, #71FFB9 98.95%);
+  }
+
+  &.gray {
+    background: linear-gradient(181.22deg, #FFFFFF -58.23%, #D8D6E5 98.95%);
+  }
 }
 
 .quest-box {
@@ -47,7 +106,8 @@
   border: 1px solid rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   border-radius: 10px;
-  padding: 20px;
+  padding: 11px 20px 17px;
+  margin-top: 30px;
 }
 
 .quest-title {
@@ -61,26 +121,26 @@
 
   color: #FFFFFF;
 
-  text-shadow: -1.4px 0 rgba(0, 0, 0, 0.75), 0 1.4px rgba(0, 0, 0, 0.75), 1.4px 0 rgba(0, 0, 0, 0.75), 0 -1.4px rgba(0, 0, 0, 0.75);
-  -webkit-text-stroke-width: 0.5px;
+  text-shadow: 0px 1.75851px 0px rgba(158, 87, 87, 0.25);
+  -webkit-text-stroke-width: 2.2px;
   -webkit-text-stroke-color: black;
+  paint-order: fill;
 }
 
 .quest-text {
-
+  margin-top: 6px;
   font-family: Montserrat !important;
-  font-size: 12px !important;
+  font-size: 14px;
+  line-height: 17px;
   font-style: normal !important;
-  font-weight: bold !important;
-  line-height: 15px !important;
-  letter-spacing: 0em !important;
+  font-weight: 800 !important;
   text-align: center !important;
 
   color: #000000;
 }
 
 .bananas-icon {
-  margin-right: 10px;
+  margin-right: 12px;
   margin-bottom: 10px;
 }
 
@@ -93,19 +153,9 @@
   border-width:0 !important;
   color:gray !important;
   background-color:gray !important;
-}
-
-.banana-help-large-instructions {
-  font-family: Montserrat !important;
-  font-style: normal !important;
-  font-weight: bold !important;
-  font-size: 18px !important;
-  line-height: 22px !important;
+  margin-top: 40px;
+  margin-bottom: 18px;
   width: 100%;
-  text-align: left;
-  color: #000000 !important;
-  margin-top: 6px;
-  margin-left: 10px;
 }
 
 .banana-help-back-game {
