@@ -5,6 +5,7 @@ import { Box } from '@material-ui/core';
 
 import { useWallet } from 'hooks/use-wallet';
 
+import pngBanana2 from 'styles/images/banana-2.png';
 import pngClose from './close.png';
 import pngMonkey from './monkey.png';
 import pngBananas from './bananas.png';
@@ -15,16 +16,22 @@ import pngLine from './line.png';
 
 export const BananaHelp = ({
     onClose,
-    onShowWallet,
+    onConnectWallet,
 }: {
     onClose: () => void;
-    onShowWallet: () => void;
+    onConnectWallet: () => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
 
     const closeClick = (e: React.MouseEvent) => {
         e.preventDefault();
         onClose();
+    };
+
+    const handleConnectWallet = () => {
+        if (!wallet.account) {
+            onConnectWallet();
+        }
     };
 
     return (
@@ -129,7 +136,10 @@ export const BananaHelp = ({
                         justifyContent='space-around'
                         margin='20px'
                     >
-                        <div className='bananas-icon'>
+                        <div
+                            className='bananas-icon'
+                            onClick={(e) => handleConnectWallet()}
+                        >
                             <img src={pngBtnAdd} width={'90px'} />
                         </div>
                         <div className='banana-help-large-instructions'>
@@ -180,29 +190,36 @@ export const BananaHelp = ({
                         justifyContent='space-around'
                         margin='20px'
                     >
-                        <div className='bananas-icon'>
+                        <div
+                            className='bananas-icon'
+                            onClick={(e) => handleConnectWallet()}
+                        >
                             <img src={pngBtnSkip} width={'90px'} />
                         </div>
                         <div className='banana-help-large-instructions'>
                             Skip the Pool
                         </div>
                     </Box>
-
-                    <Box justifyContent='space-around' margin='20px'>
-                        <div className='banana-help-to-the-game'>
-                            <img src={pngLine} width={'100%'} />
-                            <br />
-                            <br />
-                            <a
-                                href='#'
-                                onClick={(e) => {
-                                    onShowWallet();
-                                }}
+                    {wallet.account && (
+                        <>
+                            <Box margin='20px'>
+                                <hr className='banana-help-line' />
+                            </Box>
+                            <Box
+                                display='flex'
+                                flexDirection='row'
+                                justifyContent='center'
+                                margin='20px'
                             >
-                                <img src={pngBtnToGame} />
-                            </a>
-                        </div>
-                    </Box>
+                                <button
+                                    className='banana-help-back-game'
+                                    onClick={(e) => onClose()}
+                                >
+                                    To THE GAME <img src={pngBanana2} />
+                                </button>
+                            </Box>
+                        </>
+                    )}
                 </Box>
             </Box>
             <br />
