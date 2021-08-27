@@ -23,7 +23,7 @@ import pngMonkeys from 'styles/images/monkeys.png';
 import pngSpeed from 'styles/images/speed.png';
 import pngLock from 'styles/images/lock.png';
 import pngArrowLeft from 'styles/images/left.png';
-import pngX from 'styles/images/X-121.png';
+import pngX from 'styles/images/X-119.png';
 
 const ShopItem = ({
     itemName,

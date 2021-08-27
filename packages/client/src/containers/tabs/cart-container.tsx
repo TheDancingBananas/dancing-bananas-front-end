@@ -26,7 +26,7 @@ import pngChevronDown from 'styles/images/chevron-down.png';
 import pngDelete from 'styles/images/delete.png';
 import pngEditWhite from 'styles/images/edit-white.png';
 import pngEditBlack from 'styles/images/edit-black.png';
-import pngX from 'styles/images/X-121.png';
+import pngX from 'styles/images/X-119.png';
 
 import gameData from 'constants/gameData.json';
 import { storage } from 'util/localStorage';
