@@ -326,7 +326,9 @@ export const AddLiquidityV3 = ({
     );
 
     debug.marketData = marketData;
-    //debug.indicators = indicators;
+    if (indicators) {
+        debug.indicators = indicators;
+    }
     debug.tokenInputState = tokenInputState;
     const getTokensWithAmounts = () => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
