@@ -19,7 +19,10 @@ import png2HoursGray from 'styles/images/2hours-gray.png';
 import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
 import pngRemoveBanana from 'styles/images/banana-4.png';
 import pngMonkeyHappy from 'styles/images/monkey-1.png';
+
 import pngMonkeys from 'styles/images/monkeys.png';
+import pngMonkeysColor from 'styles/images/monkeys-color.png';
+
 import pngSpeed from 'styles/images/speed.png';
 import pngLock from 'styles/images/lock.png';
 import pngArrowLeft from 'styles/images/left.png';
@@ -151,9 +154,14 @@ const ShopContainer = ({
                                 PRICE RANGES
                             </>
                         }
-                        itemImage={pngMonkeys}
+                        itemImage={
+                            rewards.includes('EMOTION PRICE RANGES')
+                                ? pngMonkeysColor
+                                : pngMonkeys
+                        }
                         imageHeight={50}
-                        banana={1}
+                        banana={0}
+                        active={rewards.includes('EMOTION PRICE RANGES')}
                         onUnlock={() => handleUnlock()}
                         onExchange={() => onExchange('')}
                     />
