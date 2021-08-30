@@ -3,33 +3,33 @@ import { ethers } from 'ethers';
 import { WalletBalances } from 'types/states';
 import BigNumber from 'bignumber.js';
 
-const toBalanceStr = (
-    token: string,
-    balances: WalletBalances,
-    basketAmount: number,
-): string => {
-    const balance = balances[token]?.balance;
+// const toBalanceStr = (
+//     token: string,
+//     balances: WalletBalances,
+//     basketAmount: number,
+// ): string => {
+//     const balance = balances[token]?.balance;
 
-    const calcBalance = new BigNumber(
-        ethers.utils.formatUnits(
-            balance || 0,
-            parseInt(balances[token]?.decimals || '0', 10),
-        ),
-    ).minus(basketAmount);
+//     const calcBalance = new BigNumber(
+//         ethers.utils.formatUnits(
+//             balance || 0,
+//             parseInt(balances[token]?.decimals || '0', 10),
+//         ),
+//     ).minus(basketAmount);
 
-    if (calcBalance.isNegative()) {
-        return '0.00';
-    }
+//     if (calcBalance.isNegative()) {
+//         return '0.00';
+//     }
 
-    return calcBalance.toFixed(2);
-};
+//     return calcBalance.toFixed(2);
+// };
 
 type TokenInputProps = {
     token: string;
     amount: string;
     updateAmount: (amount: string) => void;
     handleTokenRatio: (token: string, amount: string) => void;
-    balances: WalletBalances;
+    balance: BigNumber;
     basketAmount?: number | 0;
     twoSide: boolean;
     disabled: boolean;
@@ -41,8 +41,7 @@ export const TokenInput = ({
     amount,
     updateAmount,
     handleTokenRatio,
-    balances,
-    basketAmount,
+    balance,
     twoSide,
     disabled,
     isNANA,
@@ -69,7 +68,7 @@ export const TokenInput = ({
                     selected: selected,
                 })}
             >
-                {toBalanceStr(token, balances, Number(basketAmount))}
+                {balance.toFixed(2)}
             </span>
         </div>
         {/* <button

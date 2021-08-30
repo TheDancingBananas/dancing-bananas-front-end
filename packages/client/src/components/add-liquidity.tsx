@@ -906,7 +906,8 @@ function AddLiquidity({
                     >
                         Max
                     </button> */}
-                <TokenInput
+
+                {/* <TokenInput
                     disabled={false}
                     token={tokenOne}
                     amount={tokenOneAmount}
@@ -932,7 +933,7 @@ function AddLiquidity({
                         twoSide={twoSide}
                         selected={false}
                     />
-                )}
+                )} */}
                 <TransactionSettings />
                 <PoolShare />
                 {new BigNumber(pairData.reserveUSD).lt(2000000) && (

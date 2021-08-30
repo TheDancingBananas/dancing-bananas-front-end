@@ -76,6 +76,8 @@ import AlertModal from './alert-modal';
 
 import { getEstimateTime } from 'services/api-etherscan';
 import { storage } from 'util/localStorage';
+import { getGasPriceFromInfura } from 'services/infura-json-rpc';
+import Web3 from 'web3';
 
 type Props = {
     balances: WalletBalances;
@@ -220,6 +222,49 @@ export const AddLiquidityV3 = ({
             lToken1TotalAmount -
             Number(initialState[tokenSymbol.toString()].amount)
         );
+    };
+
+    const getBalances = () => {
+        const token0Balance = new BigNumber(
+            ethers.utils.formatUnits(
+                balances?.[token0Symbol]?.balance || 0,
+                parseInt(balances[token0Symbol]?.decimals || '0', 10),
+            ),
+        ).minus(getBasketTokenAmount(token0Symbol));
+
+        const token1Balance = new BigNumber(
+            ethers.utils.formatUnits(
+                balances?.[token1Symbol]?.balance || 0,
+                parseInt(balances[token1Symbol]?.decimals || '0', 10),
+            ),
+        ).minus(getBasketTokenAmount(token0Symbol));
+
+        // Don't need calculate exact tx fee. Assume 0.01 will be wasted as tx fee for one transaction.
+        // Every liquidity will take 2 transactions and one batch run transaction And 0.05 is fee for batchrun.
+
+        const estimatedTxFee = 0.01 * (2 * (basketData.length + 1) + 1) + 0.05;
+
+        const ethBalance = new BigNumber(
+            ethers.utils.formatUnits(
+                balances?.['ETH']?.balance || 0,
+                parseInt(balances['ETH']?.decimals || '0', 10),
+            ),
+        )
+            .minus(getBasketTokenAmount('ETH'))
+            .minus(estimatedTxFee);
+        console.log(
+            'token0Balance : ',
+            token0Balance,
+            'token1Balance : ',
+            token1Balance,
+            'ETHBalance : ',
+            ethBalance,
+        );
+        return [
+            token0Balance.isNegative() ? new BigNumber(0) : token0Balance,
+            token1Balance.isNegative() ? new BigNumber(0) : token1Balance,
+            ethBalance.isNegative() ? new BigNumber(0) : ethBalance,
+        ];
     };
 
     const reducer = (
@@ -1551,16 +1596,18 @@ export const AddLiquidityV3 = ({
     });
     const selectedSymbolCount = tokenInputState.selectedTokens.length;
 
+    const [token0Balance, token1Balance, ethBalance] = getBalances();
+
     const [isToken0Disabled, setIsToken0Disabled] = useState(
-        Number(balances?.[token0Symbol]?.balance) <= 0 ||
+        Number(token0Balance) <= 0 ||
             (!isToken0Active && selectedSymbolCount === 2),
     );
     const [isToken1Disabled, setIsToken1Disabled] = useState(
-        Number(balances?.[token1Symbol]?.balance) <= 0 ||
+        Number(token1Balance) <= 0 ||
             (!isToken1Active && selectedSymbolCount === 2),
     );
     const [isTokenETHDisabled, setIsTokenETHDisabled] = useState(
-        Number(balances?.['ETH']?.balance) <= 0 ||
+        Number(ethBalance) <= 0 ||
             (!isTokenETHActive &&
                 (selectedSymbolCount === 2 ||
                     tokenInputState['WETH']?.selected)),
@@ -1573,27 +1620,21 @@ export const AddLiquidityV3 = ({
         if (selectedSymbolCount === 0 && !isRefreshed.current) {
             const activeTokens = [];
             if (isWETHPair) {
-                if (Number(balances?.['ETH']?.balance) > 0) {
+                if (Number(ethBalance) > 0) {
                     setIsTokenETHActive(true);
                     state.checkedEth = true;
                     setState(state);
                     activeTokens.push('ETH');
                 }
 
-                if (
-                    token0Symbol !== 'WETH' &&
-                    Number(balances?.[token0Symbol]?.balance) > 0
-                ) {
+                if (token0Symbol !== 'WETH' && Number(token0Balance) > 0) {
                     setIsToken0Active(true);
                     state.checkedToken0 = true;
                     setState(state);
                     activeTokens.push(token0Symbol);
                 }
 
-                if (
-                    token1Symbol !== 'WETH' &&
-                    Number(balances?.[token1Symbol]?.balance) > 0
-                ) {
+                if (token1Symbol !== 'WETH' && Number(token1Balance) > 0) {
                     setIsToken1Active(true);
                     state.checkedToken1 = true;
                     setState(state);
@@ -1604,13 +1645,11 @@ export const AddLiquidityV3 = ({
                 const totalLockedETH = new BigNumber(pool.totalValueLockedETH);
                 const ethPrice: BigNumber = totalLockedUSD.div(totalLockedETH);
                 const ethBalancePrice: number =
-                    Number(balances?.['ETH']?.balance) * Number(ethPrice);
+                    Number(ethBalance) * Number(ethPrice);
                 const token0BalancePrice: number =
-                    Number(balances?.[token0Symbol]?.balance) *
-                    Number(pool.token0Price);
+                    Number(token0Balance) * Number(pool.token0Price);
                 const token1BalancePrice: number =
-                    Number(balances?.[token1Symbol]?.balance) *
-                    Number(pool.token1Price);
+                    Number(token1Balance) * Number(pool.token1Price);
 
                 const minPrice = Math.min(
                     ethBalancePrice,
@@ -1619,10 +1658,7 @@ export const AddLiquidityV3 = ({
                 );
                 console.log('Min Price: ', minPrice);
 
-                if (
-                    Number(balances?.['ETH']?.balance) > 0 &&
-                    ethBalancePrice > minPrice
-                ) {
+                if (Number(ethBalance) > 0 && ethBalancePrice > minPrice) {
                     setIsTokenETHActive(true);
                     state.checkedEth = true;
                     setState(state);
@@ -1630,7 +1666,7 @@ export const AddLiquidityV3 = ({
                 }
 
                 if (
-                    Number(balances?.[token0Symbol]?.balance) > 0 &&
+                    Number(token0Balance) > 0 &&
                     token0BalancePrice > minPrice
                 ) {
                     setIsToken0Active(true);
@@ -1640,7 +1676,7 @@ export const AddLiquidityV3 = ({
                 }
 
                 if (
-                    Number(balances?.[token1Symbol]?.balance) > 0 &&
+                    Number(token1Balance) > 0 &&
                     token1BalancePrice > minPrice
                 ) {
                     setIsToken1Active(true);
@@ -1663,14 +1699,14 @@ export const AddLiquidityV3 = ({
                 isRefreshed.current = true;
             }
         }
-    }, [balances]);
+    }, [balances, basketData]);
 
     useEffect(() => {
         const selectedSymbolCount = tokenInputState.selectedTokens.length;
         setIsToken0Disabled(
             !balances ||
                 !balances?.[token0Symbol] ||
-                Number(balances?.[token0Symbol]?.balance) <= 0 ||
+                Number(token0Balance) <= 0 ||
                 (!isToken0Active && selectedSymbolCount === 2),
         );
         console.log('isToken0Disabled : ', isToken0Disabled);
@@ -1678,19 +1714,26 @@ export const AddLiquidityV3 = ({
         setIsToken1Disabled(
             !balances ||
                 !balances?.[token1Symbol] ||
-                Number(balances?.[token1Symbol]?.balance) <= 0 ||
+                Number(token1Balance) <= 0 ||
                 (!isToken1Active && selectedSymbolCount === 2),
         );
         setIsTokenETHDisabled(
             !balances ||
                 !balances?.['ETH'] ||
-                Number(balances?.['ETH']?.balance) <= 0 ||
+                Number(ethBalance) <= 0 ||
                 (!isTokenETHActive &&
                     (selectedSymbolCount === 2 ||
                         tokenInputState['WETH']?.selected)),
         );
         setDisableWETH(isTokenETHActive);
-    }, [isToken0Active, isToken1Active, isTokenETHActive, state, balances]);
+    }, [
+        isToken0Active,
+        isToken1Active,
+        isTokenETHActive,
+        state,
+        balances,
+        basketData,
+    ]);
 
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
     const baseCoinId = isFlipped ? pool.token0.id : pool.token1.id;
@@ -1723,6 +1766,15 @@ export const AddLiquidityV3 = ({
         if (pendingApproval) {
             setAlertTitle('APPROVING NOW');
             setAlertDescription('APE APPROVE THE TRANSACTION');
+            setShowAlert(true);
+            return;
+        }
+
+        if (isTokenETHDisabled) {
+            setAlertTitle('INSUFFICIENT ETH!');
+            setAlertDescription(
+                'PLEASE ADD MORE ETH TO YOUR WALLET TO CONTINUE PLAYING.',
+            );
             setShowAlert(true);
             return;
         }
@@ -2187,8 +2239,7 @@ export const AddLiquidityV3 = ({
                                     });
                                 }}
                                 handleTokenRatio={handleTokenRatio}
-                                balances={balances}
-                                basketAmount={getBasketTokenAmount('ETH')}
+                                balance={ethBalance}
                                 disabled={
                                     disabledInput?.includes('ETH') ||
                                     !isTokenETHActive
@@ -2319,10 +2370,7 @@ export const AddLiquidityV3 = ({
                                         });
                                     }}
                                     handleTokenRatio={handleTokenRatio}
-                                    balances={balances}
-                                    basketAmount={getBasketTokenAmount(
-                                        token0Symbol,
-                                    )}
+                                    balance={token0Balance}
                                     disabled={
                                         disabledInput?.includes(token0Symbol) ||
                                         !isToken0Active
@@ -2454,10 +2502,7 @@ export const AddLiquidityV3 = ({
                                         });
                                     }}
                                     handleTokenRatio={handleTokenRatio}
-                                    balances={balances}
-                                    basketAmount={getBasketTokenAmount(
-                                        token1Symbol,
-                                    )}
+                                    balance={token1Balance}
                                     disabled={
                                         disabledInput?.includes(token1Symbol) ||
                                         !isToken1Active
