@@ -100,6 +100,7 @@ export const WalletProvider = ({
             provider: null,
             network: null,
         });
+        debug.isDisconnectWallet = true;
         cookies.remove('current_wallet');
     }, [wallet.account, wallet.providerName]);
 

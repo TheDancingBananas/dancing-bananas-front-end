@@ -167,11 +167,6 @@ export const LiquidityContainer = ({
     }, [mode, basket, poolId]);
 
     const handleSkip = (status: number) => {
-        if (!wallet.account) {
-            handleWalletConnect();
-            return;
-        }
-
         if (status === poolCount) {
             // if (currentLevel === '1' && basket.length > 0) {
             //     handleChangeTab('cart');
