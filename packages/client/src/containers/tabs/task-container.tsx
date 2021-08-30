@@ -52,7 +52,7 @@ const TaskContainer = ({
                                     className='task-item active'
                                     onClick={(e) => onBack()}
                                 >
-                                    {task.taskName}
+                                    <span>{task.taskName}</span>
                                 </button>
                             );
                         }
@@ -92,8 +92,8 @@ const TaskContainer = ({
                 >
                     <span>LEVEL UP!</span>
                     <div className='level-up-cost'>
+                        <span>+{currentLevel.levelUpRewards}</span>
                         <img src={pngDancingBanana} />
-                        <span>X2</span>
                     </div>
                 </button>
             </div>

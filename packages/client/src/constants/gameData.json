@@ -14,6 +14,7 @@
                 }
             ],
             "rewards": [],
+            "levelUpRewards": 2,
             "bananarewards": {
                 "daily" : {
                     "label" : "Daily Bonus",
@@ -72,6 +73,7 @@
             "rewards": [
                 "REMOVE LIQUIDITY"
             ],
+            "levelUpRewards": 2,
             "bananarewards": {
                 "daily" : {
                     "label" : "Daily Bonus",
@@ -113,16 +115,17 @@
             "description": "BANANA ADDICT",
             "tasks": [
                 {
-                    "taskName": "ADD LIQUIDITY 2 TIMES",
-                    "taskType": "addliquidity",
-                    "goal" : 2,
+                    "taskName": "COMPLETE 10 TRANSACTIONS",
+                    "taskType": "transaction",
+                    "goal" : 10,
                     "current" : 0,
                     "complete": false
                 }
             ],
             "rewards": [
-                "SENTIMENT PRICE RANGES"
+                "EMOTION PRICE RANGES"
             ],
+            "levelUpRewards": 10,
             "bananarewards": {
                 "daily" : {
                     "label" : "Daily Bonus",
