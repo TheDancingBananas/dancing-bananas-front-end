@@ -36,6 +36,7 @@ const LevelUpContainer = ({
         storage.setTaskStatus(storage.getDefaultTaskStatus());
     }
     const currentLevel = storage.getLevel();
+    console.log('**********************', currentLevel);
 
     const gameLevels: Level[] = gameData.game;
     const currentLevelData: Level = gameLevels[Number(currentLevel) - 1];

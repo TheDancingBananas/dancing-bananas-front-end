@@ -28,6 +28,7 @@ export interface Level {
     description: string;
     tasks: LevelTask[];
     rewards: string[];
+    levelUpRewards: number;
     bananarewards: Reward;
 }
 
@@ -54,4 +55,5 @@ export type Tabs =
 export type Rewards =
     | 'SPEED UP 48'
     | 'REMOVE LIQUIDITY'
-    | 'SENTIMENT PRICE RANGES';
+    | 'SENTIMENT PRICE RANGES'
+    | 'EMOTION PRICE RANGES';
