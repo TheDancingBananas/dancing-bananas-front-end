@@ -28,6 +28,7 @@ export interface Level {
     description: string;
     tasks: LevelTask[];
     rewards: string[];
+    levelUpRewards: number;
     bananarewards: Reward;
 }
 
