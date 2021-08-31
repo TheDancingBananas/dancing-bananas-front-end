@@ -53,6 +53,9 @@ export const TokenInput = ({
                 placeholder='0.00'
                 value={amount}
                 disabled={disabled}
+                className={classNames('token-input-amount', {
+                    selected: selected,
+                })}
                 onChange={(e) => {
                     const val = e.target.value;
 
