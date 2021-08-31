@@ -10,18 +10,23 @@ import './wait-container.scss';
 
 import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
 import pngPaperPlane from 'styles/images/telegram-108.png';
+import pngBananaBasket from 'styles/images/banana-basket.png';
 
 import { storage, SKIP_DURATION } from 'util/localStorage';
+import classNames from 'classnames';
 
 const WaitContainer = ({
     onSkipFinish,
     onGoShop,
+    onGoBasket,
 }: {
     onSkipFinish: () => void;
     onGoShop: () => void;
+    onGoBasket: () => void;
 }): JSX.Element | null => {
     const [time, setTime] = useState<number>(storage.getRemainingWaitingTime());
 
+    const isBasketEmpty = storage.getBasketData().length < 1;
     const getHours = (time: number): string => {
         const hours = Math.floor(time / 3600).toString();
         const mins = Math.floor((time % 3600) / 60).toString();
@@ -96,6 +101,17 @@ const WaitContainer = ({
                     </div>
                 </div>
                 <div className='wait-actions'>
+                    <button
+                        className={classNames('wait-to-basket', {
+                            disable: isBasketEmpty === true,
+                        })}
+                        onClick={() => {
+                            onGoBasket();
+                        }}
+                    >
+                        <span>TO YOUR BASKET</span>{' '}
+                        <img src={pngBananaBasket} />
+                    </button>
                     <button
                         className='wait-notify-me'
                         onClick={(e) => {

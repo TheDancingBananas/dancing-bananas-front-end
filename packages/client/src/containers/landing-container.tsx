@@ -451,6 +451,9 @@ function LandingContainer({
                                 onGoShop={() => {
                                     handleChangeTab('shop');
                                 }}
+                                onGoBasket={() => {
+                                    handleChangeTab('cart');
+                                }}
                                 onRefreshPool={() => handleRefreshPool()}
                                 handleWalletConnect={() => showWalletModal()}
                                 onAddBasket={(
