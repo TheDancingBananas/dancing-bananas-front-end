@@ -68,16 +68,15 @@ import pngApySad from 'styles/images/apy-sad.png';
 import pngETH from 'styles/images/eth.png';
 import pngNANA from 'styles/images/tokens/nana.png';
 import pngBanana2 from 'styles/images/banana-2.png';
-import gifBonusBanana from 'styles/images/Bonus_bananas.gif';
-import pngBonusBanana from 'styles/images/bonus-banana-2.png';
 import pngLock from 'styles/images/lock.png';
 
 import AlertModal from './alert-modal';
 
 import { getEstimateTime } from 'services/api-etherscan';
+
+import gameData from 'constants/gameData.json';
+import { Level, Reward, RewardItem, Rewards } from 'types/game';
 import { storage } from 'util/localStorage';
-import { getGasPriceFromInfura } from 'services/infura-json-rpc';
-import Web3 from 'web3';
 
 type Props = {
     balances: WalletBalances;
@@ -124,6 +123,21 @@ export const AddLiquidityV3 = ({
     onAddSuccess,
     onStatus,
 }: Props): JSX.Element | null => {
+    const currentLevel = storage.getLevel();
+
+    const gameLevels: Level[] = gameData.game;
+
+    const rewards: Rewards[] = ['SPEED UP 48']; // default for level 1
+
+    for (let i = 0; i < Number(currentLevel); i++) {
+        const levelRewards = gameLevels[i].rewards;
+        for (let j = 0; j < levelRewards.length; j++) {
+            if (!rewards.includes(levelRewards[j] as Rewards)) {
+                rewards.push(levelRewards[j] as Rewards);
+            }
+        }
+    }
+
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertTitle, setAlertTitle] = useState<string>('');
     const [alertDescription, setAlertDescription] = useState<string>('');
@@ -142,7 +156,7 @@ export const AddLiquidityV3 = ({
         status: boolean;
         message?: JSX.Element;
     }>({ status: false, message: <p>Warning placeholder</p> });
-    const [isFlipped, setIsFlipped] = useState<boolean>(false);
+    const [isFlipped, setIsFlipped] = useState<boolean>(true);
     // State here is used to compute what tokens are being used to add liquidity with.
     const [copiedShortUrl, setCopiedShortUrl] = useState<boolean>(false);
     const currentBasketData = storage.getBasketData();
@@ -344,7 +358,11 @@ export const AddLiquidityV3 = ({
         LiquidityContext,
     );
 
-    const [sentiment, setSentiment] = useState<Sentiment>('neutral');
+    const [sentiment, setSentiment] = useState<Sentiment>(
+        defaultValue && defaultValue.sentiment
+            ? defaultValue.sentiment
+            : 'neutral',
+    );
     const [bounds, setBounds] = useState<BoundsState>({
         prices: [0, 0],
         ticks: [0, 0],
@@ -2011,6 +2029,7 @@ export const AddLiquidityV3 = ({
                 .toFixed(0),
             feeTier: pool.feeTier,
             balances,
+            sentiment,
             func: doAddLiquidity,
         };
 
@@ -2604,7 +2623,7 @@ export const AddLiquidityV3 = ({
                                     handleNotEnoughEth();
                                     return;
                                 }
-                                if (level > 2) {
+                                if (rewards.includes('EMOTION PRICE RANGES')) {
                                     setSentiment(
                                         isFlipped ? 'bullish' : 'bearish',
                                     );
@@ -2614,7 +2633,7 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            {level < 3 && (
+                            {!rewards.includes('EMOTION PRICE RANGES') && (
                                 <img
                                     className='sentiment-item-lock'
                                     src={pngLock}
@@ -2664,7 +2683,7 @@ export const AddLiquidityV3 = ({
                                     handleNotEnoughEth();
                                     return;
                                 }
-                                if (level > 2) {
+                                if (rewards.includes('EMOTION PRICE RANGES')) {
                                     setSentiment(
                                         isFlipped ? 'bearish' : 'bullish',
                                     );
@@ -2674,7 +2693,7 @@ export const AddLiquidityV3 = ({
                                 }
                             }}
                         >
-                            {level < 3 && (
+                            {!rewards.includes('EMOTION PRICE RANGES') && (
                                 <img
                                     className='sentiment-item-lock'
                                     src={pngLock}
