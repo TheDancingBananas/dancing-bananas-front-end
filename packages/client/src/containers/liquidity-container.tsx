@@ -158,6 +158,7 @@ export const LiquidityContainer = ({
         if (selectedPool === undefined) return {};
         const origin = {
             [selectedPool.lToken0Name]: selectedPool.lToken0Amount,
+            sentiment: selectedPool.sentiment,
         };
         if (selectedPool.lToken1Name) {
             origin[selectedPool.lToken1Name] = selectedPool.lToken1Amount;
