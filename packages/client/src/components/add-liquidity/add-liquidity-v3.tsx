@@ -1783,7 +1783,7 @@ export const AddLiquidityV3 = ({
         disabledInput && disabledInput.includes(symbol);
 
     const handleNotEnoughEth = () => {
-        setAlertTitle('INSUFFICIENT FUNDS!');
+        setAlertTitle('ADD MORE FUNDS!');
         setAlertDescription(
             'YOU NEED TO HAVE A MINIMUM OF 0.1 ETH IN YOUR WALLET FOR CONTINUE PLAYING.',
         );

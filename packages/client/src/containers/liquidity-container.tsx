@@ -84,6 +84,7 @@ export const LiquidityContainer = ({
     poolCount,
     mode,
     onGoShop,
+    onGoBasket,
     onRefreshPool,
     handleWalletConnect,
     onAddBasket,
@@ -100,6 +101,7 @@ export const LiquidityContainer = ({
     poolCount: number;
     mode: string;
     onGoShop: () => void;
+    onGoBasket: () => void;
     onRefreshPool: () => void;
     handleWalletConnect: () => void;
     onAddBasket: (data: LiquidityBasketData, navigateToBasket: boolean) => void;
@@ -334,6 +336,7 @@ export const LiquidityContainer = ({
                 <WaitContainer
                     onGoShop={() => onGoShop()}
                     onSkipFinish={() => handleSkipFinish()}
+                    onGoBasket={() => onGoBasket()}
                 />
             )}
         </>
