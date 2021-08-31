@@ -963,7 +963,7 @@ const CartContainer = ({
                                             </span>
                                             {` `}
                                             <span className='white'>
-                                                NEUTRAL
+                                                {item.sentiment}
                                             </span>
                                         </div>
                                     </div>

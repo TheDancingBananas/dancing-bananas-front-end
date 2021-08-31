@@ -149,5 +149,6 @@ export interface LiquidityBasketData {
     minliquidity: string;
     feeTier: string;
     balances: WalletBalances;
+    sentiment: string;
     func: () => Promise<void>;
 }
