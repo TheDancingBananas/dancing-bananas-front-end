@@ -242,16 +242,19 @@ export const AddLiquidityV3 = ({
         // Don't need calculate exact tx fee. Assume 0.01 will be wasted as tx fee for one transaction.
         // Every liquidity will take 2 transactions and one batch run transaction And 0.05 is fee for batchrun.
 
-        const estimatedTxFee = 0.01 * (2 * (basketData.length + 1) + 1) + 0.05;
+        const estimatedTxFee = basketData.length * 2 * 0.01 + 0.1;
 
-        const ethBalance = new BigNumber(
+        const orgEthBalance = new BigNumber(
             ethers.utils.formatUnits(
                 balances?.['ETH']?.balance || 0,
                 parseInt(balances['ETH']?.decimals || '0', 10),
             ),
-        )
+        );
+
+        const ethBalance = orgEthBalance
             .minus(getBasketTokenAmount('ETH'))
             .minus(estimatedTxFee);
+
         console.log(
             'token0Balance : ',
             token0Balance,
@@ -264,6 +267,7 @@ export const AddLiquidityV3 = ({
             token0Balance.isNegative() ? new BigNumber(0) : token0Balance,
             token1Balance.isNegative() ? new BigNumber(0) : token1Balance,
             ethBalance.isNegative() ? new BigNumber(0) : ethBalance,
+            orgEthBalance,
         ];
     };
 
@@ -1594,9 +1598,16 @@ export const AddLiquidityV3 = ({
         checkedToken0: isToken0Active,
         checkedToken1: isToken1Active,
     });
+
     const selectedSymbolCount = tokenInputState.selectedTokens.length;
 
-    const [token0Balance, token1Balance, ethBalance] = getBalances();
+    const [
+        token0Balance,
+        token1Balance,
+        ethBalance,
+        orgEthBalance,
+    ] = getBalances();
+    const ethEnough = orgEthBalance.gte(0.1);
 
     const [isToken0Disabled, setIsToken0Disabled] = useState(
         Number(token0Balance) <= 0 ||
@@ -1698,34 +1709,45 @@ export const AddLiquidityV3 = ({
             if (activeTokens.length > 0) {
                 isRefreshed.current = true;
             }
+            if (!wallet.account) {
+                onConnectWallet();
+                return;
+            }
         }
     }, [balances, basketData]);
 
     useEffect(() => {
         const selectedSymbolCount = tokenInputState.selectedTokens.length;
-        setIsToken0Disabled(
-            !balances ||
-                !balances?.[token0Symbol] ||
-                Number(token0Balance) <= 0 ||
-                (!isToken0Active && selectedSymbolCount === 2),
-        );
-        console.log('isToken0Disabled : ', isToken0Disabled);
-        console.log('balances', balances);
-        setIsToken1Disabled(
-            !balances ||
-                !balances?.[token1Symbol] ||
-                Number(token1Balance) <= 0 ||
-                (!isToken1Active && selectedSymbolCount === 2),
-        );
-        setIsTokenETHDisabled(
-            !balances ||
-                !balances?.['ETH'] ||
-                Number(ethBalance) <= 0 ||
-                (!isTokenETHActive &&
-                    (selectedSymbolCount === 2 ||
-                        tokenInputState['WETH']?.selected)),
-        );
-        setDisableWETH(isTokenETHActive);
+        if (ethEnough) {
+            setIsToken0Disabled(
+                !balances ||
+                    !balances?.[token0Symbol] ||
+                    Number(token0Balance) <= 0 ||
+                    (!isToken0Active && selectedSymbolCount === 2),
+            );
+            console.log('isToken0Disabled : ', isToken0Disabled);
+            console.log('balances', balances);
+            setIsToken1Disabled(
+                !balances ||
+                    !balances?.[token1Symbol] ||
+                    Number(token1Balance) <= 0 ||
+                    (!isToken1Active && selectedSymbolCount === 2),
+            );
+            setIsTokenETHDisabled(
+                !balances ||
+                    !balances?.['ETH'] ||
+                    Number(ethBalance) <= 0 ||
+                    (!isTokenETHActive &&
+                        (selectedSymbolCount === 2 ||
+                            tokenInputState['WETH']?.selected)),
+            );
+            setDisableWETH(isTokenETHActive);
+        } else {
+            setIsToken0Disabled(true);
+            setIsToken1Disabled(true);
+            setIsTokenETHDisabled(true);
+            setDisableWETH(true);
+        }
     }, [
         isToken0Active,
         isToken1Active,
@@ -1733,6 +1755,7 @@ export const AddLiquidityV3 = ({
         state,
         balances,
         basketData,
+        ethEnough,
     ]);
 
     const baseCoin = isFlipped ? pool.token0.symbol : pool.token1.symbol;
@@ -1740,6 +1763,29 @@ export const AddLiquidityV3 = ({
 
     const isDisabled = (symbol: string) =>
         disabledInput && disabledInput.includes(symbol);
+
+    const handleNotEnoughEth = () => {
+        setAlertTitle('INSUFFICIENT FUNDS!');
+        setAlertDescription(
+            'YOU NEED TO HAVE A MINIMUM OF 0.1 ETH IN YOUR WALLET FOR CONTINUE PLAYING.',
+        );
+        setShowAlert(true);
+        return;
+    };
+
+    if (
+        debug.isDisconnectWallet &&
+        wallet.account &&
+        balances &&
+        balances?.['ETH'] &&
+        !ethEnough
+    ) {
+        debug.isDisconnectWallet = false;
+        const timer = setTimeout(() => {
+            handleNotEnoughEth();
+            clearTimeout(timer);
+        }, 1000);
+    }
 
     const handleAddBasket = () => {
         // setAlertTitle('INSUFFICIENT FUNDS!');
@@ -1767,6 +1813,11 @@ export const AddLiquidityV3 = ({
             setAlertTitle('APPROVING NOW');
             setAlertDescription('APE APPROVE THE TRANSACTION');
             setShowAlert(true);
+            return;
+        }
+
+        if (!ethEnough) {
+            handleNotEnoughEth();
             return;
         }
 
@@ -2161,6 +2212,10 @@ export const AddLiquidityV3 = ({
                                     onConnectWallet();
                                     return;
                                 }
+                                if (!ethEnough) {
+                                    handleNotEnoughEth();
+                                    return;
+                                }
                                 if (
                                     !isTokenETHActive &&
                                     selectedSymbolCount === 2
@@ -2273,6 +2328,10 @@ export const AddLiquidityV3 = ({
                                 onClick={() => {
                                     if (!wallet.account) {
                                         onConnectWallet();
+                                        return;
+                                    }
+                                    if (!ethEnough) {
+                                        handleNotEnoughEth();
                                         return;
                                     }
                                     if (
@@ -2406,6 +2465,10 @@ export const AddLiquidityV3 = ({
                                         onConnectWallet();
                                         return;
                                     }
+                                    if (!ethEnough) {
+                                        handleNotEnoughEth();
+                                        return;
+                                    }
                                     if (
                                         !isToken1Active &&
                                         selectedSymbolCount === 2
@@ -2537,6 +2600,10 @@ export const AddLiquidityV3 = ({
                                     onConnectWallet();
                                     return;
                                 }
+                                if (!ethEnough) {
+                                    handleNotEnoughEth();
+                                    return;
+                                }
                                 if (level > 2) {
                                     setSentiment(
                                         isFlipped ? 'bullish' : 'bearish',
@@ -2568,6 +2635,10 @@ export const AddLiquidityV3 = ({
                                     onConnectWallet();
                                     return;
                                 }
+                                if (!ethEnough) {
+                                    handleNotEnoughEth();
+                                    return;
+                                }
                                 setSentiment('neutral');
                                 trackSentimentInteraction(pool, 'neutral');
                             }}
@@ -2587,6 +2658,10 @@ export const AddLiquidityV3 = ({
                             onClick={() => {
                                 if (!wallet.account) {
                                     onConnectWallet();
+                                    return;
+                                }
+                                if (!ethEnough) {
+                                    handleNotEnoughEth();
                                     return;
                                 }
                                 if (level > 2) {
@@ -2612,7 +2687,17 @@ export const AddLiquidityV3 = ({
                     <div className='pair-action'>
                         <button
                             className='pair-action-button silver'
-                            onClick={(e) => onSkipPairs()}
+                            onClick={(e) => {
+                                if (!wallet.account) {
+                                    onConnectWallet();
+                                    return;
+                                }
+                                if (!ethEnough) {
+                                    handleNotEnoughEth();
+                                    return;
+                                }
+                                onSkipPairs();
+                            }}
                         >
                             SKIP
                         </button>
