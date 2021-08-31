@@ -555,19 +555,6 @@ function LandingContainer({
                     )}
                 </Box>
             )}
-            {!wallet.account && (
-                <div className='wallet-button-wrapper'>
-                    <button
-                        className='connect-wallet-button black'
-                        onClick={(e) => showWalletModal()}
-                        style={{
-                            marginTop: 30,
-                        }}
-                    >
-                        <img src={pngWallet} /> Connect Wallet
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

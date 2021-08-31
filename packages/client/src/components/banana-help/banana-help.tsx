@@ -30,6 +30,14 @@ export const BananaHelp = ({
         }
     };
 
+    const handleBackToGame = () => {
+        if (!wallet.account) {
+            onConnectWallet();
+        } else {
+            onClose();
+        }
+    };
+
     return (
         <div className='banana-help-container'>
             <div className='monkey-icon'>
@@ -146,21 +154,19 @@ export const BananaHelp = ({
 
                 <hr className='banana-help-line' style={{ marginTop: 20 }} />
 
-                {wallet.account && (
-                    <Box
-                        display='flex'
-                        flexDirection='row'
-                        justifyContent='center'
-                        style={{ marginTop: 33, marginBottom: 7 }}
+                <Box
+                    display='flex'
+                    flexDirection='row'
+                    justifyContent='center'
+                    style={{ marginTop: 33, marginBottom: 7 }}
+                >
+                    <button
+                        className='banana-help-back-game'
+                        onClick={(e) => handleBackToGame()}
                     >
-                        <button
-                            className='banana-help-back-game'
-                            onClick={(e) => onClose()}
-                        >
-                            To THE GAME <img src={pngBanana2} />
-                        </button>
-                    </Box>
-                )}
+                        To THE GAME <img src={pngBanana2} />
+                    </button>
+                </Box>
             </div>
         </div>
     );
