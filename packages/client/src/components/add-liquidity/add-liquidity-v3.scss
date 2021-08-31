@@ -809,6 +809,15 @@
             color: #fff;
         }
     }
+
+    .token-input-amount {
+        &.selected {
+            caret-color: #000;
+        }
+
+        // &.unselected {
+        // }
+    }
 }
 
 .well-warn.out-of-range {
