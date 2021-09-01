@@ -671,7 +671,7 @@
                 font-size: 18px !important;
                 line-height: 18.2px !important;
                 height: 17.6px !important;
-                color: #fff !important;
+                color: #fff;
                 -webkit-text-stroke-width: 0.5px;
                 -webkit-text-stroke-color: black;
             }
@@ -694,6 +694,32 @@
             &.nana {
                 span {
                     color: #000;
+                }
+            }
+
+            .token-input-balance {
+        
+                &.selected {
+                    color: #616162;
+                }
+        
+                &.unselected {
+                    color: #fff;
+                }
+            }
+        
+            .token-input-amount {
+                &.selected {
+                    color: #000;
+                    -webkit-text-stroke-width: 0;
+                    &::placeholder {
+                        color: #000;
+                        -webkit-text-stroke-width: 0;
+                    }
+                }                
+        
+                &.unselected {
+                    color: #fff;
                 }
             }
         }
@@ -799,25 +825,30 @@
             }
         }
     }
+    // .token-input-balances {
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: center;
 
-    .token-input-balance {
-        &.selected {
-            color: #000;
-        }
+    //     input {
+    //         font-size: 18px !important;
+    //         line-height: 18.2px !important;
+    //         height: 17.6px !important;
+    //         color: #fff;
+    //         -webkit-text-stroke-width: 0.5px;
+    //         -webkit-text-stroke-color: black;
+    //     }
 
-        &.unselected {
-            color: #fff;
-        }
-    }
-
-    .token-input-amount {
-        &.selected {
-            caret-color: #000;
-        }
-
-        // &.unselected {
-        // }
-    }
+    //     span {
+    //         color: #fff;
+    //         font-size: 12px;
+    //         line-height: 12px;
+    //         padding-top: 6px;
+    //     }
+        
+    // }
+    
+    
 }
 
 .well-warn.out-of-range {

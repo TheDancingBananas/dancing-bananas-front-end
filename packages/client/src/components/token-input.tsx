@@ -55,6 +55,7 @@ export const TokenInput = ({
                 disabled={disabled}
                 className={classNames('token-input-amount', {
                     selected: selected,
+                    unselected: !selected,
                 })}
                 onChange={(e) => {
                     const val = e.target.value;
@@ -69,6 +70,7 @@ export const TokenInput = ({
                 style={{ height: '25' }}
                 className={classNames('token-input-balance', {
                     selected: selected,
+                    unselected: !selected,
                 })}
             >
                 {balance.toFixed(2)}
