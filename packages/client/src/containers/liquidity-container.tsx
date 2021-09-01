@@ -279,7 +279,7 @@ export const LiquidityContainer = ({
                                     defaultValue={originalLiquidity}
                                     onSkipPairs={() => handleSkip(1)}
                                     onAddBasket={(data: LiquidityBasketData) =>
-                                        handleAddBasket(data, false)
+                                        handleAddBasket(data, true)
                                     }
                                     onConnectWallet={() =>
                                         handleWalletConnect()
