@@ -208,10 +208,20 @@ const PositionManagerContainer = ({
             <img className='close-image' src={pngX} onClick={(e) => onBack()} />
             <h1 className='postion-manager-header'>BANANA PORTFOLIO</h1>
             <div className='position-manager-container-card'>
-                <div className='position-manager-total-liquidity-wrapper'>
+                <div className='banana-win-badge'>
+                    <img
+                        className='banana-win-badge-monkey'
+                        src={pngMonkeyHappy}
+                    />
+                    <div className='banana-win-badge-gain'>
+                        BANANA WINS
+                        <span>{formatUSD(plusSum.toString())}</span>
+                    </div>
+                </div>
+                {/* <div className='position-manager-total-liquidity-wrapper'>
                     <img src={pngMoneyBranch} />
                     <div className='position-manager-total-liquidity-amount'>
-                        <span className='white'>TOTAL LIQUIDITY</span>
+                        <span className='white'>BANANA WINS</span>
                         <span className='green amount'>
                             {formatUSD(
                                 positionType === 'positive'
@@ -220,11 +230,11 @@ const PositionManagerContainer = ({
                             )}
                         </span>
                     </div>
-                </div>
-                <PositionHeader
+                </div> */}
+                {/* <PositionHeader
                     positionType={positionType}
                     onArrow={() => handleOnArrow()}
-                />
+                /> */}
                 <div className='position-container'>
                     <div className='position-container-header'>
                         <span>ACTIVE V3 POSITIONS</span>
