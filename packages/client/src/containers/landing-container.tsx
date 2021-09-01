@@ -365,7 +365,6 @@ function LandingContainer({
                                 className='top-nav-item white'
                                 onClick={(e) => handleChangeTab('task')}
                             >
-                                <img src={pngSearch} />
                                 <span className='monkey-level'>
                                     LEVEL {currentLevel}
                                 </span>

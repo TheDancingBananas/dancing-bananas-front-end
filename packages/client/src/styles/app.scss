@@ -297,7 +297,7 @@ p {
     padding-top: 5rem;
 }
 .top-nav-container {
-    width: 450px;
+    width: 455px;
     margin: 0px auto;
     display: flex;
     align-items: flex-end;
@@ -315,7 +315,7 @@ p {
         color: #fff;
         font-size: 15px;
         line-height: 18px;
-        padding: 8px;
+        padding: 8px 12px;
         -webkit-text-stroke: 1.2px black;
         paint-order: fill;
 
@@ -341,6 +341,12 @@ p {
 
         span {
             padding-left: 10px ;
+        }
+
+        .monkey-level {
+            padding-right: 10px;
+            color: #000;
+            -webkit-text-stroke: 0px black;
         }
     }
 
