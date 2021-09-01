@@ -911,7 +911,7 @@ const CartContainer = ({
                                         <div className='row-detail-body'>
                                             <div className='row-detail-left'>
                                                 <span className='dark'>
-                                                    TOKEN USED / AMOUHNT
+                                                    TOKEN USED / AMOUNT
                                                 </span>
                                                 <div className='row-detail-token'>
                                                     {item.lToken0Name ===
