@@ -107,9 +107,13 @@ export const BananaHelp = ({
                     On the Level 1, you have 2 options:
                 </Box>
 
-                <hr className='banana-help-line' />
-
-                <Box display='flex' flexDirection='row' alignItems='center'>
+                <Box
+                    display='flex'
+                    flexDirection='row'
+                    alignItems='center'
+                    style={{ marginTop: 28 }}
+                >
+                    <span className='banana-help-chapter'>1.</span>
                     <button
                         className='banana-help-button green'
                         onClick={(e) => handleConnectWallet()}
@@ -120,7 +124,7 @@ export const BananaHelp = ({
                         Add Liquidity
                     </div>
                 </Box>
-                <Box className='text-normal' style={{ marginTop: 8 }}>
+                <Box className='text-normal' style={{ marginTop: 28 }}>
                     Adding Liquidity you will earn Nanas and Pool Fees. You can
                     track anytime your Banana Wins for Fees Collected!
                 </Box>
@@ -138,9 +142,13 @@ export const BananaHelp = ({
                     sentiments.
                 </Box>
 
-                <hr className='banana-help-line' />
-
-                <Box display='flex' flexDirection='row' alignItems='center'>
+                <Box
+                    display='flex'
+                    flexDirection='row'
+                    alignItems='center'
+                    style={{ marginTop: 28 }}
+                >
+                    <span className='banana-help-chapter'>2.</span>
                     <button
                         className='banana-help-button grau'
                         onClick={(e) => handleConnectWallet()}
@@ -152,13 +160,11 @@ export const BananaHelp = ({
                     </div>
                 </Box>
 
-                <hr className='banana-help-line' style={{ marginTop: 20 }} />
-
                 <Box
                     display='flex'
                     flexDirection='row'
                     justifyContent='center'
-                    style={{ marginTop: 33, marginBottom: 7 }}
+                    style={{ marginTop: 44, marginBottom: 7 }}
                 >
                     <button
                         className='banana-help-back-game'
