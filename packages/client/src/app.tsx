@@ -16,6 +16,7 @@ import { storage } from 'util/localStorage';
 import { PageError, ModalError } from 'components/page-error';
 
 import { WalletProvider } from 'hooks/use-wallet';
+import mixpanel from 'mixpanel-browser';
 
 function App(): ReactElement {
     // ------------------ Initial Mount - API calls for first render ------------------
@@ -42,6 +43,21 @@ function App(): ReactElement {
     // subscribe to the hook, will propogate to the nearest boundary
 
     const queryClient = new QueryClient();
+
+    const mixpanel_banana = process.env.MIXPANEL_BANANA || '';
+
+    if (mixpanel_banana != '') {
+        console.log('MIXPANEL LOADED');
+        mixpanel.init(mixpanel_banana);
+    }
+
+    useEffect(() => {
+        if (mixpanel_banana != '') {
+            console.log('MIXPANEL MESSAGE');
+            mixpanel.track('App Loaded');
+        }
+    }, []);
+
     // useErrorHandler(error);
     useEffect(() => {
         document.body.classList.add('dark');
