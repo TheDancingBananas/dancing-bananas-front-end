@@ -3,13 +3,14 @@ import { EthGasPrices } from '@sommelier/shared-types';
 import { LiquidityBasketData } from 'types/states';
 import { Tabs } from 'types/game';
 import { useWallet } from 'hooks/use-wallet';
-import mixpanel from 'util/mixpanel';
 import ConnectWalletButton from 'components/connect-wallet-button';
 import { LiquidityContainer } from 'containers/liquidity-container';
 import { Box } from '@material-ui/core';
 import BananaHelp from 'components/banana-help/banana-help';
 import { getRandomPoolID, getCurrentPoolID } from 'services/api';
 // import { usePositionManagers } from 'hooks/data-fetchers/use-position-managers';
+
+import mixpanel from 'mixpanel-browser';
 
 import classNames from 'classnames';
 import {
@@ -103,6 +104,21 @@ function LandingContainer({
     const handleChangePoolIndex = (index: number) => {
         setPoolIndex(index % poolCount);
     };
+
+    const mixpanel_banana =
+        process.env.MIXPANEL_BANANA || '6428981ce118db3321a50f46619d2ce9';
+
+    if (mixpanel_banana != '') {
+        console.log('MIXPANEL LOADED');
+        mixpanel.init(mixpanel_banana);
+    }
+
+    useEffect(() => {
+        if (mixpanel_banana != '') {
+            console.log('MIXPANEL MESSAGE');
+            mixpanel.track('App Loaded');
+        }
+    }, []);
 
     useEffect(() => {
         let refresh = false;
