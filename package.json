@@ -33,6 +33,7 @@
     ],
     "dependencies": {
         "lerna": "^3.22.1",
+        "mixpanel-browser": "^2.41.0",
         "rimraf": "^3.0.2"
     },
     "devDependencies": {
