@@ -87,10 +87,12 @@ const CartContainer = ({
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
 
-    const getGasPrice = async (): Promise<string> => {
-        const gas = Number(await getGasPriceFromInfura()) + 10;
+    const getGasPrice = async (): Promise<[string, string]> => {
+        const gas = Number(await getGasPriceFromInfura());
+        const maxgasfee = gas * 2;
         console.log('gas price from infra: ', gas);
-        return gas.toString();
+        console.log('max price: ', maxgasfee);
+        return [gas.toString(), maxgasfee.toString()];
     };
 
     const handleClickMoreDetails = (poolId: string) => {
@@ -358,17 +360,20 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const gasprice = await getGasPrice();
+                    const [gasprice, maxFee] = await getGasPrice();
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprice, 9)
+                        .toString();
+                    const maxFeePerGas = ethers.utils
+                        .parseUnits(maxFee, 9)
                         .toString();
                     console.log('baseGasPrice: ', baseGasPrice);
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
                             baseApproveAmount,
-                            { gasPrice: baseGasPrice },
+                            { maxFeePerGas: maxFeePerGas },
                         );
 
                         // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
@@ -382,7 +387,7 @@ const CartContainer = ({
                             token: tokenSymbol,
                             target: addLiquidityContractAddress,
                             amount: baseApproveAmount,
-                            gasPrice: baseGasPrice,
+                            maxFeePerGas: maxFeePerGas,
                         });
                         continue;
                     }
@@ -395,7 +400,7 @@ const CartContainer = ({
                             batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
-                                gasPrice: baseGasPrice,
+                                maxFeePerGas: maxFeePerGas,
                                 gasLimit: approvalEstimate,
                             },
                         );
@@ -569,17 +574,20 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const gasprice = await getGasPrice();
+                    const [gasprice, maxFee] = await getGasPrice();
 
                     const baseGasPrice = ethers.utils
                         .parseUnits(gasprice, 9)
+                        .toString();
+                    const maxFeePerGas = ethers.utils
+                        .parseUnits(maxFee, 9)
                         .toString();
 
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
                             baseApproveAmount,
-                            { gasPrice: baseGasPrice },
+                            { maxFeePerGas: maxFeePerGas },
                         );
 
                         // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
@@ -593,7 +601,7 @@ const CartContainer = ({
                             to: tokenSymbol,
                             target: addLiquidityContractAddress,
                             amount: baseApproveAmount,
-                            gasPrice: baseGasPrice,
+                            maxFeePerGas: maxFeePerGas,
                         });
                         continue;
                     }
@@ -605,7 +613,7 @@ const CartContainer = ({
                             batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
-                                gasPrice: baseGasPrice,
+                                maxFeePerGas: maxFeePerGas,
                                 gasLimit: approvalEstimate,
                             },
                         );
@@ -662,9 +670,10 @@ const CartContainer = ({
 
         // Get gas price
 
-        const gasprice = await getGasPrice();
+        const [gasprice, maxFee] = await getGasPrice();
 
         const baseGasPrice = ethers.utils.parseUnits(gasprice, 9).toString();
+        const maxFeePerGas = ethers.utils.parseUnits(maxFee, 9).toString();
 
         // Call the contract and sign
         let gasEstimate: ethers.BigNumber;
@@ -674,18 +683,18 @@ const CartContainer = ({
             gasEstimate = await batchLiquidityContract.estimateGas['batchRun'](
                 batchParams.join(''),
                 {
-                    gasPrice: baseGasPrice,
+                    maxFeePerGas: maxFeePerGas,
                     value, // flat fee sent to contract - 0.0005 ETH - with ETH added if used as entry
                 },
             );
 
             // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
             gasEstimate = gasEstimate.add(gasEstimate.div(2));
-
+            console.log('gasLimit: ', gasEstimate);
             const { hash } = await batchLiquidityContract['batchRun'](
                 batchParams.join(''),
                 {
-                    gasPrice: baseGasPrice,
+                    maxFeePerGas: maxFeePerGas,
                     gasLimit: gasEstimate,
                     value, // flat fee sent to contract - 0.0005 ETH - with ETH added if used as entry
                 },
