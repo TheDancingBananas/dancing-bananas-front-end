@@ -265,18 +265,18 @@ const CartContainer = ({
                 const mintAmount0 = data.token0Amount;
                 const mintAmount1 = data.token1Amount;
 
-                const liquidity = new BigNumber(
-                    data.bounds.position.liquidity.toString(),
-                )
-                    .exponentiatedBy(2)
-                    .div(2)
-                    .sqrt();
+                // const liquidity = new BigNumber(
+                //     data.bounds.position.liquidity.toString(),
+                // )
+                //     .exponentiatedBy(2)
+                //     .div(2)
+                //     .sqrt();
 
-                if (liquidity.isZero()) {
-                    handleLiquidityError(data.poolName);
-                    continue;
-                }
-                const minLiquidity = liquidity.times(0.98).toFixed(0);
+                // if (liquidity.isZero()) {
+                //     handleLiquidityError(data.poolName);
+                //     continue;
+                // }
+                // const minLiquidity = liquidity.times(0.98).toFixed(0);
 
                 const sqrtPriceAX96 = TickMath.getSqrtRatioAtTick(
                     data.bounds.position.tickLower,
