@@ -389,7 +389,7 @@ const CartContainer = ({
                             amount: baseApproveAmount,
                             maxFeePerGas: maxFeePerGas,
                         });
-                        continue;
+                        return;
                     }
 
                     // Approve the add liquidity contract to spend entry tokens
@@ -407,7 +407,7 @@ const CartContainer = ({
                         approveHash = hash;
                     } catch (err) {
                         handleUserRejectError(data.poolName, tokenSymbol, err);
-                        continue;
+                        return;
                     }
 
                     // setApprovalState('pending');
@@ -603,7 +603,7 @@ const CartContainer = ({
                             amount: baseApproveAmount,
                             maxFeePerGas: maxFeePerGas,
                         });
-                        continue;
+                        return;
                     }
 
                     // Approve the add liquidity contract to spend entry tokens
@@ -620,7 +620,7 @@ const CartContainer = ({
                         approveHash = hash;
                     } catch (err) {
                         handleUserRejectError(data.poolName, tokenSymbol, err);
-                        continue;
+                        return;
                     }
 
                     // setApprovalState('pending');
@@ -723,6 +723,7 @@ const CartContainer = ({
         } catch (err) {
             console.log(err);
             handleTransactionFailError();
+            return;
         }
 
         // cartData[0].func();
