@@ -2025,7 +2025,7 @@ export const AddLiquidityV3 = ({
                 .exponentiatedBy(2)
                 .div(2)
                 .sqrt()
-                .times(0.98)
+                .times(0.97)
                 .toFixed(0),
             feeTier: pool.feeTier,
             balances,
