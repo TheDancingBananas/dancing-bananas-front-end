@@ -2021,18 +2021,28 @@ export const AddLiquidityV3 = ({
             token1Amount,
             ethAmount,
             bounds,
-            minliquidity: new BigNumber(bounds.position.liquidity.toString())
-                .exponentiatedBy(2)
-                .div(2)
-                .sqrt()
-                .times(0.97)
-                .toFixed(0),
+            // minliquidity: new BigNumber(bounds.position.liquidity.toString())
+            //     .exponentiatedBy(2)
+            //     .div(2)
+            //     .sqrt()
+            //     .times(0.85)
+            //     .toFixed(0),
+            minliquidity: '0',
             feeTier: pool.feeTier,
             balances,
             sentiment,
             func: doAddLiquidity,
         };
-
+        console.log('liquidity:', bounds.position.liquidity.toString());
+        console.log(
+            '-----liquidity:',
+            new BigNumber(bounds.position.liquidity.toString())
+                .exponentiatedBy(2)
+                .div(2)
+                .sqrt()
+                .toFixed(0),
+        );
+        console.log('minliquidity:', poolInfo.minliquidity);
         onAddBasket(poolInfo);
     };
 
