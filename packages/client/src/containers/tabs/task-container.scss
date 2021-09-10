@@ -156,9 +156,10 @@
             height: 1rem;
             overflow: hidden;
             font-size: .75rem;
-            background-color: #e9ecef;
-            border-radius: .25rem;
+            background-color:white;
+            border-radius: .5rem;
             margin: 10px 0;
+            border: 1px solid black;
             &-bar {                
                 display: flex;
                 flex-direction: column;
@@ -166,7 +167,7 @@
                 color: #fff;
                 text-align: center;
                 white-space: nowrap;
-                background-color: #007bff;
+                background-color: #DD00B3;
                 transition: width .6s ease;
             }
         }
