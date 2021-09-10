@@ -182,7 +182,6 @@ const CartContainer = ({
             return;
         }
 
-        let status = 'none';
         // const gasPrice = await getGasPrice();
         // const baseGasPrice = ethers.utils
         //     .parseUnits(gasPrice.high.toString(), 9)
@@ -239,7 +238,6 @@ const CartContainer = ({
             }
 
             if (data.isOneSide) {
-                status = 'starting';
                 const selectedToken = data.lToken0Name;
                 const tokenData = {
                     id: data.lToken0Address,
@@ -293,7 +291,7 @@ const CartContainer = ({
                     data.bounds.position.tickUpper, // tickUpper
                     sqrtPriceAX96.toString(),
                     sqrtPriceBX96.toString(),
-                    data.minliquidity, // amount0Desired
+                    '0', //data.minliquidity, // amount0Desired
                     wallet.account, // recipient
                     Math.floor(Date.now() / 1000) + 86400000, // deadline
                 ];
@@ -310,6 +308,20 @@ const CartContainer = ({
                         tokenSymbol === data.token0Name
                             ? data.token0Address
                             : data.token1Address;
+
+                    if (tokenSymbol === 'WETH') {
+                        if (
+                            data.lToken0Name === 'ETH' ||
+                            (data.lToken1Name && data.lToken1Name === 'ETH')
+                        ) {
+                            continue;
+                        }
+                    } else if (
+                        tokenSymbol !== data.lToken0Name &&
+                        (!data.lToken1Name || data.lToken1Name !== tokenSymbol)
+                    ) {
+                        continue;
+                    }
 
                     const erc20Contract = new ethers.Contract(
                         tokenAddress,
@@ -422,11 +434,6 @@ const CartContainer = ({
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
                     }
-                    status = 'pending';
-                }
-
-                if (status === 'starting') {
-                    continue;
                 }
 
                 if (
@@ -455,7 +462,6 @@ const CartContainer = ({
 
             // Two side token
             if (!data.isOneSide) {
-                status = 'starting';
                 const isEthAdd =
                     data.lToken0Name === 'ETH' ||
                     (data.lToken1Name && data.lToken1Name === 'ETH');
@@ -635,11 +641,6 @@ const CartContainer = ({
                         await provider.waitForTransaction(approveHash);
                         onStatus(false);
                     }
-                    status = 'pending';
-                }
-
-                if (status === 'starting') {
-                    continue;
                 }
 
                 if (
