@@ -120,12 +120,12 @@
     }
 
     .task-content {
-        margin-top: 33px;
+        margin-top: 33px;        
     }
 
     .task-item {
         width: 100%;
-        height: 56px;
+        min-height: 56px;
         background: #E7EBF2;
         border: 2.14286px solid #000000;
         box-sizing: border-box;
@@ -136,8 +136,10 @@
         text-shadow: -1px 0 rgba(0, 0, 0, 0.75), 0 1px rgba(0, 0, 0, 0.75), 1px 0 rgba(0, 0, 0, 0.75), 0 -1px rgba(0, 0, 0, 0.75);
         -webkit-text-stroke: 1.3px #000;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 10px 15px;
         margin-bottom: 15px;
 
         span {
@@ -146,6 +148,27 @@
         
         &.active {
             background: #71FFB9;
+        }
+
+        .progress {
+            width: 80%;
+            display: flex;
+            height: 1rem;
+            overflow: hidden;
+            font-size: .75rem;
+            background-color: #e9ecef;
+            border-radius: .25rem;
+            margin: 10px 0;
+            &-bar {                
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                color: #fff;
+                text-align: center;
+                white-space: nowrap;
+                background-color: #007bff;
+                transition: width .6s ease;
+            }
         }
     }
 

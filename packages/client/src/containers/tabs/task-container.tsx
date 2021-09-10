@@ -53,6 +53,12 @@ const TaskContainer = ({
                                     onClick={(e) => onBack()}
                                 >
                                     <span>{task.taskName}</span>
+                                    <div className='progress'>
+                                        <div
+                                            className='progress-bar'
+                                            style={{ width: `${10}%` }}
+                                        ></div>
+                                    </div>
                                 </button>
                             );
                         }
