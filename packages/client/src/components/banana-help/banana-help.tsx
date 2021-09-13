@@ -100,8 +100,8 @@ export const BananaHelp = ({
                 </Box>
 
                 <Box className='text-normal' style={{ marginTop: 15 }}>
-                    Every 4 hours a Dancing Banana Liquidity Pool will be reveal
-                    for you.
+                    Every 4 hours a Dancing Banana Liquidity Pool will be
+                    revealed for you.
                 </Box>
                 <Box className='text-normal' style={{ marginTop: 15 }}>
                     On the Level 1, you have 2 options:
