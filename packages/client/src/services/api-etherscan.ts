@@ -36,17 +36,15 @@ export async function getEstimateTimeEtherscan(
 export async function getEstimateTime(
     provider: ethers.providers.Web3Provider,
     transactionHash: string,
-    defaultPrice: string,
 ): Promise<number | undefined> {
     try {
         const transaction = await provider.getTransaction(transactionHash);
-        const gasPrice = transaction.gasPrice
-            ? transaction.gasPrice.toString()
-            : defaultPrice;
-
-        const estimateTime = await getEstimateTimeEtherscan(gasPrice);
-
-        return estimateTime;
+        if (transaction.gasPrice) {
+            return await getEstimateTimeEtherscan(
+                transaction.gasPrice.toString(),
+            );
+        }
+        return undefined;
     } catch (err) {
         console.log('get Estimate Time error:', JSON.stringify(err));
         return undefined;
