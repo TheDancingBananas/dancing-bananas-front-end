@@ -27,6 +27,8 @@ export const BananaHelp = ({
     const handleConnectWallet = () => {
         if (!wallet.account) {
             onConnectWallet();
+        } else {
+            onClose();
         }
     };
 
