@@ -1005,19 +1005,7 @@ export const GetPositionSnapshotsDocument = gql`
         token1Price
         sqrtPrice
         liquidity
-      }
-      tickLower {
-        id
-        tickIdx
-        price0
-        price1
-      }
-      tickUpper {
-        id
-        tickIdx
-        price0
-        price1
-      }
+      }      
       liquidity
       depositedToken0
       depositedToken1
@@ -1069,19 +1057,7 @@ export const GetPositionsDocument = gql`
       token1Price
       sqrtPrice
       liquidity
-    }
-    tickLower {
-      id
-      tickIdx
-      price0
-      price1
-    }
-    tickUpper {
-      id
-      tickIdx
-      price0
-      price1
-    }
+    }    
     liquidity
     depositedToken0
     depositedToken1
