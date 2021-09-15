@@ -268,15 +268,6 @@ export const AddLiquidityV3 = ({
         const ethBalance = orgEthBalance
             .minus(getBasketTokenAmount('ETH'))
             .minus(estimatedTxFee);
-
-        console.log(
-            'token0Balance : ',
-            token0Balance,
-            'token1Balance : ',
-            token1Balance,
-            'ETHBalance : ',
-            ethBalance,
-        );
         return [
             token0Balance.isNegative() ? new BigNumber(0) : token0Balance,
             token1Balance.isNegative() ? new BigNumber(0) : token1Balance,
@@ -998,14 +989,10 @@ export const AddLiquidityV3 = ({
                         } as PendingTx),
                 );
             if (provider) {
-                const baseGasPrice = ethers.utils
-                    .parseUnits(currentGasPrice.toString(), 9)
-                    .toString();
-                const estimateTime = await getEstimateTime(
-                    provider,
-                    hash,
-                    baseGasPrice,
-                );
+                // const baseGasPrice = ethers.utils
+                //     .parseUnits(currentGasPrice.toString(), 9)
+                //     .toString();
+                const estimateTime = await getEstimateTime(provider, hash);
                 onStatus(true, estimateTime);
 
                 const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(
@@ -1250,7 +1237,6 @@ export const AddLiquidityV3 = ({
                 const estimateTime = await getEstimateTime(
                     provider,
                     approveHash,
-                    baseGasPrice,
                 );
                 onStatus(true, estimateTime);
 
@@ -1524,7 +1510,6 @@ export const AddLiquidityV3 = ({
                 const estimateTime = await getEstimateTime(
                     provider,
                     approveHash,
-                    baseGasPrice,
                 );
                 onStatus(true, estimateTime);
 
