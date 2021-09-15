@@ -148,6 +148,8 @@ function LandingContainer({
 
         if (!wallet.account) {
             setBananaHelp(true);
+        } else {
+            setBananaHelp(false);
         }
     }, [wallet.account]);
 
