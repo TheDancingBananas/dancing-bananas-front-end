@@ -33,7 +33,7 @@ import { storage } from 'util/localStorage';
 import { Level, Reward, RewardItem } from 'types/game';
 
 import { useEthGasPrices } from 'hooks';
-import { getGasPriceFromInfura } from 'services/infura-json-rpc';
+//import { getGasPriceFromInfura } from 'services/infura-json-rpc';
 
 import {
     FeeAmount,
@@ -87,13 +87,13 @@ const CartContainer = ({
         provider = new ethers.providers.Web3Provider(wallet?.provider);
     }
 
-    const getGasPrice = async (): Promise<[string, string]> => {
-        const gas = Number(await getGasPriceFromInfura());
-        const maxgasfee = gas * 2;
-        console.log('gas price from infra: ', gas);
-        console.log('max price: ', maxgasfee);
-        return [gas.toString(), maxgasfee.toString()];
-    };
+    // const getGasPrice = async (): Promise<[string, string]> => {
+    //     const gas = Number(await getGasPriceFromInfura());
+    //     const maxgasfee = gas * 2;
+    //     console.log('gas price from infra: ', gas);
+    //     console.log('max price: ', maxgasfee);
+    //     return [gas.toString(), maxgasfee.toString()];
+    // };
 
     const handleClickMoreDetails = (poolId: string) => {
         if (viewId === poolId) {
@@ -372,20 +372,20 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const [gasprice, maxFee] = await getGasPrice();
+                    // const [gasprice, maxFee] = await getGasPrice();
 
-                    const baseGasPrice = ethers.utils
-                        .parseUnits(gasprice, 9)
-                        .toString();
-                    const maxFeePerGas = ethers.utils
-                        .parseUnits(maxFee, 9)
-                        .toString();
-                    console.log('baseGasPrice: ', baseGasPrice);
+                    // const baseGasPrice = ethers.utils
+                    //     .parseUnits(gasprice, 9)
+                    //     .toString();
+                    // const maxFeePerGas = ethers.utils
+                    //     .parseUnits(maxFee, 9)
+                    //     .toString();
+                    // console.log('baseGasPrice: ', baseGasPrice);
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
                             baseApproveAmount,
-                            { maxFeePerGas: maxFeePerGas },
+                            {},
                         );
 
                         // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
@@ -399,7 +399,6 @@ const CartContainer = ({
                             token: tokenSymbol,
                             target: addLiquidityContractAddress,
                             amount: baseApproveAmount,
-                            maxFeePerGas: maxFeePerGas,
                         });
                         return;
                     }
@@ -412,7 +411,7 @@ const CartContainer = ({
                             batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
-                                maxFeePerGas: maxFeePerGas,
+                                // maxFeePerGas: maxFeePerGas,
                                 gasLimit: approvalEstimate,
                             },
                         );
@@ -427,7 +426,6 @@ const CartContainer = ({
                         const estimateTime = await getEstimateTime(
                             provider,
                             approveHash,
-                            baseGasPrice,
                         );
                         //txFee = txFee.add(approvalEstimate.mul(baseGasPrice));
                         onStatus(true, estimateTime);
@@ -580,20 +578,20 @@ const CartContainer = ({
 
                     // Get gas price
 
-                    const [gasprice, maxFee] = await getGasPrice();
+                    // const [gasprice, maxFee] = await getGasPrice();
 
-                    const baseGasPrice = ethers.utils
-                        .parseUnits(gasprice, 9)
-                        .toString();
-                    const maxFeePerGas = ethers.utils
-                        .parseUnits(maxFee, 9)
-                        .toString();
+                    // const baseGasPrice = ethers.utils
+                    //     .parseUnits(gasprice, 9)
+                    //     .toString();
+                    // const maxFeePerGas = ethers.utils
+                    //     .parseUnits(maxFee, 9)
+                    //     .toString();
 
                     try {
                         approvalEstimate = await erc20Contract.estimateGas.approve(
                             batchLiquidityContractAddress,
                             baseApproveAmount,
-                            { maxFeePerGas: maxFeePerGas },
+                            {},
                         );
 
                         // Add a 30% buffer over the ethers.js gas estimate. We don't want transactions to fail
@@ -607,7 +605,6 @@ const CartContainer = ({
                             to: tokenSymbol,
                             target: addLiquidityContractAddress,
                             amount: baseApproveAmount,
-                            maxFeePerGas: maxFeePerGas,
                         });
                         return;
                     }
@@ -619,7 +616,6 @@ const CartContainer = ({
                             batchLiquidityContractAddress,
                             baseApproveAmount,
                             {
-                                maxFeePerGas: maxFeePerGas,
                                 gasLimit: approvalEstimate,
                             },
                         );
@@ -634,7 +630,6 @@ const CartContainer = ({
                         const estimateTime = await getEstimateTime(
                             provider,
                             approveHash,
-                            baseGasPrice,
                         );
                         //txFee = txFee.add(approvalEstimate.mul(baseGasPrice));
                         onStatus(true, estimateTime);
@@ -671,10 +666,10 @@ const CartContainer = ({
 
         // Get gas price
 
-        const [gasprice, maxFee] = await getGasPrice();
+        // const [gasprice, maxFee] = await getGasPrice();
 
-        const baseGasPrice = ethers.utils.parseUnits(gasprice, 9).toString();
-        const maxFeePerGas = ethers.utils.parseUnits(maxFee, 9).toString();
+        // const baseGasPrice = ethers.utils.parseUnits(gasprice, 9).toString();
+        // const maxFeePerGas = ethers.utils.parseUnits(maxFee, 9).toString();
 
         // Call the contract and sign
         let gasEstimate: ethers.BigNumber;
@@ -684,7 +679,7 @@ const CartContainer = ({
             gasEstimate = await batchLiquidityContract.estimateGas['batchRun'](
                 batchParams.join(''),
                 {
-                    maxFeePerGas: maxFeePerGas,
+                    // maxFeePerGas: maxFeePerGas,
                     value, // flat fee sent to contract - 0.0005 ETH - with ETH added if used as entry
                 },
             );
@@ -695,7 +690,7 @@ const CartContainer = ({
             const { hash } = await batchLiquidityContract['batchRun'](
                 batchParams.join(''),
                 {
-                    maxFeePerGas: maxFeePerGas,
+                    // maxFeePerGas: maxFeePerGas,
                     gasLimit: gasEstimate,
                     value, // flat fee sent to contract - 0.0005 ETH - with ETH added if used as entry
                 },
@@ -703,11 +698,7 @@ const CartContainer = ({
 
             if (hash) {
                 if (provider) {
-                    const estimateTime = await getEstimateTime(
-                        provider,
-                        hash,
-                        baseGasPrice,
-                    );
+                    const estimateTime = await getEstimateTime(provider, hash);
                     onStatus(true, estimateTime);
 
                     const txStatus: ethers.providers.TransactionReceipt = await provider.waitForTransaction(

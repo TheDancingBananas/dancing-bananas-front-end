@@ -90,10 +90,10 @@ async function getPositionsTotalNotionalGain(
 ): Promise<string> {
     const { network, address } = req.params;
     const fetcher = UniswapV3Fetchers.get(network);
-
+    console.log('getting positions ~~~~~~~~~~~~~~~');
     const positions = await fetcher.getPositions(address);
     const snapshots = await fetcher.getPositionSnapshots(address);
-
+    console.log('positions --------------', positions);
     const snapshotsByNFLP = snapshots.reduce(
         (acc: { [key: string]: GetPositionSnapshotsResult }, snapshot) => {
             // TODO: Deploy a new subgraph which uses a delineator
