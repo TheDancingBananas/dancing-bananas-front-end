@@ -195,9 +195,33 @@ const PositionManagerContainer = ({
             }
         });
 
-        setPlusPools(pPools);
-        setMinusPools(mPools);
-        setClosedPools(cPools);
+        setPlusPools(
+            pPools.sort((a, b) =>
+                Number(
+                    new BigNumber(b.stats.totalFeesUSD).minus(
+                        a.stats.totalFeesUSD,
+                    ),
+                ),
+            ),
+        );
+        setMinusPools(
+            mPools.sort((a, b) =>
+                Number(
+                    new BigNumber(b.stats.totalFeesUSD).minus(
+                        a.stats.totalFeesUSD,
+                    ),
+                ),
+            ),
+        );
+        setClosedPools(
+            cPools.sort((a, b) =>
+                Number(
+                    new BigNumber(b.stats.totalFeesUSD).minus(
+                        a.stats.totalFeesUSD,
+                    ),
+                ),
+            ),
+        );
 
         setPlusSum(pSum);
         setMinusSum(mSum);
