@@ -170,6 +170,16 @@
                 background-color: #DD00B3;
                 transition: width .6s ease;
             }
+            &-value {                
+                padding-top: 21px;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50% -50%);
+                transform: translate(-50%, 0);
+                text-shadow: none;
+                -webkit-text-stroke: black;
+                color: black;
+            }
         }
     }
 

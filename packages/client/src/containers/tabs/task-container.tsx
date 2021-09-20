@@ -59,11 +59,20 @@ const TaskContainer = ({
                                                 className='progress-bar'
                                                 style={{
                                                     width: `${
-                                                        (task.current * 100) /
+                                                        ((task.current >
+                                                        task.goal
+                                                            ? task.goal
+                                                            : task.current) *
+                                                            100) /
                                                         task.goal
                                                     }%`,
                                                 }}
                                             ></div>
+                                            <span className='progress-value'>
+                                                {task.current > task.goal
+                                                    ? task.goal
+                                                    : task.current}
+                                            </span>
                                         </div>
                                     )}
                                 </button>
