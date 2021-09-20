@@ -53,6 +53,28 @@ const TaskContainer = ({
                                     onClick={(e) => onBack()}
                                 >
                                     <span>{task.taskName}</span>
+                                    {task.goal > 1 && (
+                                        <div className='progress'>
+                                            <div
+                                                className='progress-bar'
+                                                style={{
+                                                    width: `${
+                                                        ((task.current >
+                                                        task.goal
+                                                            ? task.goal
+                                                            : task.current) *
+                                                            100) /
+                                                        task.goal
+                                                    }%`,
+                                                }}
+                                            ></div>
+                                            <span className='progress-value'>
+                                                {task.current > task.goal
+                                                    ? task.goal
+                                                    : task.current}
+                                            </span>
+                                        </div>
+                                    )}
                                 </button>
                             );
                         }

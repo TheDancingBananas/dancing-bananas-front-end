@@ -6,7 +6,7 @@
             "description": "CURIOUS MONKEY",
             "tasks": [
                 {
-                    "taskName": "ADD LIQUIDITY 1 TIME",
+                    "taskName": "COMPLETE ONE TRANSACTION",
                     "taskType": "addliquidity",
                     "goal" : 1,
                     "current" : 0,
@@ -56,7 +56,7 @@
             "description": "MYSTERIOUS CHIMP",
             "tasks": [
                 {
-                    "taskName": "ADD LIQUIDITY 2 TIMES",
+                    "taskName": "COMPLETE 2 TRANSACTIONS",
                     "taskType": "addliquidity",
                     "goal" : 2,
                     "current" : 0,
