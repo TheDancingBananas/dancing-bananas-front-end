@@ -97,6 +97,7 @@ type Props = {
     onRight: () => void;
     onAddSuccess: () => void;
     onStatus: (status: boolean, time?: number) => void;
+    handleCloseInstruction: () => void;
 };
 
 export type Sentiment = 'bullish' | 'bearish' | 'neutral';
@@ -122,6 +123,7 @@ export const AddLiquidityV3 = ({
     onRight,
     onAddSuccess,
     onStatus,
+    handleCloseInstruction,
 }: Props): JSX.Element | null => {
     const currentLevel = storage.getLevel();
 
@@ -1812,6 +1814,8 @@ export const AddLiquidityV3 = ({
             return;
         }
 
+        handleCloseInstruction();
+
         if (pendingApproval) {
             setAlertTitle('APPROVING NOW');
             setAlertDescription('APE APPROVE THE TRANSACTION');
@@ -2706,6 +2710,7 @@ export const AddLiquidityV3 = ({
                                     onConnectWallet();
                                     return;
                                 }
+                                handleCloseInstruction();
                                 if (!ethEnough) {
                                     handleNotEnoughEth();
                                     return;
