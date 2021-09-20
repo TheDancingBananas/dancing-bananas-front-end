@@ -489,6 +489,9 @@ function LandingContainer({
                                     if (poolIndex != i)
                                         handleChangePoolIndex(i);
                                 }}
+                                handleCloseInstruction={() =>
+                                    toggleBananaHelp(false)
+                                }
                             />
                         )}
 

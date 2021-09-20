@@ -93,6 +93,7 @@ export const LiquidityContainer = ({
     onStatus,
     handleChangeTab,
     handleChangePoolIndex,
+    handleCloseInstruction,
 }: {
     gasPrices: EthGasPrices | null;
     poolId: string;
@@ -110,6 +111,7 @@ export const LiquidityContainer = ({
     onStatus: (status: boolean, time?: number) => void;
     handleChangeTab: (t: Tabs) => void;
     handleChangePoolIndex: (i: number) => void;
+    handleCloseInstruction: () => void;
 }): JSX.Element => {
     const { wallet } = useWallet();
     const currentLevel = storage.getLevel();
@@ -238,6 +240,7 @@ export const LiquidityContainer = ({
 
     const handleClickBananaBadge = () => {
         if (wallet.account) {
+            handleCloseInstruction();
             handleChangeTab('position');
         } else {
             handleWalletConnect();
@@ -294,6 +297,9 @@ export const LiquidityContainer = ({
                                         status: boolean,
                                         time?: number,
                                     ) => onStatus(status, time)}
+                                    handleCloseInstruction={() =>
+                                        handleCloseInstruction()
+                                    }
                                 />
                             </Box>
                         </div>
@@ -326,6 +332,9 @@ export const LiquidityContainer = ({
                                         status: boolean,
                                         time?: number,
                                     ) => onStatus(status, time)}
+                                    handleCloseInstruction={() =>
+                                        handleCloseInstruction()
+                                    }
                                 />
                             </Box>
                         </div>
