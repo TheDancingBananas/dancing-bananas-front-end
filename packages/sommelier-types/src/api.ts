@@ -59,3 +59,10 @@ export interface V3PositionData {
     snapshots: GetPositionSnapshotsResult;
     stats: V3PositionStats;
 }
+
+export interface RedisV3PositionData {
+    positionData: V3PositionDataList;
+    notionalGain: string;
+}
+
+export type V3PositionDataList = { [key: string]: V3PositionData };
