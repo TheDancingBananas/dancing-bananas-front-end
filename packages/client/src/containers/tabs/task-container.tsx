@@ -54,25 +54,39 @@ const TaskContainer = ({
                                 >
                                     <span>{task.taskName}</span>
                                     {task.goal > 1 && (
-                                        <div className='progress'>
-                                            <div
-                                                className='progress-bar'
-                                                style={{
-                                                    width: `${
-                                                        ((task.current >
-                                                        task.goal
-                                                            ? task.goal
-                                                            : task.current) *
-                                                            100) /
-                                                        task.goal
-                                                    }%`,
-                                                }}
-                                            ></div>
-                                            <span className='progress-value'>
-                                                {task.current > task.goal
-                                                    ? task.goal
-                                                    : task.current}
-                                            </span>
+                                        <div className='progress-wrapper'>
+                                            <div className='progress'>
+                                                <div
+                                                    className='progress-bar'
+                                                    style={{
+                                                        width: `${
+                                                            ((task.current >
+                                                            task.goal
+                                                                ? task.goal
+                                                                : task.current) *
+                                                                100) /
+                                                            task.goal
+                                                        }%`,
+                                                    }}
+                                                ></div>
+                                                <span
+                                                    className='progress-value'
+                                                    style={{
+                                                        left: `${
+                                                            ((task.current >
+                                                            task.goal
+                                                                ? task.goal
+                                                                : task.current) *
+                                                                100) /
+                                                            task.goal
+                                                        }%`,
+                                                    }}
+                                                >
+                                                    {task.current > task.goal
+                                                        ? task.goal
+                                                        : task.current}
+                                                </span>
+                                            </div>
                                         </div>
                                     )}
                                 </button>

@@ -150,8 +150,13 @@
             background: #71FFB9;
         }
 
-        .progress {
+        .progress-wrapper {
+            position: relative;
             width: 80%;
+            margin: auto;
+        }
+
+        .progress {            
             display: flex;
             height: 1rem;
             overflow: hidden;
@@ -172,12 +177,12 @@
             }
 
             &-value {                
-                padding-top: 21px;
                 position: absolute;
                 left: 50%;
-                transform: translate(-50% -50%);
+                bottom: 0;
                 transform: translate(-50%, 0);
                 text-shadow: none;
+                filter: none;
                 -webkit-text-stroke: black;
                 color: black;
             }
