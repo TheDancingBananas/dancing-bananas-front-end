@@ -52,6 +52,15 @@ const getLevel = (): string => {
     return value ? value : '1';
 };
 
+const setInstructionVisible = (visible: boolean): void => {
+    localStorage.setItem('instructionVisible', visible.toString());
+};
+
+const getInstructionVisible = (): boolean => {
+    const value = localStorage.getItem('instructionVisible');
+    return value ? value === 'true' : true;
+};
+
 const setTaskStatus = (task: LevelTask[]): void => {
     const value = JSON.stringify(task);
     localStorage.setItem('task', value);
@@ -150,4 +159,6 @@ export const storage = {
     getLevelTaskCompleted,
     getGasPrices,
     setGasPrices,
+    setInstructionVisible,
+    getInstructionVisible,
 };

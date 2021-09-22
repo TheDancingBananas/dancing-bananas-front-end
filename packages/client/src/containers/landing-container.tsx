@@ -145,9 +145,24 @@ function LandingContainer({
         };
         const address = wallet.account ? wallet.account : '0x';
         getCurrentPoolAsync(address);
+    }, [wallet.account]);
+
+    useEffect(() => {
+        const level = storage.getLevel();
+        const instructionVisible = storage.getInstructionVisible();
 
         if (!wallet.account) {
             setBananaHelp(true);
+            return;
+        }
+
+        if (Number(level) <= 1) {
+            setBananaHelp(instructionVisible);
+            return;
+        }
+
+        if (Number(level) > 1) {
+            setBananaHelp(false);
         }
     }, [wallet.account]);
 
@@ -357,6 +372,9 @@ function LandingContainer({
 
     const [bananaHelp, setBananaHelp] = useState<boolean>(true);
     const toggleBananaHelp = (visible: boolean) => {
+        if (visible === false) {
+            storage.setInstructionVisible(false);
+        }
         setBananaHelp(visible);
     };
 
