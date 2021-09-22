@@ -525,9 +525,6 @@ function LandingContainer({
                     )}
                     {tab === 'transactionSuccess' && (
                         <SuccessContainer
-                            onBack={() => {
-                                handleChangeTab('home');
-                            }}
                             onToTask={() => {
                                 handleChangeTab('task');
                             }}
