@@ -2010,13 +2010,13 @@ export const AddLiquidityV3 = ({
             token1Amount,
             ethAmount,
             bounds,
-            // minliquidity: new BigNumber(bounds.position.liquidity.toString())
-            //     .exponentiatedBy(2)
-            //     .div(2)
-            //     .sqrt()
-            //     .times(0.85)
-            //     .toFixed(0),
-            minliquidity: '0',
+            minliquidity: new BigNumber(bounds.position.liquidity.toString())
+                .exponentiatedBy(2)
+                .div(2)
+                .sqrt()
+                .times(0.95)
+                .toFixed(0),
+            //minliquidity: '0',
             feeTier: pool.feeTier,
             balances,
             sentiment,
