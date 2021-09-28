@@ -291,7 +291,7 @@ const CartContainer = ({
                     data.bounds.position.tickUpper, // tickUpper
                     sqrtPriceAX96.toString(),
                     sqrtPriceBX96.toString(),
-                    '0', //data.minliquidity, // amount0Desired
+                    data.minliquidity, // amount0Desired
                     wallet.account, // recipient
                     Math.floor(Date.now() / 1000) + 86400000, // deadline
                 ];
