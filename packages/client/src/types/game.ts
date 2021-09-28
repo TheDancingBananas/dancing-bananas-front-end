@@ -54,6 +54,6 @@ export type Tabs =
 
 export type Rewards =
     | 'SPEED UP 48'
-    | 'REMOVE LIQUIDITY'
+    | 'COLLECT FEES AND LIQUIDITY'
     | 'SENTIMENT PRICE RANGES'
     | 'EMOTION PRICE RANGES';

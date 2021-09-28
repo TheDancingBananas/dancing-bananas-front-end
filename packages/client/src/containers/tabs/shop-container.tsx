@@ -17,7 +17,8 @@ import png2Hours from 'styles/images/2hours.png';
 import png2HoursGray from 'styles/images/2hours-gray.png';
 
 import pngSpeedUp from 'styles/images/shop/Monkey_rocket.png';
-import pngRemoveBanana from 'styles/images/banana-4.png';
+import pngCollectFees from 'styles/images/shop/Collectfees.png';
+import pngCollectFeesLock from 'styles/images/shop/Collectfees_lock.png';
 import pngMonkeyHappy from 'styles/images/monkey-1.png';
 
 import pngMonkeys from 'styles/images/monkeys.png';
@@ -43,14 +44,14 @@ const ShopItem = ({
     active?: boolean | false;
     imageHeight?: number;
     onUnlock: () => void;
-    onExchange: () => void;
+    onExchange?: () => void;
 }): JSX.Element | null => {
     const style = imageHeight ? { height: `${imageHeight}px` } : {};
     const fontStyle = itemImage ? {} : { fontSize: 20, lineHeight: '24px' };
     const isSpeedUp = itemName === 'SPEED UP 48';
 
     const handleExchange = () => {
-        if (active) {
+        if (active && onExchange) {
             onExchange();
         }
     };
@@ -135,16 +136,19 @@ const ShopContainer = ({
                     <ShopItem
                         itemName={
                             <>
-                                REMOVE
+                                COLLECT FEES
                                 <br />
-                                LIQUIDITY
+                                AND LIQUIDITY
                             </>
                         }
-                        itemImage={pngRemoveBanana}
+                        itemImage={
+                            rewards.includes('COLLECT FEES AND LIQUIDITY')
+                                ? pngCollectFees
+                                : pngCollectFeesLock
+                        }
                         banana={0}
-                        active={rewards.includes('REMOVE LIQUIDITY')}
+                        active={rewards.includes('COLLECT FEES AND LIQUIDITY')}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -163,7 +167,6 @@ const ShopContainer = ({
                         banana={0}
                         active={rewards.includes('EMOTION PRICE RANGES')}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -176,7 +179,6 @@ const ShopContainer = ({
                         itemImage={png3HoursGray}
                         banana={1}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -189,7 +191,6 @@ const ShopContainer = ({
                         itemImage={pngSpeed}
                         banana={1}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -202,7 +203,6 @@ const ShopContainer = ({
                         itemImage={png2HoursGray}
                         banana={1}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -215,7 +215,6 @@ const ShopContainer = ({
                         active={true}
                         banana={0}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                     <ShopItem
                         itemName={
@@ -228,7 +227,6 @@ const ShopContainer = ({
                         active={true}
                         banana={0}
                         onUnlock={() => handleUnlock()}
-                        onExchange={() => onExchange('')}
                     />
                 </div>
                 <img

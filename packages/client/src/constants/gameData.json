@@ -71,7 +71,7 @@
                 }
             ],
             "rewards": [
-                "REMOVE LIQUIDITY"
+                "COLLECT FEES AND LIQUIDITY"
             ],
             "levelUpRewards": 2,
             "bananarewards": {
